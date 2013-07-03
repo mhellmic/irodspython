@@ -1,0 +1,73 @@
+   How to install PyRods 3.2.x :
+
+REQUIREMENTS:
+=============
+
+This client API is linked against iRODS 3.2 client API. The client API is 
+independent from the iRODS installation.
+
+https://www.irods.org
+
+The API has been tested with python 2.7. It requires the python development 
+headers (python-dev package for ubuntu for instance)
+
+LICENSING:
+==========
+
+PyRods is free software: you can redistribute it and/or modify it under the 
+terms of the GNU Lesser General Public License as published by the Free 
+Software Foundation, either version 3 of the License, or (at your option) any 
+later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY 
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along 
+with this program. If not, see <http://www.gnu.org/licenses/>.
+
+iRODS code included in this package is released under a BSD license.
+
+
+QUICK INSTALL:
+==============
+
+$ tar xvzf PyRods-3.2.3.tar.gz
+$ cd PyRods-3.2.3
+$ export CFLAGS=-fPIC
+$ ./scripts/configure
+$ make clients
+$ python setup.py build 
+$ sudo python setup.py install
+
+INSTALLATION:
+=============
+
+- Expand the package:
+    $ tar xvzf PyRods-3.2.3.tar.gz   
+
+- For a 64 bits OS add the -fPIC option to the compiler:
+    $ export CFLAGS=-fPIC
+
+- Configure the C client API:
+   $ ./scripts/configure
+
+- Build the C client API:
+    $ make clients
+    
+- Build the Python library:
+    $ python setup.py build
+
+- Optionally, you can install the libraries in your python site-packages.
+  You will need the permission to write in that directory.
+    $ sudo python setup.py install
+
+- The setup.py defines an `irods-dir` option that can be used to link to an 
+  existing iRODS install.
+    $ python setup.py build --irods-dir=/home/rods/iRODS
+    
+USAGE:
+======
+
+The examples directory provides a set of Python scripts which can be used to
+understand the syntax ot the Python API.
