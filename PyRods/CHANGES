@@ -1,0 +1,23 @@
+* 3.2.1:
+  - Correct a bug in irodsCollection.getObjects
+  - Rewrite splitPathByKey to be more consistent (return status in first) 
+  
+* 3.2.2:
+  - Improve support for mac osx and 32 bits system (include configure script)
+  - Add irods-dir option for setup.py
+  - Correct bugs in keyValPair_t, inxValPair_t
+  - replace int by size_t in several .i files for 64/32 bits warning on mac osx
+  - Remove some unnecessary files from the archive
+  
+* 3.2.3:
+  - Add more licensing information - Switch to LGPL
+  - Add options to compile with GSI support (read README.gsi to find more 
+    information)
+  - Add quota support:
+      getUserQuotaGlobal(conn, userName) -> global quota for a user
+      getUserQuotaResources(conn, userName) -> resources quota for a user
+      getGroupsQuotaGlobal(conn) -> global quota for groups  
+      getGroupsQuotaResources(conn) -> resources quota for groups
+      getUsersQuotaGlobal(conn) -> global quota for users
+      getUsersQuotaResources(conn) -> resources quota for users
+      See examples/quotas.py for an example

@@ -1,0 +1,38 @@
+include setup.py setup_gsi.py irods_wrap.c irods.py COPYING COPYING.LESSER 
+include irodsctl LICENSE.txt Makefile 
+include README README.macosx README.gsi CHANGES
+
+include clients/icommands/Makefile
+recursive-include clients/icommands/src *.c
+
+recursive-include config *
+
+recursive-include lib *.h
+recursive-include lib *.c
+recursive-include lib README.txt
+recursive-include lib Makefile
+
+include modules/extendedICAT/README.txt
+include modules/extendedICAT/extendedICAT.h
+
+recursive-include scripts *
+
+recursive-include server *.h
+recursive-include server *.c
+recursive-include server README.txt
+recursive-include server Makefile
+recursive-include server/config *
+
+include test/common.py
+include test/maintest.py
+include test/make_resources.txt
+
+recursive-include examples *
+
+# To create the empty obj folders (tar will not create the folders if they are empty)
+include lib/api/obj/empty.txt
+include lib/md5/obj/empty.txt
+include lib/rbudp/obj/empty.txt
+include lib/core/obj/empty.txt
+include clients/icommands/obj/empty.txt
+include clients/icommands/bin/empty.txt

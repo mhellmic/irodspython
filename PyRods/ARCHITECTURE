@@ -1,0 +1,1335 @@
+/* Copyright(c) 2013, University of Liverpool
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *(at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * Author       : Jerome Fuselier
+ */
+
+
+
+
+/*****************************************************************************/
+/*                              DEFINE                                       */
+/*****************************************************************************/
+
+
+
+ADD_TO_TAR_OPR                         rodsIO.i
+CHALLENGE_LEN                          auth.i
+CREATE_TAR_OPR                         rodsIO.i
+DATA_QUERY_FIRST_FG                    miscUtil.i
+DELETE_STRUCT_FILE                     rodsIO.i
+FORCE_FLAG                             rodsFile.i
+INCLUDE_CONDINPUT_IN_QUERY             miscUtil.i
+LOGICAL_BUNDLE                         rodsIO.i
+LONG_METADATA_FG                       miscUtil.i
+MAX_PASSWORD_LEN                       obf.i
+MAX_PATH_ALLOWED                       rodsDef.i
+MAX_NAME_LEN                           rodsDef.i
+MULTI_MSG_TICKET                       rodsXmsg.i
+NO_CHK_PERM_FLAG                       rodsFile.i
+NO_REG_COLL_INFO                       rodsIO.i
+NO_TRIM_REPL_FG                        miscUtil.i
+O_RDONLY                               rodsIO.i
+O_WRONLY                               rodsIO.i
+O_RDWR                                 rodsIO.i
+O_CREAT                                rodsIO.i
+PRESERVE_COLL_PATH                     rodsIO.i
+PRESERVE_DIR_CONT                      rodsIO.i
+PURGE_STRUCT_FILE_CACHE                rodsIO.i
+RECUR_QUERY_FG                         miscUtil.i
+RESPONSE_LEN                           auth.i
+RMDIR_RECUR                            rodsFile.i
+SEEK_SET                               rodsIO.i
+SEEK_CUR                               rodsIO.i
+SEEK_END                               rodsIO.i
+SINGLE_MSG_TICKET                      rodsXmsg.i
+TRANS_BUF_SZ                           rodsDef.i
+UNIQUE_REM_COMM_FLAG                   rodsFile.i
+VERY_LONG_METADATA_FG                  miscUtil.i
+
+
+/*****************************************************************************/
+/*                                 Enums                                     */
+/*****************************************************************************/
+
+
+
+collState_t                            miscUtil.i
+
+
+
+
+
+/*****************************************************************************/
+/*                            Structures                                     */
+/*****************************************************************************/
+
+
+
+authCheckInp_t                         auth.i
+authCheckOut_t                         auth.i
+authInfo_t                             rodsUser.i
+authResponseInp_t                      auth.i
+authRequestOut_t                       auth.i
+bytesBuf_t                             rodsDef.i
+chkObjPermAndStat_t                    chkObjPermAndStat.i
+collEnt_t                              miscUtil.i
+collHandle_t                           miscUtil.i
+collInp_t                              dataObj.i
+collSqlResult_t                        miscUtil.i
+dataCopyInp_t                          dataObj.i
+dataObjCopyInp_t                       dataObj.i
+dataObjInfo_t                          rodsInfo.i
+dataObjInp_t                           dataObj.i
+dataObjSqlResult_t                     miscUtil.i
+dataOprInp_t                           dataObj.i
+execCmd_t                              rodsExec.i
+execCmdOut_t                           rodsExec.i
+execMyRuleInp_t                        rodsExec.i
+fileChmodInp_t                         rodsFile.i
+fileChksumInp_t                        rodsFile.i
+fileCloseInp_t;                        rodsFile.i
+fileClosedirInp_t                      rodsFile.i
+fileCreateInp_t                        rodsFile.i
+fileFstatInp_t                         rodsFile.i
+fileFsyncInp_t                         rodsFile.i
+fileGetFsFreeSpaceInp_t                rodsFile.i
+fileGetFsFreeSpaceOut_t                rodsFile.i
+fileLseekInp_t                         rodsFile.i
+fileLseekOut_t                         rodsFile.i
+fileMkdirInp_t                         rodsFile.i
+fileOpenInp_t                          rodsFile.i
+fileOpendirInp_t                       rodsFile.i
+fileReadInp_t                          rodsFile.i
+fileRenameInp_t;                       rodsFile.i
+fileRmdirInp_t                         rodsFile.i
+fileStageInp_t                         rodsFile.i
+fileStatInp_t                          rodsFile.i
+fileUnlinkInp_t                        rodsFile.i
+fileWriteInp_t                         rodsFile.i
+generalAdminInp_t                      rodsAdmin.i
+generalUpdateInp_t                     rodsQuery.i
+genQueryInp_t                          rodsQuery.i
+genQueryOut_t                          rodsQuery.i
+getTempPasswordOut_t                   rodsDef.i
+getXmsgTicketInp_t                     rodsXmsg.i
+gsiAuthRequestOut_t                    auth.i
+inxIvalPair_t                          rodsInfo.i
+inxValPair_t                           rodsInfo.i
+irodsCollection                        rodsIO.i
+irodsFile                              rodsIO.i
+irodsGroup                             rodsUser.i
+irodsResource                          rodsUser.i
+irodsUser                              rodsUser.i
+irodsZone                              rodsUser.i
+keyValPair_t                           rodsInfo.i
+MD5_CTX                                md5.i
+miscSvrInfo_t                          rodsInfo.i
+modAccessControlInp_t                  modAccessControl.i
+modAVUMetadataInp_t                    rodsMeta.i
+modDataObjMeta_t                       rodsMeta.i
+msParam_t                              msParam.i
+msParamArray_t                         msParam.i
+objType_t                              rodsDef.i
+openedDataObjInp_t                     dataObj.i
+openStat_t                             dataObj.i
+portalOprOut_t                         dataObj.i
+portList_t                             dataObj
+rcvXmsgInp_t                           rodsXmsg.i
+rcvXmsgOut_t                           rodsXmsg.i
+regReplica_t                           rodsIO.i
+rErrMsg_t                              rodsError.i
+rodsArguments_t                        parseCommandLine.i
+rodsDirent_t                           rodsDef.i
+rodsEnv                                getRodsEnv.i
+rodsHostAddr_t                         rodsDef.i
+rodsLong_t                             rodsDef.i
+rodsObjStat_t                          rodsInfo.i
+rodsPath_t                             rodsPath.i
+rodsPathInp_t                          rodsPath.i
+rodsRestart_t                          rodsDef.i
+rodsStat_t                             rodsDef.i
+ruleExecDelInp_t                       rodsExec.i
+ruleExecModInp_t                       rodsExec.i
+ruleExecSubmitInp_t                    rodsExec.i
+sendXmsgInp_t                          rodsXmsg.i
+simpleQueryInp_t                       rodsQuery.i
+simpleQueryOut_t                       rodsQuery.i
+specColl_t                             rodsInfo.i
+sqlResult_t                            rodsQuery.i
+structFileExtAndRegInp_t               rodsStructFile.i
+structFileOprInp_t                     rodsStructFile.i
+subFile_t                              rodsInfo.i
+subStructFileFdOprInp_t                rodsStructFile.i
+subStructFileLseekInp_t                rodsStructFile.i
+subStructFileRenameInp_t               rodsStructFile.i
+unregDataObj_t                         rodsIO.i
+userAdminInp_t                         rodsAdmin.i
+userInfo_t                             rodsUser.i
+userOtherInfo_t                        rodsUser.i
+version_t                              rodsDef.i
+xmsgTicketInfo_t                       rodsXmsg.i
+
+
+
+/*****************************************************************************/
+/*                            Functions                                      */
+/*****************************************************************************/
+
+
+
+
+
+_irodsOpen                             rodsIO.i
+addInxIval                             rcMisc.i
+addInxVal                              rcMisc.i
+addKeyVal                              rcMisc.i
+addMsParamToArray                      msParam.i
+addObject                              sqlMisc.i
+addResultToFormatDictList              sqlMisc.i
+addResultToTupleList                   sqlMisc.i
+addSrcInPath                           rodsPath.i
+addUserMetadata                        sqlMisc.i
+appendRodsEnv                          getRodsEnv.i
+chkStateForResume                      rcMisc.i
+chksumLocFile                          md5.i
+clearDataObjCopyInp                    dataObj.i
+clearModAVUMetadataInp                 rodsMeta.i
+clearModDataObjMetaInp                 rodsMeta.i
+clearRegReplicaInp                     rodsIO.i
+clearUnregDataObj                      rodsIO.i
+createGroup                            rodsUser.i
+createResource                         rodsUser.i
+createUser                             rodsUser.i
+createZone                             rodsUser.i
+deleteGroup                            rodsUser.i
+deleteResource                         rodsUser.i
+deleteUser                             rodsUser.i
+deleteZone                             rodsUser.i
+fillBufLenInMsParam                    msParam.i
+fillCharInMsParam                      msParam.i
+fillDoubleInMsParam                    msParam.i
+fillFloatInMsParam                     msParam.i
+fillIntInMsParam                       msParam.i
+fillStrInMsParam                       msParam.i
+getDataObjReplicaNumber                sqlMisc.i
+getDataObjRescNames                    sqlMisc.i
+getDataObjSize                         sqlMisc.i
+getFileInfoToDict                      sqlMisc.i
+getGroup                               rodsUser.i
+getGroupMembers                        sqlMisc.i
+getGroups                              rodsUser.i
+getLastPathElement                     rodsPath.i
+getLocalTimeFromRodsTime               rcMisc.i
+getMountedSubPhyPath                   rcMisc.i
+getMsParamByLabel                      msParam.i
+getRescInfoToDict                      sqlMisc.i
+getResource                            rodsUser.i
+getResources                           sqlMisc.i
+getRodsEnv                             getRodsEnv.i
+getRodsEnvAuthFileName                 getRodsEnv.i
+getRodsEnvFileName                     getRodsEnv.i
+getRodsObjType                         miscUtil.i
+getSpecCollTypeStr                     rcMisc.i
+getSqlResultByInx                      rcMisc.i
+getUser                                rodsUser.i
+getUserInfo                            rodsUser.i
+getUserInfoToDict                      sqlMisc.i
+getUsers                               rodsUser.i
+getZone                                rodsUser.i
+getZoneInfoToDict                      sqlMisc.i
+getZones                               rodsUser.i
+irodsOpen                              rodsIO.i
+MD5Digest                              md5.i
+md5ToStr                               md5.i
+mkColl                                 miscUtil.i
+mkCollR                                miscUtil.i
+mkdirR                                 miscUtil.i
+modifyObject                           sqlMisc.i
+myChmod                                miscUtil.i
+obfDecodeByKey                         obf.i
+obfDecodeByKeyV2                       obf.i
+obfEncodeByKey                         obf.i
+obfEncodeByKeyV2                       obf.i
+obfGetPw                               obf.i
+obfiDecode                             obf.i
+obfiEncode                             obf.i
+obfRmPw                                obf.i
+obfSavePw                              obf.i
+obfTempOps                             obf.i
+openRestartFile                        rcMisc.i
+parseCmdLinePath                       rodsPath.i
+parseMspForFloat                       msParam.i
+parseMspForPosInt                      msParam.i
+parseMspForStr                         msParam.i
+parseRodsPath                          rodsPath.i
+parseRodsPathStr                       rodsPath.i
+parseUserName                          rcMisc.i
+printError                             rcMisc.i
+printErrorStack                        rcMisc.i
+procAndWriteRestartFile                rcMisc.i
+procUserMetadata                       sqlMisc.i
+queryCollAcl                           miscUtil.i
+queryCollInColl                        miscUtil.i
+queryCollInheritance                   miscUtil.i
+queryDataObjInColl                     miscUtil.i
+queryDataObjAcl                        miscUtil.i
+queryDataObjAcl                        miscUtil.i
+queryToFormatDictList                  sqlMisc.i
+queryToTupleList                       sqlMisc.i
+rcAuthCheck                            auth.i
+rcAuthRequest                          auth.i
+rcAuthResponse                         auth.i
+rcChkObjPermAndStat                    chkObjPermAndStat.i
+rcChksumLocFile                        md5.i
+rcCloseCollection                      rodsIO.i
+rcCollCreate                           rodsIO.i
+rcCollRepl                             rodsIO.i
+rcDataCopy                             dataObj.i
+rcDataGet                              dataObj.i
+rcDataPut                              dataObj.i
+rcDataObjChksum                        dataObj.i
+rcDataObjClose                         dataObj.i
+rcDataObjCopy                          dataObj.i
+rcDataObjCreate                        dataObj.i
+rcDataObjCreateAndStat                 dataObj.i
+rcDataObjGet                           dataObj.i
+rcDataObjLseek                         dataObj.i
+rcDataObjOpen                          dataObj.i
+rcDataObjOpenAndStat                   dataObj.i
+rcDataObjPhymv                         dataObj.i
+rcDataObjPut                           dataObj.i
+rcDataObjRead                          dataObj.i
+rcDataObjRead                          dataObj.i
+rcDataObjRename                        dataObj.i
+rcDataObjRepl                          dataObj.i
+rcDataObjRsync                         dataObj.i
+rcDataObjTrim                          dataObj.i
+rcDataObjTruncate                      dataObj.i
+rcDataObjUnlink                        dataObj.i
+rcDataObjWrite                         dataObj.i
+rcExecCmd                              rodsExec.i
+rcExecMyRule                           rodsExec.i
+rcFileChmod                            rodsFile.i
+rcFileChksum                           rodsFile.i
+rcFileClose                            rodsFile.i
+rcFileClosedir                         rodsFile.i
+rcFileCreate                           rodsFile.i
+rcFileFstat                            rodsFile.i
+rcFileFsync                            rodsFile.i
+rcFileGetv                             rodsFile.i
+rcFileGetFsFreeSpace                   rodsFile.i
+rcFileLseek                            rodsFile.i
+rcFileMkdir                            rodsFile.i
+rcFileOpen                             rodsFile.i
+rcFileOpendir                          rodsFile.i
+rcFilePut                              rodsFile.i
+rcFileRead                             rodsFile.i
+rcFileReaddir                          rodsFile.i
+rcFileRename                           rodsFile.i
+rcFileRmdir                            rodsFile.i
+rcFileStage                            rodsFile.i
+rcFileStat                             rodsFile.i
+rcFileTruncate                         rodsFile.i
+rcFileUnlink                           rodsFile.i
+rcFileWrite                            rodsFile.i
+rcGeneralAdmin                         rodsAdmin.i
+rcGeneralUpdate                        rodsQuery.i
+rcGenQuery                             rodsQuery.i
+rcGetMiscSvrInfo                       rodsInfo.i
+rcGetRemoteZoneResc                    rcMisc.i
+rcGetTempPassword                      rcMisc.i
+rcGetXmsgTicket                        rodsXmsg.i
+rcGsiAuthRequest                       auth.i
+rcL3FileGetSingleBuf                   rodsFile.i
+rcL3FilePutSingleBuf                   rodsFile.i
+rclCloseCollection                     miscUtil.i
+rclInitQueryHandle                     miscUtil.i
+rclOpenCollection                      miscUtil.i
+rclOpenCollection                      miscUtil.i
+rclReadCollection                      miscUtil.i
+rclReadCollection                      miscUtil.i
+rcModAccessControl                     modAccessControl.i
+rcModAVUMetadata                       rodsMeta.i
+rcModColl                              rodsIO.i
+rcModDataObjMeta                       rodsMeta.i
+rcObjStat                              rodsInfo.i
+rcOpenCollection                       rodsIO.i
+rcOprComplete                          rodsIO.i
+rcPhyPathReg                           rodsIO.i
+rcQuerySpecColl                        rodsQuery.i
+rcRcvXmsg                              rodsXmsg.i
+rcReadCollection                       rodsIO.i
+rcRegColl                              rodsIO.i
+rcRegDataObj                           rodsIO.i
+rcRegReplica                           rodsIO.i
+rcRmColl                               rcMisc.i
+rcRuleExecDel                          rodsExec.i
+rcRuleExecMod                          rodsExec.i
+rcRuleExecSubmit                       rodsExec.i
+rcSendXmsg                             rodsXmsg.i
+rcSimpleQuery                          rodsQuery.i
+rcStructFileBundle                     rodsStructFile.i
+rcStructFileExtAndReg                  rodsStructFile.i
+rcStructFileExtract                    rodsStructFile.i
+rcStructFileSync                       rodsStructFile.i
+rcSubStructFileClose                   rodsStructFile.i
+rcSubStructFileClosedir                rodsStructFile.i
+rcSubStructFileCreate                  rodsStructFile.i
+rcSubStructFileFstat                   rodsStructFile.i
+rcSubStructFileGet                     rodsStructFile.i
+rcSubStructFileLseek                   rodsStructFile.i
+rcSubStructFileMkdir                   rodsStructFile.i
+rcSubStructFileOpen                    rodsStructFile.i
+rcSubStructFileOpendir                 rodsStructFile.i
+rcSubStructFilePut                     rodsStructFile.i
+rcSubStructFileRead                    rodsStructFile.i
+rcSubStructFileReaddir                 rodsStructFile.i
+rcSubStructFileRename                  rodsStructFile.i
+rcSubStructFileRmdir                   rodsStructFile.i
+rcSubStructFileTruncate                rodsStructFile.i
+rcSubStructFileUnlink                  rodsStructFile.i
+rcSubStructFileWrite                   rodsStructFile.i
+rcSyncMountedColl                      rodsIO.i
+rcUnregDataObj                         rodsIO.i
+rcUserAdmin                            rodsAdmin.i
+resolveRodsTarget                      rodsPath.i
+resolveSpecCollType                    rcMisc.i
+rodsErrorName                          rodsLog.i
+rodsLog                                rodsLog.i
+rodsLogError                           rodsLog.i
+rodsLogLevel                           rodsLog.i
+rmObject                               sqlMisc.i
+rmUserMetadata                         sqlMisc.i
+setQueryFlag                           miscUtil.i
+setQueryInpForData                     miscUtil.i
+setStateForRestart                     rcMisc.i
+splitPathByKey                         stringOpr.i
+
+
+
+
+/*****************************************************************************/
+/*                              Files                                        */
+/*****************************************************************************/
+
+/**********/
+/* AUTH.I */
+/**********/
+
+Defines :
+
+CHALLENGE_LEN
+RESPONSE_LEN
+
+
+
+Structs :
+
+authCheckInp_t
+authCheckOut_t
+authResponseInp_t
+authRequestOut_t
+gsiAuthRequestOut_t
+
+
+
+Functions :
+
+rcAuthCheck(rcComm_t *, authCheckInp_t *) -> authCheckOut_t
+rcAuthRequest(rcComm_t *) -> authRequestOut_t
+rcAuthResponse(rcComm_t *, authResponseInp_t *) -> int
+rcGsiAuthRequest(rcComm_t *) -> gsiAuthRequestOut_t
+
+
+
+/***********************/
+/* CHKOBJPERMANDSTAT.I */
+/***********************/
+
+Structs :
+
+chkObjPermAndStat_t
+
+
+
+Functions :
+
+rcChkObjPermAndStat(rcComm_t *, chkObjPermAndStat_t *) -> int
+
+
+
+/*************/
+/* DATAOBJ.I */
+/*************/
+
+Structs :
+
+collInp_t
+dataCopyInp_t
+dataObjCopyInp_t
+dataObjInp_t
+dataOprInp_t
+openedDataObjInp_t
+openStat_t
+portalOprOut_t
+portList_t
+
+
+
+Functions :
+
+clearDataObjCopyInp(dataObjCopyInp_t *) -> int
+rcDataCopy(rcComm_t *, dataCopyInp_t *) -> int
+rcDataGet(rcComm_t *, dataOprInp_t *) -> portalOprOut_t *
+rcDataPut(rcComm_t *, dataOprInp_t *) -> portalOprOut_t *
+rcDataObjChksum(rcComm_t *, dataObjInp_t *, char **) -> int
+rcDataObjClose(rcComm_t *, openedDataObjInp_t *) -> int
+rcDataObjCopy(rcComm_t *, dataObjCopyInp_t *) -> int
+rcDataObjCreate(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjCreateAndStat(rcComm_t *, dataObjInp_t *, openStat_t **) -> int
+rcDataObjGet(rcComm_t *, dataObjInp_t *, char *) -> int
+rcDataObjLseek(rcComm_t *, openedDataObjInp_t *) -> fileLseekOut_t *
+rcDataObjOpen(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjOpenAndStat(rcComm_t *, dataObjInp_t *, openStat_t **) -> int
+rcDataObjPhymv(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjPut(rcComm_t *, dataObjInp_t *, char *) -> int
+rcDataObjRead(rcComm_t *, openedDataObjInp_t *, bytesBuf_t *) -> int
+rcDataObjRead(rcComm_t *, openedDataObjInp_t *) ->(str, int)
+rcDataObjRename(rcComm_t *, dataObjCopyInp_t *) -> int
+rcDataObjRepl(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjRsync(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjTrim(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjTruncate(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjUnlink(rcComm_t *, dataObjInp_t *) -> int
+rcDataObjWrite(rcComm_t *, openedDataObjInp_t *, bytesBuf_t *) -> int
+
+
+
+/****************/
+/* GETRODSENV.I */
+/****************/
+
+Structs :
+
+rodsEnv
+
+
+
+Functions :
+
+appendRodsEnv(str) -> int
+getRodsEnv(rodsEnv *) -> int
+getRodsEnv() ->(int, rodsEnv *)
+getRodsEnvAuthFileName() -> str
+getRodsEnvFileName() -> str
+
+
+
+/*********/
+/* MD5.I */
+/*********/
+
+Structs :
+
+MD5_CTX
+
+
+
+Functions :
+
+chksumLocFile(str, str) -> int
+MD5Digest(str) -> str
+md5ToStr(unsigned char *, char *) -> int
+rcChksumLocFile(char *, char *, keyValPair_t *) -> int
+
+
+
+/**************/
+/* MISCUTIL.I */
+/**************/
+
+Defines :
+
+LONG_METADATA_FG
+VERY_LONG_METADATA_FG
+RECUR_QUERY_FG
+DATA_QUERY_FIRST_FG
+NO_TRIM_REPL_FG
+INCLUDE_CONDINPUT_IN_QUERY
+
+Enums:
+
+collState_t
+
+
+Structs :
+
+collEnt_t
+collHandle_t
+collSqlResult_t
+dataObjSqlResult_t
+
+
+Functions :
+
+getRodsObjType(rcComm_t *, rodsPath_t *) -> int
+mkColl(rcComm_t *, char *) -> int
+mkCollR(rcComm_t *, char *, char *) -> int
+mkdirR(char *, char *, int ) -> int
+myChmod(char *, uint) -> int
+queryCollAcl(rcComm_t *, char *, char *) genQueryOut_t *
+queryCollInColl(queryHandle_t *, char *, int , genQueryInp_t *) -> genQueryOut_t *
+queryCollInheritance(rcComm_t *, char *) -> genQueryOut_t *
+queryDataObjInColl(queryHandle_t *, char *, int , genQueryInp_t *, keyValPair_t * -> genQueryOut_t *
+queryDataObjAcl(rcComm_t *, char *, char *, genQueryOut_t **) -> int
+queryDataObjAcl(rcComm_t *, char *, char *) -> genQueryOut_t *
+rclCloseCollection(collHandle_t *) -> int
+rclInitQueryHandle(queryHandle_t *, rcComm_t *) -> int
+rclOpenCollection(rcComm_t *, char *, int , collHandle_t *) -> int
+rclOpenCollection(rcComm_t *, char *, int)  ->(collHandle_t *, int)
+rclReadCollection(rcComm_t *, collHandle_t *, collEnt_t *) -> int
+rclReadCollection(rcComm_t *, collHandle_t) ->(collEnt_t *, int):
+setQueryFlag(rodsArguments_t *) -> int
+setQueryInpForData(int, genQueryInp_t *) -> int
+
+
+
+/**********************/
+/* MODACCESSCONTROL.I */
+/**********************/
+
+Structs :
+
+modAccessControlInp_t
+
+
+
+Functions :
+
+rcModAccessControl(rcComm_t *, modAccessControlInp_t *) -> int
+
+
+
+/*************/
+/* MSPARAM.I */
+/*************/
+
+Structs :
+
+msParam_t
+msParamArray_t
+
+
+
+Functions :
+
+addMsParamToArray(msParamArray_t *, char *, char *, void *, bytesBuf_t *, int) -> int
+fillBufLenInMsParam(msParam_t *, int, bytesBuf_t *) -> int
+fillCharInMsParam(msParam_t *, char) -> int
+fillDoubleInMsParam(msParam_t *, rodsLong_t) -> int
+fillFloatInMsParam(msParam_t *, float) -> int
+fillIntInMsParam(msParam_t *, int) -> int
+fillStrInMsParam(msParam_t *, char *) -> int
+getMsParamByLabel(msParamArray_t *, char *label) -> msParam_t *
+parseMspForFloat(msParam_t *, float *) -> int
+parseMspForPosInt(msParam_t *) -> int
+parseMspForStr(msParam_t *) -> str
+
+
+
+/*********/
+/* OBF.I */
+/*********/
+
+Defines :
+
+MAX_PASSWORD_LEN
+
+
+
+Functions :
+
+obfDecodeByKey(char *, char *, char *)
+obfDecodeByKeyV2(char *, char *, char *, char *)
+obfEncodeByKey(char *, char *, char *)
+obfEncodeByKeyV2(char *, char *, char *, char *)
+obfGetPw() ->(int, str)
+obfiDecode(char *, char *, int) -> int
+obfiEncode(char *, char *, int)
+obfRmPw(int) -> int
+obfSavePw(int, int, int, char *) -> int
+obfTempOps(int) -> int
+
+
+
+/**********************/
+/* PARSECOMMANDLINE.I */
+/**********************/
+
+Structs :
+
+rodsArguments_t
+
+
+
+Functions :
+
+parseCmdLineOpt(int, char **, char *, int, rodsArguments_t *) -> int
+
+
+
+/***************/
+/* RCCONNECT.I */
+/***************/
+
+Structs :
+
+rcComm_t
+
+
+
+Functions :
+
+clientLogin(rcComm_t *) -> int
+clientLoginWithPassword(rcComm_t *, char *) -> int
+getSessionSignitureClientside() -> str
+rcConnect(char *, int , char *, char *, int, rErrMsg_t *) -> rcComm_t *
+rcConnect(char *, int , char *, char *, [int]) ->(rcComm_t *, rErrMsg_t)
+rcDisconnect(rcComm_t *) -> int
+
+
+
+/************/
+/* RCMISC.I */
+/************/
+
+Functions :
+
+addInxIval(inxIvalPair_t *, int, int) -> int
+addInxVal(inxValPair_t *, int, char *) -> int
+addKeyVal(keyValPair_t *, char *, char *) -> int
+chkStateForResume(rcComm_t *, rodsRestart_t *, char *, rodsArguments_t *, objType_t, keyValPair_t *, int) -> int
+getLocalTimeFromRodsTime(char *) -> str
+getMountedSubPhyPath(char *, char *, char *, char *) -> int
+getSpecCollTypeStr(specColl_t *, char *) -> int
+getSqlResultByInx(genQueryOut_t *, int) -> sqlResult_t *
+openRestartFile(char *, rodsRestart_t *, rodsArguments_t *) -> int
+parseUserName(char *, char *, char *) -> int
+printError(rcComm_t *, int, char *) -> int
+printErrorStack(rError_t *) -> int
+procAndWriteRestartFile(rodsRestart_t *, char *) -> int
+rcGetRemoteZoneResc(rcComm_t *, dataObjInp_t *) -> rodsHostAddr_t *
+rcGetTempPassword(rcComm_t *) -> str
+rcRmColl(rcComm_t *, collInp_t *, int) -> int
+resolveSpecCollType(char *, char *, char *, char *, specColl_t *) -> int
+setStateForRestart(rcComm_t *, rodsRestart_t *, rodsPath_t *, rodsArguments_t *) -> int
+
+
+
+/***************/
+/* RODSADMIN.I */
+/***************/
+
+Structs :
+
+generalAdminInp_t
+userAdminInp_t
+
+
+
+Functions :
+
+rcGeneralAdmin(rcComm_t *, generalAdminInp_t *) -> int
+rcUserAdmin(rcComm_t *, userAdminInp_t *) -> int
+
+
+
+/*************/
+/* RODSDEF.I */
+/*************/
+
+Defines :
+
+MAX_PATH_ALLOWED
+MAX_NAME_LEN
+TRANS_BUF_SZ
+
+
+
+Structs :
+
+bytesBuf_t
+getTempPasswordOut_t
+objType_t
+rodsDirent_t
+rodsHostAddr_t
+rodsLong_t
+rodsRestart_t
+rodsStat_t
+version_t
+
+
+
+/***************/
+/* RODSERROR.I */
+/***************/
+
+Structs :
+
+rErrMsg_t
+
+
+
+/**************/
+/* RODSEXEC.I */
+/**************/
+
+Structs :
+
+execCmd_t
+execCmdOut_t
+execMyRuleInp_t
+ruleExecDelInp_t
+ruleExecModInp_t
+ruleExecSubmitInp_t
+
+
+
+Functions :
+
+rcExecCmd(rcComm_t *, execCmd_t *) -> execCmdOut_t * 
+rcExecMyRule(rcComm_t *, execMyRuleInp_t *) -> msParamArray_t *
+rcRuleExecDel(rcComm_t *, ruleExecDelInp_t *) -> int
+rcRuleExecMod(rcComm_t *, ruleExecModInp_t *) -> int
+rcRuleExecSubmit(rcComm_t *, ruleExecSubmitInp_t *, char **) -> int
+
+
+
+/**************/
+/* RODSFILE.I */
+/**************/
+
+Defines :
+
+FORCE_FLAG
+NO_CHK_PERM_FLAG
+RMDIR_RECUR
+UNIQUE_REM_COMM_FLAG
+
+
+
+Structs :
+
+fileChmodInp_t
+fileChksumInp_t
+fileCloseInp_t;
+fileClosedirInp_t
+fileCreateInp_t
+fileFstatInp_t
+fileFsyncInp_t
+fileGetFsFreeSpaceInp_t
+fileGetFsFreeSpaceOut_t
+fileLseekInp_t
+fileLseekOut_t
+fileMkdirInp_t
+fileOpenInp_t
+fileOpendirInp_t
+fileReadInp_t
+fileRenameInp_t;
+fileRmdirInp_t
+fileStageInp_t
+fileStatInp_t
+fileUnlinkInp_t
+fileWriteInp_t
+
+
+
+Functions :
+
+rcFileChmod(rcComm_t *rcComm_t *, fileChmodInp_t *fileChmodInp) -> int
+rcFileChksum(rcComm_t *rcComm_t *, fileChksumInp_t *fileChksumInp, char **chksumStr) -> int
+rcFileClose(rcComm_t *rcComm_t *, fileCloseInp_t *fileCloseInp) -> int
+rcFileClosedir(rcComm_t *rcComm_t *, fileClosedirInp_t *fileClosedirInp) -> int
+rcFileCreate(rcComm_t *rcComm_t *, fileCreateInp_t *fileCreateInp) -> int
+rcFileFstat(rcComm_t *rcComm_t *, fileFstatInp_t *fileFstatInp) -> rodsStat_t *
+rcFileFsync(rcComm_t *rcComm_t *, fileFsyncInp_t *fileFsyncInp) -> int
+rcFileGet(rcComm_t *rcComm_t *, fileOpenInp_t *fileGetInp, bytesBuf_t *fileGetOutBBuf) -> int
+rcFileGetFsFreeSpace(rcComm_t *rcComm_t *, fileGetFsFreeSpaceInp_t *fileGetFsFreeSpaceInp) -> fileGetFsFreeSpaceOut_t *
+rcFileLseek(rcComm_t *rcComm_t *, fileLseekInp_t *fileLseekInp) -> fileLseekOut_t *
+rcFileMkdir(rcComm_t *rcComm_t *, fileMkdirInp_t *fileMkdirInp) -> int
+rcFileOpen(rcComm_t *rcComm_t *, fileOpenInp_t *fileOpenInp) -> int
+rcFileOpendir(rcComm_t *rcComm_t *, fileOpendirInp_t *fileOpendirInp) -> int
+rcFilePut(rcComm_t *rcComm_t *, fileOpenInp_t *filePutInp, bytesBuf_t *filePutInpBBuf) -> int
+rcFileRead(rcComm_t *rcComm_t *, fileReadInp_t *fileReadInp, bytesBuf_t *fileReadOutBBuf) -> int
+rcFileReaddir(rcComm_t *rcComm_t *, fileReaddirInp_t *fileReaddirInp) -> rodsDirent_t *
+rcFileRename(rcComm_t *rcComm_t *, fileRenameInp_t *fileRenameInp) -> int
+rcFileRmdir(rcComm_t *rcComm_t *, fileRmdirInp_t *fileRmdirInp) -> int
+rcFileStage(rcComm_t *rcComm_t *, fileStageInp_t *fileStageInp) -> int
+rcFileStat(rcComm_t *rcComm_t *, fileStatInp_t *fileStatInp) -> rodsStat_t *
+rcFileTruncate(rcComm_t *rcComm_t *, fileOpenInp_t *fileTruncateInp) -> int
+rcFileUnlink(rcComm_t *rcComm_t *, fileUnlinkInp_t *fileUnlinkInp) -> int
+rcFileWrite(rcComm_t *rcComm_t *, fileWriteInp_t *fileWriteInp, bytesBuf_t *fileWriteInpBBuf) -> int
+rcL3FileGetSingleBuf(rcComm_t *rcComm_t *, int l1descInx,bytesBuf_t *dataObjOutBBuf) -> int
+rcL3FilePutSingleBuf(rcComm_t *rcComm_t *, int l1descInx, bytesBuf_t *dataObjInBBuf) -> int
+
+
+
+/**************/
+/* RODSINFO.I */
+/**************/
+
+Structs :
+
+dataObjInfo_t
+inxIvalPair_t
+inxValPair_t
+keyValPair_t
+miscSvrInfo_t
+rodsObjStat_t
+specColl_t
+subFile_t
+
+
+
+Functions :
+
+rcGetMiscSvrInfo(rcComm_t *) -> miscSvrInfo_t *
+rcObjStat(rcComm_t *, dataObjInp_t *) -> rodsObjStat_t *
+
+
+
+/**************/
+/* RODSIO.I */
+/**************/
+
+Defines :
+
+ADD_TO_TAR_OPR
+CREATE_TAR_OPR
+DELETE_STRUCT_FILE 
+LOGICAL_BUNDLE
+NO_REG_COLL_INFO 
+O_RDONLY
+O_WRONLY
+O_RDWR
+O_CREAT
+PRESERVE_COLL_PATH
+PRESERVE_DIR_CONT
+PURGE_STRUCT_FILE_CACHE 
+SEEK_SET
+SEEK_CUR
+SEEK_END
+
+
+Classes :
+
+irodsFile
+    __init__(rcComm_t):
+    fullPath() -> str
+    close() -> int
+    delete(bool) -> int
+    getCollName() -> str
+    getName() -> str
+    getInfos() -> dict
+    getDescInx() -> int
+    getPosition() -> int
+    getResourceName() -> str
+    getResourceGroupName() -> str
+    getId() -> str
+    getMapId() -> str
+    getPath() -> str
+    getTypeName() -> str
+    getComment() -> str
+    getMode() -> str
+    getOwnerName() -> str
+    getOwnerZone() -> str
+    getChecksum() -> str
+    getVersion() -> str
+    getExpiryTs() -> str
+    getModifyTs() -> str
+    getCreateTs() -> str
+    getStatus() -> str
+    getCollId() -> str
+    getReplStatus() -> str
+    getSize() -> str
+    getReplNumber() -> str
+    getReplications() -> str list
+    read([int]) -> str
+    seek(int, int) -> fileLseekOut_t
+    write(str) -> int
+    update() -> int
+    replicate(str) -> int
+    addUserMetadata(str, str, [str]) -> int
+    getUserMetadata() -> tuple list
+    rmUserMetadata(str, str, [str]) -> int
+    
+
+iRodsCollection
+    __init__(rcComm_t, [str])
+    createCollection(str) -> int
+    deleteCollection(str) -> int
+    getCollName() -> str
+    getObjects() -> list of(src, src)
+    getLenObjects() -> int
+    getSubCollections() -> list of str
+    getLenSubCollections() -> int
+    openCollection(str) -> int
+    open(src, [src], [src]) -> irodsFile
+    delete(src, [src]) -> int
+    create(src, [src]) -> irodsFile
+    upCollection()
+    addUserMetadata(str, str, [str]) -> int
+    getUserMetadata() -> tuple list
+    rmUserMetadata(str, str, [str]) -> int
+
+
+
+
+Structs :
+
+regReplica_t
+unregDataObj_t
+
+
+
+Functions :
+
+_irodsOpen(rcComm_t *, str, str, str, str) -> irodsFile
+clearRegReplicaInp(regReplica_t *regReplicaInp) -> int
+clearUnregDataObj(unregDataObj_t *unregDataObjInp) -> int
+irodsOpen(rcComm_t *, str, str, str) -> irodsFile
+rcCloseCollection(rcComm_t *rcComm_t *, int handleInxInp) -> int
+rcCollCreate(rcComm_t *rcComm_t *, collInp_t *collCreateInp) -> int
+rcCollRepl(rcComm_t *rcComm_t *, collInp_t *collReplInp, int vFlag) -> int
+rcModColl(rcComm_t *rcComm_t *, collInp_t *modCollInp) -> int
+rcOpenCollection(rcComm_t *rcComm_t *, collInp_t *openCollInp) -> int
+rcOprComplete(rcComm_t *rcComm_t *, int retval) -> int
+rcPhyPathReg(rcComm_t *rcComm_t *, dataObjInp_t *phyPathRegInp) -> int
+rcReadCollection(rcComm_t *rcComm_t *, int handleInxInp, collEnt_t **collEnt) -> int
+rcRegColl(rcComm_t *rcComm_t *, collInp_t *regCollInp) -> int
+rcRegDataObj(rcComm_t *rcComm_t *, dataObjInfo_t *dataObjInfo) -> dataObjInfo_t *
+rcSyncMountedColl(rcComm_t *rcComm_t *, dataObjInp_t *syncMountedCollInp) -> int
+rcRegReplica(rcComm_t *rcComm_t *, regReplica_t *regReplicaInp) -> int
+rcUnregDataObj(rcComm_t *rcComm_t *, unregDataObj_t *unregDataObjInp) -> int
+
+
+
+/*************/
+/* RODSLOG.I */
+/*************/
+
+
+
+Functions :
+
+rodsErrorName(int, char **) -> str
+rodsLog(int, char *, ...)
+rodsLogError(int, int, char *, ...)
+rodsLogLevel(int)
+
+
+
+/**************/
+/* RODSMETA.I */
+/**************/
+
+Structs :
+
+modDataObjMeta_t
+modAVUMetadataInp_t
+
+
+
+Functions :
+
+clearModAVUMetadataInp(modAVUMetadataInp_t *) -> int
+clearModDataObjMetaInp(modDataObjMeta_t *) -> int
+rcModAVUMetadata(rcComm_t *, modAVUMetadataInp_t *) -> int
+rcModDataObjMeta(rcComm_t *, modDataObjMeta_t *) -> int
+
+
+
+/**************/
+/* RODSPATH.I */
+/**************/
+
+Structs :
+
+rodsPath_t
+rodsPathInp_t
+
+
+
+Functions :
+
+addSrcInPath(rodsPathInp_t *, char *) -> int
+getLastPathElement(char *, char *) -> int
+getLastPathElement(src) ->(str, int)
+parseCmdLinePath(int, char **, int, rodsEnv *, int, int, int, rodsPathInp_t *) -> int
+parseRodsPath(rodsPath_t *, rodsEnv *) -> int
+parseRodsPathStr(char *, rodsEnv *, char *) -> int
+resolveRodsTarget(rcComm_t *, rodsEnv *, rodsPathInp_t *, int) -> int
+
+
+
+/***************/
+/* RODSQUERY.I */
+/***************/
+
+Structs :
+
+generalUpdateInp_t
+genQueryInp_t
+genQueryOut_t
+simpleQueryInp_t
+simpleQueryOut_t
+sqlResult_t
+
+Functions :
+
+rcGeneralUpdate(rcComm_t *rcComm_t *, generalUpdateInp_t *generalUpdateInp) -> int
+rcGenQuery(rcComm_t *rcComm_t *, genQueryInp_t *genQueryInp) -> genQueryOut_t *
+rcQuerySpecColl(rcComm_t *rcComm_t *, dataObjInp_t *querySpecCollInp) -> genQueryOut_t *
+rcSimpleQuery(rcComm_t *rcComm_t *, simpleQueryInp_t *simpleQueryInp) -> simpleQueryOut_t *
+
+
+
+/********************/
+/* RODSSTRUCTFILE.I */
+/********************/
+
+Structs :
+
+structFileExtAndRegInp_t
+structFileOprInp_t
+subStructFileFdOprInp_t
+subStructFileLseekInp_t
+subStructFileRenameInp_t
+
+
+
+Functions :
+
+rcStructFileBundle(rcComm_t *, structFileExtAndRegInp_t *) -> int
+rcStructFileExtAndReg(rcComm_t *, structFileExtAndRegInp_t *) -> int
+rcStructFileExtract(rcComm_t *, structFileOprInp_t *) -> int
+rcStructFileSync(rcComm_t *, structFileOprInp_t *) -> int
+rcSubStructFileClose(rcComm_t *, subStructFileFdOprInp_t *) -> int
+rcSubStructFileClosedir(rcComm_t *, subStructFileFdOprInp_t *) -> int
+rcSubStructFileCreate(rcComm_t *, subFile_t *) -> int
+rcSubStructFileFstat(rcComm_t *, subStructFileFdOprInp_t *) -> rodsStat_t *
+rcSubStructFileGet(rcComm_t *, subFile_t *, bytesBuf_t *) -> int
+rcSubStructFileLseek(rcComm_t *, subStructFileLseekInp_t *) -> fileLseekOut_t *
+rcSubStructFileMkdir(rcComm_t *, subFile_t *) -> int
+rcSubStructFileOpen(rcComm_t *, subFile_t *) -> int
+rcSubStructFileOpendir(rcComm_t *, subFile_t *) -> int
+rcSubStructFilePut(rcComm_t *, subFile_t *, bytesBuf_t *) -> int
+rcSubStructFileRead(rcComm_t *, subStructFileFdOprInp_t *, bytesBuf_t *) -> int
+rcSubStructFileReaddir(rcComm_t *, subStructFileFdOprInp_t *, rodsDirent_t **) -> int
+rcSubStructFileRename(rcComm_t *, subStructFileRenameInp_t *) -> int
+rcSubStructFileRmdir(rcComm_t *, subFile_t *) -> int
+rcSubStructFileTruncate(rcComm_t *, subFile_t *) -> int
+rcSubStructFileUnlink(rcComm_t *, subFile_t *) -> int
+rcSubStructFileWrite(rcComm_t *, subStructFileFdOprInp_t *subStructFileWriteInp, bytesBuf_t *) -> int
+
+
+
+/**************/
+/* RODSUSER.I */
+/**************/
+
+Structs :
+
+irodsGroup
+    __init__(rcComm_t, str)
+    addUser(str, [str]) -> int
+    addUserMetadata(str, str, [str]) -> int
+    getComment() -> str
+    getCreateTs() -> str
+    getId() -> str
+    getInfo() -> str
+    getInfos() -> dict
+    getMembers() -> list of tuples
+    getModifyTs() -> str
+    getName() -> str
+    getTypeName() -> str
+    getUserMetadata() -> list of tuples
+    getZone() -> str
+    rmUser(str, [str]) -> int
+    rmUserMetadata(str, str, [str]) -> int
+    setComment(str) -> int
+    setInfo(str) -> int
+
+
+irodsResource
+    __init__(rcComm_t, str)
+    addUserMetadata(str, str, [str]) -> int
+    getClassName() -> str
+    getComment() -> str
+    getCreateTs() -> str
+    getFreeSpace() -> str
+    getFreeSpaceTs() -> str
+    getHost() -> str
+    getId() -> str
+    getInfo() -> str
+    getInfos() -> dict
+    getModifyTs() -> str
+    getName() -> str
+    getPath() -> str
+    getTypeName() -> str
+    getUserMetadata() -> list of tuples
+    getZone() -> str
+    rmUserMetadata(str, str, [str]) -> int
+    setClassName(str) -> int
+    setComment(str) -> int
+    setFreeSpace(str) -> int
+    setHost(str) -> int
+    setInfo(str) -> int
+    setPath(str) -> int
+    setTypeName(str) -> int
+
+
+irodsUser
+    __init__(rcComm_t, str, str)
+    addUserMetadata(str, str, [str]) -> int
+    getComment() -> str
+    getCreateTs() -> str
+    getGroups() -> list of tuples
+    getId() -> str
+    getInfo() -> str
+    getInfos() -> dict
+    getModifyTs() -> str
+    getName() -> str
+    getTypeName() -> str
+    getUserMetadata() -> list of tuples
+    getZone() -> str
+    rmUserMetadata(str, str, [str]) -> int
+    setComment(str) -> int
+    setinfo(str) -> int
+    setTypeName(str) -> int
+    setZone(str) -> int
+
+
+irodsZone
+    __init__(rcComm_t, str)
+    getComment() -> str
+    getConnString() -> str
+    getCreateTs() -> str
+    getId() -> str
+    getInfos() -> dict
+    getModifyTs() -> str
+    getName() -> str
+    setComment(str) -> int
+    setConnString(str) -> int
+
+
+authInfo_t
+userInfo_t
+userOtherInfo_t
+
+
+
+Functions :
+
+createGroup(rcComm_t, str) -> irodsGroup
+createResource(rcComm_t, str, str, str, str, str) -> irodsResource
+createUser(rcComm_t, str, str) -> irodsUser
+createZone(rcComm_t, str, str, str, str) -> irodsZone
+deleteGroup(rcComm_t, str) -> int
+deleteResource(rcComm_t, str) -> int
+deleteUser(rcComm_t, str) -> int
+deleteZone(rcComm_t, str) -> int
+getGroup(rcComm_t, str) -> irodsGroup
+getGroups(rcComm_t) -> list of str
+getResource(rcComm_t, str) -> irodsResource
+getUser(rcComm_t, str, str, [str]) -> irodsUser
+getUserInfo(rcComm_t, str, str, [str]) -> dict
+getUsers(rcComm_t) -> list of str
+getZone(rcComm_t, str) -> irodsZone
+getZones(rcComm_t) -> list of irodsZone
+
+
+
+/**************/
+/* RODSXMSG.I */
+/**************/
+
+Defines :
+
+SINGLE_MSG_TICKET
+MULTI_MSG_TICKET
+
+
+
+Structs :
+
+getXmsgTicketInp_t
+rcvXmsgInp_t
+rcvXmsgOut_t
+xmsgTicketInfo_t
+sendXmsgInp_t
+
+
+
+Functions :
+
+rcGetXmsgTicket (rcComm_t *, getXmsgTicketInp_t *) -> xmsgTicketInfo_t *
+rcRcvXmsg (rcComm_t *, rcvXmsgInp_t *) -> rcvXmsgOut_t *
+rcSendXmsg (rcComm_t *, sendXmsgInp_t *) -> int
+
+
+
+/*************/
+/* SQLMISC.I */
+/*************/
+
+Functions :
+
+addObject(rcComm_t *, str, str, str, str, str) -> int
+addResultToFormatDictList(genQueryOut_t, str, list)
+addResultToTupleList(genQueryOut_t, l)
+addUserMetadata(rcComm_t *, str, str, str, str, str)
+getDataObjReplicaNumber(rcComm_t *, str, str, str) -> str
+getDataObjRescNames(rcComm_t *, str, str) -> list of str
+getDataObjSize(rcComm_t *, str, str, str) -> int
+getFileInfoToDict(rcComm_t *, str, str, str) -> dict
+getGroupMembers(rcComm_t *, str) -> list of tuple
+getRescInfoToDict(rcComm_t *, str) -> list of dict
+getResources(conn) -> list of tuples
+getUserInfoToDict(rcComm_t *, str, [str]) -> list of dict
+getZoneInfoToDict(rcComm_t *, str, [str]) -> list of dict
+modifyObject(rcComm_t *, str, str, str, str) -> int
+procUserMetadata(rcComm_t *, str, str, str, str, str, str) -> int
+queryToFormatDictList(rcComm_t *, inxIvalPair_t, inxValPair_t, str) -> list of dict
+queryToTupleList(rcComm_t *, inxIvalPair_t, inxValPair_t) -> list of tuple
+rmObject(rcComm_t *, str, str, str) -> int
+rmUserMetadata(rcComm_t *, str, str, str, str, str) -> int
+
+
+
+/***************/
+/* STRINGOPR.I */
+/***************/
+
+Functions :
+
+splitPathByKey(src, src) ->  (int, str, str)
+
+
+
+
+

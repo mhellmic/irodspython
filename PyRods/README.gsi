@@ -1,0 +1,78 @@
+   How to install PyRods 3.2.x with GSI support:
+
+REQUIREMENTS:
+=============
+
+This client API is linked against iRODS 3.2 client API. The client API is 
+independent from the iRODS installation.
+
+https://www.irods.org
+
+The API has been tested with python 2.7. It requires the python development headers (python-dev package for ubuntu for instance)
+
+
+QUICK INSTALL:
+==============
+
+$ tar xvzf PyRods-3.2.3.tar.gz
+$ cd PyRods-3.2.3
+$ export CFLAGS=-fPIC
+$ ./scripts/configure --enable-gsi --globus-location=/usr/local/globus-5.2.4 --gsi-install-type=gcc64dbg
+$ ./scripts/configure
+$ make clients
+$ python setup_gsi.py build 
+$ sudo python setup_gsi.py install
+
+INSTALLATION:
+=============
+
+- Expand the package:
+    $ tar xvzf PyRods-3.2.3.tar.gz   
+
+- For a 64 bits OS add the -fPIC option to the compiler:
+    $ export CFLAGS=-fPIC
+
+- Configure the C client API with GSI support:
+   $ ./scripts/configure --enable-gsi --globus-location=/usr/local/globus-5.2.4 --gsi-install-type=gcc64dbg
+
+- Build the C client API:
+    $ make clients
+    
+- Build the Python library:
+    $ python setup_gsi.py build
+
+- Optionally, you can install the libraries in your python site-packages.
+  You will need the permission to write in that directory.
+    $ sudo python setup_gsi.py install
+
+- The setup.py defines an `irods-dir` option that can be used to link to an existing iRODS install.
+    $ python setup_gsi.py build --irods-dir=/home/rods/iRODS
+    
+USAGE:
+======
+
+The examples directory provides a set of Python scripts which can be used to
+understand the syntax ot the Python API.
+
+NOTES:
+======
+
+- I had problem to compile iRODS 3.2 with GSI support, I had to modify some makefiles (even after installing the patch for 64 bits architecture). It may be possible that you will need to adapt the path in order to manage to compile the libraries.
+
+- In case something is not working here are the different files to investigate/modify:
+   * clients/icommands/Makefile: l. 201
+   * lib/Makefile: l. 121
+   * setup_gsi.py: l. 47 -> l.54
+
+- You also need to have globus libraries in LD_LIBRARY_PATH. 
+    $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/globus-5.2.4/lib64
+
+- You need to add GSI options in the ~/.irods/.irodsEnv file. You may need to create it if you only install the client API for Python.
+    irodsAuthScheme 'GSI'
+    irodsServerDn '/O=Grid/OU=GlobusTest/OU=simpleCA-desktop/OU=local/CN=Rods'
+
+- If everything is compiled and installed correctly the use of certificates will be transparent, the clientLogin() call in the Python API will call the clientLogin() in the C API which then calls the clientLoginGsi() to authenticate the user.
+   
+
+    
+     
