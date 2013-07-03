@@ -1,0 +1,5 @@
+for the unittest script you need to resources : demoResc and demoResc2
+
+I use :
+iadmin mkresc demoResc "unix file system" archive localhost.localdomain /home/rods/install/irods/Vault
+iadmin mkresc demoResc2 "unix file system" archive localhost.localdomain /home/rods/install/irods/Vault2
