@@ -45,13 +45,13 @@ irods = Extension("_irods",
                   sources=['irods_wrap.c'],
                   include_dirs=include_dirs,
                   library_dirs = ['/usr/local/globus-5.2.4/lib64'],
-                  libraries=['globus_gss_assist', 'globus_gssapi_gsi', 
-						'globus_gsi_credential', 'globus_gsi_proxy_core', 
-						'globus_gsi_callback', 'globus_oldgaa', 
-						'globus_gsi_sysconfig', 'globus_gsi_cert_utils', 
-						'globus_openssl_error', 'globus_openssl', 
-						'globus_proxy_ssl', 'ssl', 'crypto', 'globus_common', 
-						'globus_callout', 'ltdl'],
+                  libraries=['globus_gss_assist', 'globus_gssapi_gsi',
+                             'globus_gsi_credential', 'globus_gsi_proxy_core',
+                             'globus_gsi_callback', 'globus_oldgaa',
+                             'globus_gsi_sysconfig', 'globus_gsi_cert_utils',
+                             'globus_openssl_error', 'globus_openssl',
+                             'globus_proxy_ssl', 'ssl', 'crypto',
+                             'globus_common', 'globus_callout', 'ltdl'],
                   extra_objects=extra_objects)
 
 from distutils.command.build import build
@@ -73,10 +73,10 @@ class MyBuild(build):
             extra_objects[i] = self.irods_dir + extra_objects[i]
 
 setup(name="PyRods", 
-      version="3.2.3",
+      version="3.2.4",
       author = "Jerome Fuselier",
       author_email = "jerome.fuselier@free.fr",
-      license = "GPL",
+      license = "LGPL",
       description = 'python client API for iRODS',
       url="http://code.google.com/p/irodspython",
       cmdclass = { "build" : MyBuild },

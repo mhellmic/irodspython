@@ -243,6 +243,41 @@ chkObjPermAndStat_t_swigregister(chkObjPermAndStat_t)
 def rcChkObjPermAndStat(*args):
   return _irods.rcChkObjPermAndStat(*args)
 rcChkObjPermAndStat = _irods.rcChkObjPermAndStat
+DONE_OPR = _irods.DONE_OPR
+PUT_OPR = _irods.PUT_OPR
+GET_OPR = _irods.GET_OPR
+SAME_HOST_COPY_OPR = _irods.SAME_HOST_COPY_OPR
+COPY_TO_LOCAL_OPR = _irods.COPY_TO_LOCAL_OPR
+COPY_TO_REM_OPR = _irods.COPY_TO_REM_OPR
+REPLICATE_OPR = _irods.REPLICATE_OPR
+REPLICATE_DEST = _irods.REPLICATE_DEST
+REPLICATE_SRC = _irods.REPLICATE_SRC
+COPY_DEST = _irods.COPY_DEST
+COPY_SRC = _irods.COPY_SRC
+RENAME_DATA_OBJ = _irods.RENAME_DATA_OBJ
+RENAME_COLL = _irods.RENAME_COLL
+MOVE_OPR = _irods.MOVE_OPR
+RSYNC_OPR = _irods.RSYNC_OPR
+PHYMV_OPR = _irods.PHYMV_OPR
+PHYMV_SRC = _irods.PHYMV_SRC
+PHYMV_DEST = _irods.PHYMV_DEST
+QUERY_DATA_OBJ = _irods.QUERY_DATA_OBJ
+QUERY_DATA_OBJ_RECUR = _irods.QUERY_DATA_OBJ_RECUR
+QUERY_COLL_OBJ = _irods.QUERY_COLL_OBJ
+QUERY_COLL_OBJ_RECUR = _irods.QUERY_COLL_OBJ_RECUR
+RENAME_UNKNOWN_TYPE = _irods.RENAME_UNKNOWN_TYPE
+REMOTE_ZONE_OPR = _irods.REMOTE_ZONE_OPR
+UNREG_OPR = _irods.UNREG_OPR
+NC_OPR = _irods.NC_OPR
+NC_OPEN_FOR_WRITE = _irods.NC_OPEN_FOR_WRITE
+NC_OPEN_FOR_READ = _irods.NC_OPEN_FOR_READ
+NC_CREATE = _irods.NC_CREATE
+NC_OPEN_GROUP = _irods.NC_OPEN_GROUP
+CREATE_TYPE = _irods.CREATE_TYPE
+OPEN_FOR_READ_TYPE = _irods.OPEN_FOR_READ_TYPE
+OPEN_FOR_WRITE_TYPE = _irods.OPEN_FOR_WRITE_TYPE
+STREAMING_FLAG = _irods.STREAMING_FLAG
+NO_CHK_COPY_LEN_FLAG = _irods.NO_CHK_COPY_LEN_FLAG
 class collInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, collInp_t, name, value)
@@ -4066,7 +4101,7 @@ class irodsFile:
             addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
         
         dataObjInp.openFlags = O_RDONLY
-        dataObjInp.objPath = self.fullPath()        
+        dataObjInp.objPath = self.fullPath()
         return rcDataObjUnlink(self._conn, dataObjInp)
     
     def getCollName(self):
@@ -4076,8 +4111,8 @@ class irodsFile:
         return self.dataName
     
     def getInfos(self):
-        return getFileInfoToDict(self._conn, self.collName,
-                                 self.dataName, self.resourceName)
+        return getFileInfo(self._conn, self.collName,
+                           self.dataName, self.resourceName)
         
     def getDescInx(self):
         return self.descInx
@@ -6595,7 +6630,7 @@ def getDataObjSize(conn, coll_name, data_name, resc_name):
 # Get the file Info with the name and resource, query the ICAT database and
 # create a dictionary with the returned information. Need the connection to
 # iRODS
-def getFileInfoToDict(conn, coll_name, data_name, resc_name):
+def getFileInfo(conn, coll_name, data_name, resc_name):
     sqlCondInp = inxValPair_t()
     selectInp = inxIvalPair_t()
     

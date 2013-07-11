@@ -150,7 +150,7 @@ def getDataObjSize(conn, coll_name, data_name, resc_name):
 # Get the file Info with the name and resource, query the ICAT database and
 # create a dictionary with the returned information. Need the connection to
 # iRODS
-def getFileInfoToDict(conn, coll_name, data_name, resc_name):
+def getFileInfo(conn, coll_name, data_name, resc_name):
     sqlCondInp = inxValPair_t()
     selectInp = inxIvalPair_t()
     

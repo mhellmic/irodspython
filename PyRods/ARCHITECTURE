@@ -228,7 +228,7 @@ fillStrInMsParam                       msParam.i
 getDataObjReplicaNumber                sqlMisc.i
 getDataObjRescNames                    sqlMisc.i
 getDataObjSize                         sqlMisc.i
-getFileInfoToDict                      sqlMisc.i
+getFileInfo                            sqlMisc.i
 getGroup                               rodsUser.i
 getGroupMembers                        sqlMisc.i
 getGroups                              rodsUser.i
@@ -1306,7 +1306,7 @@ addUserMetadata(rcComm_t *, str, str, str, str, str)
 getDataObjReplicaNumber(rcComm_t *, str, str, str) -> str
 getDataObjRescNames(rcComm_t *, str, str) -> list of str
 getDataObjSize(rcComm_t *, str, str, str) -> int
-getFileInfoToDict(rcComm_t *, str, str, str) -> dict
+getFileInfo(rcComm_t *, str, str, str) -> dict
 getGroupMembers(rcComm_t *, str) -> list of tuple
 getRescInfoToDict(rcComm_t *, str) -> list of dict
 getResources(conn) -> list of tuples

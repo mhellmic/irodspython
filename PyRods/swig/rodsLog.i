@@ -31,7 +31,19 @@
 
 /*****************************************************************************/
 
-char *rodsErrorName(int errorValue, char **subName);
+%inline %{
+PyObject * rodsErrorName(int errorValue) {
+    char *mySubName;
+    char *myName;
+    PyObject *tuple = PyTuple_New(2);
+    myName = rodsErrorName(errorValue, &mySubName);
+    
+    PyTuple_SetItem(tuple, 0, Py_BuildValue("s", myName));
+    PyTuple_SetItem(tuple, 1, Py_BuildValue("s", mySubName));
+    
+    return tuple;
+}
+%}
 
 /*****************************************************************************/
 

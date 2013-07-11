@@ -4107,6 +4107,19 @@ dataObjInfo_t * rcRegDataObj(rcComm_t *conn, dataObjInfo_t *dataObjInfo) {
 #include "rodsKeyWdDef.h"
 
 
+PyObject * rodsErrorName(int errorValue) {
+    char *mySubName;
+    char *myName;
+    PyObject *tuple = PyTuple_New(2);
+    myName = rodsErrorName(errorValue, &mySubName);
+    
+    PyTuple_SetItem(tuple, 0, Py_BuildValue("s", myName));
+    PyTuple_SetItem(tuple, 1, Py_BuildValue("s", mySubName));
+    
+    return tuple;
+}
+
+
 #include "modAVUMetadata.h"
 #include "modDataObjMeta.h"
 
@@ -41152,51 +41165,21 @@ fail:
 SWIGINTERN PyObject *_wrap_rodsErrorName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
-  char **arg2 = (char **) 0 ;
   int val1 ;
   int ecode1 = 0 ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *result = 0 ;
+  PyObject *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:rodsErrorName",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:rodsErrorName",&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "rodsErrorName" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = (int)(val1);
-  {
-    /* Check if is a list */
-    if (PyList_Check(obj1)) {
-      size_t size = PyList_Size(obj1);
-      size_t i = 0;
-      arg2 = (char **) malloc((size+1)*sizeof(char *));
-      for (i = 0; i < size; i++) {
-        PyObject *o = PyList_GetItem(obj1,i);
-        if (PyString_Check(o))
-        arg2[i] = PyString_AsString(PyList_GetItem(obj1,i));
-        else {
-          PyErr_SetString(PyExc_TypeError,"list must contain strings");
-          free(arg2);
-          return NULL;
-        }
-      }
-      arg2[size] = 0;
-    } else {
-      PyErr_SetString(PyExc_TypeError,"not a list");
-      return NULL;
-    }
-  }
-  result = (char *)rodsErrorName(arg1,arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  {
-    free((char *)arg2);
-  }
+  result = (PyObject *)rodsErrorName(arg1);
+  resultobj = result;
   return resultobj;
 fail:
-  {
-    free((char *)arg2);
-  }
   return NULL;
 }
 
@@ -52813,6 +52796,41 @@ SWIG_init(void) {
   
   SWIG_Python_SetConstant(d, "CHALLENGE_LEN",SWIG_From_int((int)(64)));
   SWIG_Python_SetConstant(d, "RESPONSE_LEN",SWIG_From_int((int)(16)));
+  SWIG_Python_SetConstant(d, "DONE_OPR",SWIG_From_int((int)(9999)));
+  SWIG_Python_SetConstant(d, "PUT_OPR",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "GET_OPR",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "SAME_HOST_COPY_OPR",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "COPY_TO_LOCAL_OPR",SWIG_From_int((int)(4)));
+  SWIG_Python_SetConstant(d, "COPY_TO_REM_OPR",SWIG_From_int((int)(5)));
+  SWIG_Python_SetConstant(d, "REPLICATE_OPR",SWIG_From_int((int)(6)));
+  SWIG_Python_SetConstant(d, "REPLICATE_DEST",SWIG_From_int((int)(7)));
+  SWIG_Python_SetConstant(d, "REPLICATE_SRC",SWIG_From_int((int)(8)));
+  SWIG_Python_SetConstant(d, "COPY_DEST",SWIG_From_int((int)(9)));
+  SWIG_Python_SetConstant(d, "COPY_SRC",SWIG_From_int((int)(10)));
+  SWIG_Python_SetConstant(d, "RENAME_DATA_OBJ",SWIG_From_int((int)(11)));
+  SWIG_Python_SetConstant(d, "RENAME_COLL",SWIG_From_int((int)(12)));
+  SWIG_Python_SetConstant(d, "MOVE_OPR",SWIG_From_int((int)(13)));
+  SWIG_Python_SetConstant(d, "RSYNC_OPR",SWIG_From_int((int)(14)));
+  SWIG_Python_SetConstant(d, "PHYMV_OPR",SWIG_From_int((int)(15)));
+  SWIG_Python_SetConstant(d, "PHYMV_SRC",SWIG_From_int((int)(16)));
+  SWIG_Python_SetConstant(d, "PHYMV_DEST",SWIG_From_int((int)(17)));
+  SWIG_Python_SetConstant(d, "QUERY_DATA_OBJ",SWIG_From_int((int)(18)));
+  SWIG_Python_SetConstant(d, "QUERY_DATA_OBJ_RECUR",SWIG_From_int((int)(19)));
+  SWIG_Python_SetConstant(d, "QUERY_COLL_OBJ",SWIG_From_int((int)(20)));
+  SWIG_Python_SetConstant(d, "QUERY_COLL_OBJ_RECUR",SWIG_From_int((int)(21)));
+  SWIG_Python_SetConstant(d, "RENAME_UNKNOWN_TYPE",SWIG_From_int((int)(22)));
+  SWIG_Python_SetConstant(d, "REMOTE_ZONE_OPR",SWIG_From_int((int)(24)));
+  SWIG_Python_SetConstant(d, "UNREG_OPR",SWIG_From_int((int)(26)));
+  SWIG_Python_SetConstant(d, "NC_OPR",SWIG_From_int((int)(1000)));
+  SWIG_Python_SetConstant(d, "NC_OPEN_FOR_WRITE",SWIG_From_int((int)(1000)));
+  SWIG_Python_SetConstant(d, "NC_OPEN_FOR_READ",SWIG_From_int((int)(1001)));
+  SWIG_Python_SetConstant(d, "NC_CREATE",SWIG_From_int((int)(1002)));
+  SWIG_Python_SetConstant(d, "NC_OPEN_GROUP",SWIG_From_int((int)(1003)));
+  SWIG_Python_SetConstant(d, "CREATE_TYPE",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "OPEN_FOR_READ_TYPE",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "OPEN_FOR_WRITE_TYPE",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "STREAMING_FLAG",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "NO_CHK_COPY_LEN_FLAG",SWIG_From_int((int)(0x2)));
   SWIG_Python_SetConstant(d, "LONG_METADATA_FG",SWIG_From_int((int)(0x1)));
   SWIG_Python_SetConstant(d, "VERY_LONG_METADATA_FG",SWIG_From_int((int)(0x2)));
   SWIG_Python_SetConstant(d, "RECUR_QUERY_FG",SWIG_From_int((int)(0x4)));

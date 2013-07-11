@@ -66,10 +66,10 @@ class MyBuild(build):
             extra_objects[i] = self.irods_dir + extra_objects[i]
 
 setup(name="PyRods", 
-      version="3.2.3",
+      version="3.2.4",
       author = "Jerome Fuselier",
       author_email = "jerome.fuselier@free.fr",
-      license = "GPL",
+      license = "LGPL",
       description = 'python client API for iRODS',
       url="http://code.google.com/p/irodspython",
       cmdclass = { "build" : MyBuild },

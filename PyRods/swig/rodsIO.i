@@ -224,7 +224,7 @@ class irodsFile:
             addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
         
         dataObjInp.openFlags = O_RDONLY
-        dataObjInp.objPath = self.fullPath()        
+        dataObjInp.objPath = self.fullPath()
         return rcDataObjUnlink(self._conn, dataObjInp)
     
     def getCollName(self):
@@ -234,8 +234,8 @@ class irodsFile:
         return self.dataName
     
     def getInfos(self):
-        return getFileInfoToDict(self._conn, self.collName,
-                                 self.dataName, self.resourceName)
+        return getFileInfo(self._conn, self.collName,
+                           self.dataName, self.resourceName)
         
     def getDescInx(self):
         return self.descInx

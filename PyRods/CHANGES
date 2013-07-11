@@ -21,3 +21,7 @@
       getUsersQuotaGlobal(conn) -> global quota for users
       getUsersQuotaResources(conn) -> resources quota for users
       See examples/quotas.py for an example
+
+* 3.2.4:
+  - Modify rodsErrorName
+  - Rename: getFileInfoToDict -> getFileInfo
