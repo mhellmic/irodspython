@@ -1,0 +1,4 @@
+include README gpl.txt config.ini main.py
+recursive-include model *.py
+recursive-include interface *.py *.png
+prune interface/wxGlade
