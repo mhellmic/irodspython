@@ -133,6 +133,9 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
         else:
             l1descInx = rcDataObjCreate(conn, dataObjInp)
     
+    else:
+        l1descInx = 0
+    
     if not resc_name: # If the resc parameter was NULL then we need to find the
                       # resource iRODS used and set the ir_file variable
         ir_resc_name = getDataObjRescNames(conn, collName, dataName)
@@ -146,10 +149,21 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
         
 def addCollUserMetadata(conn, path, name, value, units=""):
     return addUserMetadata(conn, "-c", path, name, value, units)
-    
+
 def addFileUserMetadata(conn, path, name, value, units=""):
     return addUserMetadata(conn, "-d", path, name, value, units)
-    
+
+def getCollId(conn, path):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_COLL_ID], [0], 1)
+    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
+    l = queryToTupleList(conn, selectInp, sqlCondInp)
+    if l:
+        return l[0]
+    else:
+        return -1
+
 def getCollUserMetadata(conn, path):
     sqlCondInp = inxValPair_t()
     selectInp = inxIvalPair_t()
@@ -518,7 +532,10 @@ class irodsCollection:
 
     def getCollName(self):
         return self.collName
-    
+
+    def getId(self):
+        return getCollId(self._conn, self.getCollName())
+
     def getLenObjects(self):
         queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
         nb_el = 0

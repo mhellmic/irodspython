@@ -37,6 +37,11 @@ int addKeyVal (keyValPair_t *condInput, char *keyWord, char *value);
 
 /*****************************************************************************/
 
+int addTagStruct (tagStruct_t *condInput, char *preTag, char *postTag, 
+char *keyWord);
+
+/*****************************************************************************/
+
 int chkStateForResume (rcComm_t *conn, rodsRestart_t *rodsRestart,
 char *targPath, rodsArguments_t *rodsArgs, objType_t objType,
 keyValPair_t *condInput, int deleteFlag);

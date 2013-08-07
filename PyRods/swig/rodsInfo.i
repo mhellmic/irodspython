@@ -82,6 +82,59 @@ typedef struct rodsObjStat {
     specColl_t          *specColl;
 } rodsObjStat_t;
 
+%ignore TagStruct::preTag;
+%ignore TagStruct::postTag;
+%ignore TagStruct::keyWord;
+
+typedef struct TagStruct {
+    int len;
+    char **preTag;
+    char **postTag;
+    char **keyWord;
+} tagStruct_t;
+
+
+%extend tagStruct_t {
+    
+    char ** getPreTag(size_t *len) {
+        *len = $self->len;
+        return $self->preTag;
+    }
+    
+    char * getPreTag(int n) {
+        if ( (n >=0) && (n < $self->len) ) {
+            char * tag = $self->preTag[n];
+            return tag;
+        } else
+            return NULL;
+    }
+
+    char * getPostTag(int n) {
+        if ( (n >=0) && (n < $self->len) )
+            return $self->postTag[n];
+        else
+            return NULL;
+    }
+    
+    char ** getPostTag(size_t *len) {
+        *len = $self->len;
+        return $self->postTag;
+    }
+    
+    char ** getKeyWord(size_t *len) {
+        *len = $self->len;
+        return $self->keyWord;
+    }
+
+    char * getKeyWord(int n) {
+        if ( (n >=0) && (n < $self->len) )
+            return $self->keyWord[n];
+        else
+            return NULL;
+    }
+
+}
+
 typedef struct SpecColl {
     specCollClass_t collClass;
     structFileType_t type;
@@ -105,7 +158,6 @@ typedef struct Subfile {
 
 /*****************************************************************************/
 
-%ignore KeyValPair::len;
 %ignore KeyValPair::keyWord;
 %ignore KeyValPair::value;
 
@@ -139,16 +191,30 @@ typedef struct KeyValPair {
     
     int getLen() {
         return $self->len;
-    }    
+    }
     
     char ** getKeyWord(size_t *len) {
         *len = $self->len;
         return $self->keyWord;
     }
     
+    char * getKeyWord(int n) {
+        if ( (n >=0) && (n < $self->len) )
+            return $self->keyWord[n];
+        else
+            return NULL;
+    }
+    
     char ** getValue(size_t *len) {
         *len = $self->len;
         return $self->value;
+    }
+    
+    char * getValue(int n) {
+        if ( (n >=0) && (n < $self->len) )
+            return $self->value[n];
+        else
+            return NULL;
     }
     
     char * __str__() {
@@ -167,7 +233,6 @@ typedef struct KeyValPair {
 /*****************************************************************************/
 
 %ignore InxIvalPair::inx;
-%ignore InxIvalPair::len;
 %ignore InxIvalPair::value;
 
 typedef struct InxIvalPair {
@@ -224,7 +289,6 @@ typedef struct InxIvalPair {
 /*****************************************************************************/
 
 %ignore InxValPair::inx;
-%ignore InxValPair::len;
 %ignore InxValPair::value;
 
 typedef struct InxValPair {

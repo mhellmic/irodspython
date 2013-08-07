@@ -79,20 +79,26 @@ typedef struct {
 /*****************************************************************************/
 
 %inline %{
-execCmdOut_t * rcExecCmd(rcComm_t *conn, execCmd_t *execCmdInp) {
+PyObject * rcExecCmd(rcComm_t *conn, execCmd_t *execCmdInp) {
     execCmdOut_t *execCmdOut = NULL;
-    rcExecCmd(conn, execCmdInp, &execCmdOut);
-    return execCmdOut;
+    int status = rcExecCmd(conn, execCmdInp, &execCmdOut);
+    return Py_BuildValue("(iO)", 
+                         status, 
+                         SWIG_NewPointerObj(SWIG_as_voidptr(execCmdOut), 
+                                            SWIGTYPE_p_ExecCmdOut, 0 |  0 ));
 }
 %}
 
 /*****************************************************************************/
 
 %inline %{
-msParamArray_t * rcExecMyRule(rcComm_t *conn, execMyRuleInp_t *execMyRuleInp) {
+PyObject * rcExecMyRule(rcComm_t *conn, execMyRuleInp_t *execMyRuleInp) {
     msParamArray_t *outParamArray = NULL;
-    rcExecMyRule(conn, execMyRuleInp, &outParamArray);
-    return outParamArray;
+    int status = rcExecMyRule(conn, execMyRuleInp, &outParamArray);
+    return Py_BuildValue("(iO)", 
+                         status, 
+                         SWIG_NewPointerObj(SWIG_as_voidptr(outParamArray), 
+                                            SWIGTYPE_p_MsParamArray, 0 |  0 ));
 }
 %}
 

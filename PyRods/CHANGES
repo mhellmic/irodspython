@@ -25,3 +25,9 @@
 * 3.2.4:
   - Modify rodsErrorName
   - Rename: getFileInfoToDict -> getFileInfo
+  - Updates in msParam.i:
+      Add some defines
+      Extend msParam_t and msParamArray_t
+  - Modify rcExecCmd and rcExecMyRule in rodsExec (return a tuple with the status)
+  - Extend keyValPair_t in rodsInfo.i
+  - Add rcDataObjLock()

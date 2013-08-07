@@ -278,6 +278,12 @@ OPEN_FOR_READ_TYPE = _irods.OPEN_FOR_READ_TYPE
 OPEN_FOR_WRITE_TYPE = _irods.OPEN_FOR_WRITE_TYPE
 STREAMING_FLAG = _irods.STREAMING_FLAG
 NO_CHK_COPY_LEN_FLAG = _irods.NO_CHK_COPY_LEN_FLAG
+READ_LOCK_TYPE = _irods.READ_LOCK_TYPE
+WRITE_LOCK_TYPE = _irods.WRITE_LOCK_TYPE
+UNLOCK_TYPE = _irods.UNLOCK_TYPE
+SET_LOCK_CMD = _irods.SET_LOCK_CMD
+SET_LOCK_WAIT_CMD = _irods.SET_LOCK_WAIT_CMD
+GET_LOCK_CMD = _irods.GET_LOCK_CMD
 class collInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, collInp_t, name, value)
@@ -600,6 +606,10 @@ rcDataObjCreateAndStat = _irods.rcDataObjCreateAndStat
 def rcDataObjGet(*args):
   return _irods.rcDataObjGet(*args)
 rcDataObjGet = _irods.rcDataObjGet
+
+def rcDataObjLock(*args):
+  return _irods.rcDataObjLock(*args)
+rcDataObjLock = _irods.rcDataObjLock
 
 def rcDataObjLseek(*args):
   return _irods.rcDataObjLseek(*args)
@@ -1155,6 +1165,89 @@ modAccessControlInp_t_swigregister(modAccessControlInp_t)
 def rcModAccessControl(*args):
   return _irods.rcModAccessControl(*args)
 rcModAccessControl = _irods.rcModAccessControl
+STR_MS_T = _irods.STR_MS_T
+INT_MS_T = _irods.INT_MS_T
+INT16_MS_T = _irods.INT16_MS_T
+CHAR_MS_T = _irods.CHAR_MS_T
+BUF_LEN_MS_T = _irods.BUF_LEN_MS_T
+STREAM_MS_T = _irods.STREAM_MS_T
+DOUBLE_MS_T = _irods.DOUBLE_MS_T
+FLOAT_MS_T = _irods.FLOAT_MS_T
+BOOL_MS_T = _irods.BOOL_MS_T
+DataObjInp_MS_T = _irods.DataObjInp_MS_T
+DataObjCloseInp_MS_T = _irods.DataObjCloseInp_MS_T
+DataObjCopyInp_MS_T = _irods.DataObjCopyInp_MS_T
+DataObjReadInp_MS_T = _irods.DataObjReadInp_MS_T
+DataObjWriteInp_MS_T = _irods.DataObjWriteInp_MS_T
+DataObjLseekInp_MS_T = _irods.DataObjLseekInp_MS_T
+DataObjLseekOut_MS_T = _irods.DataObjLseekOut_MS_T
+KeyValPair_MS_T = _irods.KeyValPair_MS_T
+TagStruct_MS_T = _irods.TagStruct_MS_T
+CollInp_MS_T = _irods.CollInp_MS_T
+ExecCmd_MS_T = _irods.ExecCmd_MS_T
+ExecCmdOut_MS_T = _irods.ExecCmdOut_MS_T
+RodsObjStat_MS_T = _irods.RodsObjStat_MS_T
+VaultPathPolicy_MS_T = _irods.VaultPathPolicy_MS_T
+StrArray_MS_T = _irods.StrArray_MS_T
+IntArray_MS_T = _irods.IntArray_MS_T
+GenQueryInp_MS_T = _irods.GenQueryInp_MS_T
+GenQueryOut_MS_T = _irods.GenQueryOut_MS_T
+XmsgTicketInfo_MS_T = _irods.XmsgTicketInfo_MS_T
+SendXmsgInfo_MS_T = _irods.SendXmsgInfo_MS_T
+GetXmsgTicketInp_MS_T = _irods.GetXmsgTicketInp_MS_T
+SendXmsgInp_MS_T = _irods.SendXmsgInp_MS_T
+RcvXmsgInp_MS_T = _irods.RcvXmsgInp_MS_T
+RcvXmsgOut_MS_T = _irods.RcvXmsgOut_MS_T
+StructFileExtAndRegInp_MS_T = _irods.StructFileExtAndRegInp_MS_T
+RuleSet_MS_T = _irods.RuleSet_MS_T
+RuleStruct_MS_T = _irods.RuleStruct_MS_T
+DVMapStruct_MS_T = _irods.DVMapStruct_MS_T
+FNMapStruct_MS_T = _irods.FNMapStruct_MS_T
+MsrvcStruct_MS_T = _irods.MsrvcStruct_MS_T
+NcOpenInp_MS_T = _irods.NcOpenInp_MS_T
+NcInqIdInp_MS_T = _irods.NcInqIdInp_MS_T
+NcInqWithIdOut_MS_T = _irods.NcInqWithIdOut_MS_T
+NcInqInp_MS_T = _irods.NcInqInp_MS_T
+NcInqOut_MS_T = _irods.NcInqOut_MS_T
+NcCloseInp_MS_T = _irods.NcCloseInp_MS_T
+NcGetVarInp_MS_T = _irods.NcGetVarInp_MS_T
+NcGetVarOut_MS_T = _irods.NcGetVarOut_MS_T
+NccfGetVarInp_MS_T = _irods.NccfGetVarInp_MS_T
+NccfGetVarOut_MS_T = _irods.NccfGetVarOut_MS_T
+NcInqGrpsOut_MS_T = _irods.NcInqGrpsOut_MS_T
+Dictionary_MS_T = _irods.Dictionary_MS_T
+DictArray_MS_T = _irods.DictArray_MS_T
+GenArray_MS_T = _irods.GenArray_MS_T
+RESC_NAME_FLAG = _irods.RESC_NAME_FLAG
+DEST_RESC_NAME_FLAG = _irods.DEST_RESC_NAME_FLAG
+BACKUP_RESC_NAME_FLAG = _irods.BACKUP_RESC_NAME_FLAG
+FORCE_FLAG_FLAG = _irods.FORCE_FLAG_FLAG
+ALL_FLAG = _irods.ALL_FLAG
+LOCAL_PATH_FLAG = _irods.LOCAL_PATH_FLAG
+VERIFY_CHKSUM_FLAG = _irods.VERIFY_CHKSUM_FLAG
+IRODS_ADMIN_FLAG = _irods.IRODS_ADMIN_FLAG
+UPDATE_REPL_FLAG = _irods.UPDATE_REPL_FLAG
+REPL_NUM_FLAG = _irods.REPL_NUM_FLAG
+DATA_TYPE_FLAG = _irods.DATA_TYPE_FLAG
+CHKSUM_ALL_FLAG = _irods.CHKSUM_ALL_FLAG
+FORCE_CHKSUM_FLAG = _irods.FORCE_CHKSUM_FLAG
+FILE_PATH_FLAG = _irods.FILE_PATH_FLAG
+CREATE_MODE_FLAG = _irods.CREATE_MODE_FLAG
+OPEN_FLAGS_FLAG = _irods.OPEN_FLAGS_FLAG
+COLL_FLAGS_FLAG = _irods.COLL_FLAGS_FLAG
+DATA_SIZE_FLAGS = _irods.DATA_SIZE_FLAGS
+NUM_THREADS_FLAG = _irods.NUM_THREADS_FLAG
+OPR_TYPE_FLAG = _irods.OPR_TYPE_FLAG
+OBJ_PATH_FLAG = _irods.OBJ_PATH_FLAG
+COLL_NAME_FLAG = _irods.COLL_NAME_FLAG
+IRODS_RMTRASH_FLAG = _irods.IRODS_RMTRASH_FLAG
+IRODS_ADMIN_RMTRASH_FLAG = _irods.IRODS_ADMIN_RMTRASH_FLAG
+DEF_RESC_NAME_FLAG = _irods.DEF_RESC_NAME_FLAG
+RBUDP_TRANSFER_FLAG = _irods.RBUDP_TRANSFER_FLAG
+RBUDP_SEND_RATE_FLAG = _irods.RBUDP_SEND_RATE_FLAG
+RBUDP_PACK_SIZE_FLAG = _irods.RBUDP_PACK_SIZE_FLAG
+BULK_OPR_FLAG = _irods.BULK_OPR_FLAG
+UNREG_FLAG = _irods.UNREG_FLAG
 class msParam_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, msParam_t, name, value)
@@ -1173,6 +1266,12 @@ class msParam_t(_object):
     __swig_setmethods__["inpOutBuf"] = _irods.msParam_t_inpOutBuf_set
     __swig_getmethods__["inpOutBuf"] = _irods.msParam_t_inpOutBuf_get
     if _newclass:inpOutBuf = _swig_property(_irods.msParam_t_inpOutBuf_get, _irods.msParam_t_inpOutBuf_set)
+    def getInOutAsExecCmdOut(self): return _irods.msParam_t_getInOutAsExecCmdOut(self)
+    def getInOutAsChar(self): return _irods.msParam_t_getInOutAsChar(self)
+    def getInOutAsInt(self): return _irods.msParam_t_getInOutAsInt(self)
+    def getInOutAsDouble(self): return _irods.msParam_t_getInOutAsDouble(self)
+    def getInOutAsKeyValPair(self): return _irods.msParam_t_getInOutAsKeyValPair(self)
+    def getInOutAsTagStruct(self): return _irods.msParam_t_getInOutAsTagStruct(self)
     def __init__(self): 
         this = _irods.new_msParam_t()
         try: self.this.append(this)
@@ -1197,6 +1296,7 @@ class msParamArray_t(_object):
     __swig_setmethods__["msParam"] = _irods.msParamArray_t_msParam_set
     __swig_getmethods__["msParam"] = _irods.msParamArray_t_msParam_get
     if _newclass:msParam = _swig_property(_irods.msParamArray_t_msParam_get, _irods.msParamArray_t_msParam_set)
+    def getMsParam(self, *args): return _irods.msParamArray_t_getMsParam(self, *args)
     def __init__(self): 
         this = _irods.new_msParamArray_t()
         try: self.this.append(this)
@@ -1210,6 +1310,26 @@ msParamArray_t_swigregister(msParamArray_t)
 def addMsParamToArray(*args):
   return _irods.addMsParamToArray(*args)
 addMsParamToArray = _irods.addMsParamToArray
+
+def addCharParamToArray(*args):
+  return _irods.addCharParamToArray(*args)
+addCharParamToArray = _irods.addCharParamToArray
+
+def addDoubleParamToArray(*args):
+  return _irods.addDoubleParamToArray(*args)
+addDoubleParamToArray = _irods.addDoubleParamToArray
+
+def addKeyValParamToArray(*args):
+  return _irods.addKeyValParamToArray(*args)
+addKeyValParamToArray = _irods.addKeyValParamToArray
+
+def addTagStructParamToArray(*args):
+  return _irods.addTagStructParamToArray(*args)
+addTagStructParamToArray = _irods.addTagStructParamToArray
+
+def addIntParamToArray(*args):
+  return _irods.addIntParamToArray(*args)
+addIntParamToArray = _irods.addIntParamToArray
 
 def fillBufLenInMsParam(*args):
   return _irods.fillBufLenInMsParam(*args)
@@ -1238,6 +1358,10 @@ fillStrInMsParam = _irods.fillStrInMsParam
 def getMsParamByLabel(*args):
   return _irods.getMsParamByLabel(*args)
 getMsParamByLabel = _irods.getMsParamByLabel
+
+def getMsParamByType(*args):
+  return _irods.getMsParamByType(*args)
+getMsParamByType = _irods.getMsParamByType
 
 def parseMspForFloat(*args):
   return _irods.parseMspForFloat(*args)
@@ -1781,6 +1905,10 @@ def addKeyVal(*args):
   return _irods.addKeyVal(*args)
 addKeyVal = _irods.addKeyVal
 
+def addTagStruct(*args):
+  return _irods.addTagStruct(*args)
+addTagStruct = _irods.addTagStruct
+
 def chkStateForResume(*args):
   return _irods.chkStateForResume(*args)
 chkStateForResume = _irods.chkStateForResume
@@ -1963,6 +2091,7 @@ class bytesBuf_t(_object):
     __del__ = lambda self : None;
     def setBuf(self, *args): return _irods.bytesBuf_t_setBuf(self, *args)
     def getBuf(self): return _irods.bytesBuf_t_getBuf(self)
+    def getBufAsChar(self): return _irods.bytesBuf_t_getBufAsChar(self)
     def __init__(self): 
         this = _irods.new_bytesBuf_t()
         try: self.this.append(this)
@@ -3776,6 +3905,27 @@ class rodsObjStat_t(_object):
 rodsObjStat_t_swigregister = _irods.rodsObjStat_t_swigregister
 rodsObjStat_t_swigregister(rodsObjStat_t)
 
+class tagStruct_t(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, tagStruct_t, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, tagStruct_t, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["len"] = _irods.tagStruct_t_len_set
+    __swig_getmethods__["len"] = _irods.tagStruct_t_len_get
+    if _newclass:len = _swig_property(_irods.tagStruct_t_len_get, _irods.tagStruct_t_len_set)
+    def getPreTag(self, *args): return _irods.tagStruct_t_getPreTag(self, *args)
+    def getPostTag(self, *args): return _irods.tagStruct_t_getPostTag(self, *args)
+    def getKeyWord(self, *args): return _irods.tagStruct_t_getKeyWord(self, *args)
+    def __init__(self): 
+        this = _irods.new_tagStruct_t()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _irods.delete_tagStruct_t
+    __del__ = lambda self : None;
+tagStruct_t_swigregister = _irods.tagStruct_t_swigregister
+tagStruct_t_swigregister(tagStruct_t)
+
 class specColl_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, specColl_t, name, value)
@@ -3857,10 +4007,13 @@ class keyValPair_t(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, keyValPair_t, name)
     __repr__ = _swig_repr
+    __swig_setmethods__["len"] = _irods.keyValPair_t_len_set
+    __swig_getmethods__["len"] = _irods.keyValPair_t_len_get
+    if _newclass:len = _swig_property(_irods.keyValPair_t_len_get, _irods.keyValPair_t_len_set)
     def init(self, *args): return _irods.keyValPair_t_init(self, *args)
     def getLen(self): return _irods.keyValPair_t_getLen(self)
-    def getKeyWord(self): return _irods.keyValPair_t_getKeyWord(self)
-    def getValue(self): return _irods.keyValPair_t_getValue(self)
+    def getKeyWord(self, *args): return _irods.keyValPair_t_getKeyWord(self, *args)
+    def getValue(self, *args): return _irods.keyValPair_t_getValue(self, *args)
     def __str__(self): return _irods.keyValPair_t___str__(self)
     def __init__(self): 
         this = _irods.new_keyValPair_t()
@@ -3877,6 +4030,9 @@ class inxIvalPair_t(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, inxIvalPair_t, name)
     __repr__ = _swig_repr
+    __swig_setmethods__["len"] = _irods.inxIvalPair_t_len_set
+    __swig_getmethods__["len"] = _irods.inxIvalPair_t_len_get
+    if _newclass:len = _swig_property(_irods.inxIvalPair_t_len_get, _irods.inxIvalPair_t_len_set)
     def init(self, *args): return _irods.inxIvalPair_t_init(self, *args)
     def getLen(self): return _irods.inxIvalPair_t_getLen(self)
     def getInx(self): return _irods.inxIvalPair_t_getInx(self)
@@ -3897,6 +4053,9 @@ class inxValPair_t(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, inxValPair_t, name)
     __repr__ = _swig_repr
+    __swig_setmethods__["len"] = _irods.inxValPair_t_len_set
+    __swig_getmethods__["len"] = _irods.inxValPair_t_len_get
+    if _newclass:len = _swig_property(_irods.inxValPair_t_len_get, _irods.inxValPair_t_len_set)
     def init(self, *args): return _irods.inxValPair_t_init(self, *args)
     def getLen(self): return _irods.inxValPair_t_getLen(self)
     def getInx(self): return _irods.inxValPair_t_getInx(self)
@@ -4010,6 +4169,9 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
         else:
             l1descInx = rcDataObjCreate(conn, dataObjInp)
     
+    else:
+        l1descInx = 0
+    
     if not resc_name: # If the resc parameter was NULL then we need to find the
                       # resource iRODS used and set the ir_file variable
         ir_resc_name = getDataObjRescNames(conn, collName, dataName)
@@ -4023,10 +4185,21 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
         
 def addCollUserMetadata(conn, path, name, value, units=""):
     return addUserMetadata(conn, "-c", path, name, value, units)
-    
+
 def addFileUserMetadata(conn, path, name, value, units=""):
     return addUserMetadata(conn, "-d", path, name, value, units)
-    
+
+def getCollId(conn, path):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_COLL_ID], [0], 1)
+    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
+    l = queryToTupleList(conn, selectInp, sqlCondInp)
+    if l:
+        return l[0]
+    else:
+        return -1
+
 def getCollUserMetadata(conn, path):
     sqlCondInp = inxValPair_t()
     selectInp = inxIvalPair_t()
@@ -4395,7 +4568,10 @@ class irodsCollection:
 
     def getCollName(self):
         return self.collName
-    
+
+    def getId(self):
+        return getCollId(self._conn, self.getCollName())
+
     def getLenObjects(self):
         queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
         nb_el = 0

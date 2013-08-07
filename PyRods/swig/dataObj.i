@@ -27,6 +27,7 @@
 #include "dataObjCreateAndStat.h"
 #include "dataObjGet.h"
 #include "dataObjInpOut.h"
+#include "dataObjLock.h"
 #include "dataObjLseek.h"
 #include "dataObjOpen.h"
 #include "dataObjOpenAndStat.h"
@@ -85,6 +86,16 @@
 /* definition for flags */
 #define STREAMING_FLAG      0x1
 #define NO_CHK_COPY_LEN_FLAG    0x2
+
+/* lock type definition */
+#define READ_LOCK_TYPE  "readLockType"
+#define WRITE_LOCK_TYPE "writeLockType"
+#define UNLOCK_TYPE "unlockType"
+
+/* lock command definition */
+#define SET_LOCK_CMD    "setLockCmd"
+#define SET_LOCK_WAIT_CMD "setLockWaitCmd"
+#define GET_LOCK_CMD    "getLockCmd"
 
 /*****************************************************************************/
 
@@ -253,6 +264,10 @@ PyObject * rcDataObjCreateAndStat(rcComm_t *conn, dataObjInp_t *dataObjInp) {
 /*****************************************************************************/
 
 int rcDataObjGet (rcComm_t *conn, dataObjInp_t *dataObjInp, char *locFilePath);
+
+/*****************************************************************************/
+
+int rcDataObjLock (rcComm_t *conn, dataObjInp_t *dataObjInp);
 
 /*****************************************************************************/
 

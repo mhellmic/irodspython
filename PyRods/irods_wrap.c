@@ -2972,95 +2972,96 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_SubStructFileLseekInp swig_types[41]
 #define SWIGTYPE_p_SubStructFileRenameInp swig_types[42]
 #define SWIGTYPE_p_Subfile swig_types[43]
-#define SWIGTYPE_p_UINT4 swig_types[44]
-#define SWIGTYPE_p_XmsgTicketInfo swig_types[45]
-#define SWIGTYPE_p_authCheckInp_t swig_types[46]
-#define SWIGTYPE_p_authCheckOut_t swig_types[47]
-#define SWIGTYPE_p_authInfo_t swig_types[48]
-#define SWIGTYPE_p_authRequestOut_t swig_types[49]
-#define SWIGTYPE_p_authResponseInp_t swig_types[50]
-#define SWIGTYPE_p_char swig_types[51]
-#define SWIGTYPE_p_chkObjPermAndStat_t swig_types[52]
-#define SWIGTYPE_p_collState_t swig_types[53]
-#define SWIGTYPE_p_connType_t swig_types[54]
-#define SWIGTYPE_p_fileChmodInp_t swig_types[55]
-#define SWIGTYPE_p_fileClosedirInp_t swig_types[56]
-#define SWIGTYPE_p_fileDriverType_t swig_types[57]
-#define SWIGTYPE_p_fileFstatInp_t swig_types[58]
-#define SWIGTYPE_p_fileFsyncInp_t swig_types[59]
-#define SWIGTYPE_p_fileGetFsFreeSpaceInp_t swig_types[60]
-#define SWIGTYPE_p_fileGetFsFreeSpaceOut_t swig_types[61]
-#define SWIGTYPE_p_fileMkdirInp_t swig_types[62]
-#define SWIGTYPE_p_fileOpenInp_t swig_types[63]
-#define SWIGTYPE_p_fileOpendirInp_t swig_types[64]
-#define SWIGTYPE_p_fileReaddirInp_t swig_types[65]
-#define SWIGTYPE_p_fileRenameInp_t swig_types[66]
-#define SWIGTYPE_p_fileRestart_t swig_types[67]
-#define SWIGTYPE_p_fileRmdirInp_t swig_types[68]
-#define SWIGTYPE_p_fileStageInp_t swig_types[69]
-#define SWIGTYPE_p_fileStatInp_t swig_types[70]
-#define SWIGTYPE_p_fileUnlinkInp_t swig_types[71]
-#define SWIGTYPE_p_fileWriteInp_t swig_types[72]
-#define SWIGTYPE_p_float swig_types[73]
-#define SWIGTYPE_p_funcPtr swig_types[74]
-#define SWIGTYPE_p_generalAdminInp_t swig_types[75]
-#define SWIGTYPE_p_getTempPasswordOut_t swig_types[76]
-#define SWIGTYPE_p_getXmsgTicketInp_t swig_types[77]
-#define SWIGTYPE_p_gsiAuthRequestOut_t swig_types[78]
-#define SWIGTYPE_p_int swig_types[79]
-#define SWIGTYPE_p_irodsProt_t swig_types[80]
-#define SWIGTYPE_p_long_long swig_types[81]
-#define SWIGTYPE_p_modAVUMetadataInp_t swig_types[82]
-#define SWIGTYPE_p_modAccessControlInp_t swig_types[83]
-#define SWIGTYPE_p_modDataObjMeta_t swig_types[84]
-#define SWIGTYPE_p_objStat_t swig_types[85]
-#define SWIGTYPE_p_objType_t swig_types[86]
-#define SWIGTYPE_p_operProgress_t swig_types[87]
-#define SWIGTYPE_p_p_CollEnt swig_types[88]
-#define SWIGTYPE_p_p_MsParam swig_types[89]
-#define SWIGTYPE_p_p_char swig_types[90]
-#define SWIGTYPE_p_p_rodsDirent swig_types[91]
-#define SWIGTYPE_p_portList_t swig_types[92]
-#define SWIGTYPE_p_portalOprOut swig_types[93]
-#define SWIGTYPE_p_procState_t swig_types[94]
-#define SWIGTYPE_p_pthread_cond_t swig_types[95]
-#define SWIGTYPE_p_pthread_mutex_t swig_types[96]
-#define SWIGTYPE_p_pthread_t swig_types[97]
-#define SWIGTYPE_p_rErrMsg_t swig_types[98]
-#define SWIGTYPE_p_rError_t swig_types[99]
-#define SWIGTYPE_p_rcComm_t swig_types[100]
-#define SWIGTYPE_p_regReplica_t swig_types[101]
-#define SWIGTYPE_p_rescInfo_t swig_types[102]
-#define SWIGTYPE_p_rodsArguments_t swig_types[103]
-#define SWIGTYPE_p_rodsDirent swig_types[104]
-#define SWIGTYPE_p_rodsEnv swig_types[105]
-#define SWIGTYPE_p_rodsHostAddr_t swig_types[106]
-#define SWIGTYPE_p_rodsObjStat swig_types[107]
-#define SWIGTYPE_p_rodsRestart_t swig_types[108]
-#define SWIGTYPE_p_rodsStat swig_types[109]
-#define SWIGTYPE_p_ruleExecDelInp_t swig_types[110]
-#define SWIGTYPE_p_ruleExecModInp_t swig_types[111]
-#define SWIGTYPE_p_ruleExecSubmitInp_t swig_types[112]
-#define SWIGTYPE_p_sendXmsgInfo_t swig_types[113]
-#define SWIGTYPE_p_sendXmsgInp_t swig_types[114]
-#define SWIGTYPE_p_simpleQueryInp_t swig_types[115]
-#define SWIGTYPE_p_simpleQueryOut_t swig_types[116]
-#define SWIGTYPE_p_size_t swig_types[117]
-#define SWIGTYPE_p_sockaddr_in swig_types[118]
-#define SWIGTYPE_p_specCollClass_t swig_types[119]
-#define SWIGTYPE_p_structFileType_t swig_types[120]
-#define SWIGTYPE_p_time_t swig_types[121]
-#define SWIGTYPE_p_transferStat_t swig_types[122]
-#define SWIGTYPE_p_uint swig_types[123]
-#define SWIGTYPE_p_unregDataObj_t swig_types[124]
-#define SWIGTYPE_p_unsigned_char swig_types[125]
-#define SWIGTYPE_p_userAdminInp_t swig_types[126]
-#define SWIGTYPE_p_userInfo_t swig_types[127]
-#define SWIGTYPE_p_userOtherInfo_t swig_types[128]
-#define SWIGTYPE_p_version_t swig_types[129]
-#define SWIGTYPE_p_void swig_types[130]
-static swig_type_info *swig_types[132];
-static swig_module_info swig_module = {swig_types, 131, 0, 0, 0, 0};
+#define SWIGTYPE_p_TagStruct swig_types[44]
+#define SWIGTYPE_p_UINT4 swig_types[45]
+#define SWIGTYPE_p_XmsgTicketInfo swig_types[46]
+#define SWIGTYPE_p_authCheckInp_t swig_types[47]
+#define SWIGTYPE_p_authCheckOut_t swig_types[48]
+#define SWIGTYPE_p_authInfo_t swig_types[49]
+#define SWIGTYPE_p_authRequestOut_t swig_types[50]
+#define SWIGTYPE_p_authResponseInp_t swig_types[51]
+#define SWIGTYPE_p_char swig_types[52]
+#define SWIGTYPE_p_chkObjPermAndStat_t swig_types[53]
+#define SWIGTYPE_p_collState_t swig_types[54]
+#define SWIGTYPE_p_connType_t swig_types[55]
+#define SWIGTYPE_p_fileChmodInp_t swig_types[56]
+#define SWIGTYPE_p_fileClosedirInp_t swig_types[57]
+#define SWIGTYPE_p_fileDriverType_t swig_types[58]
+#define SWIGTYPE_p_fileFstatInp_t swig_types[59]
+#define SWIGTYPE_p_fileFsyncInp_t swig_types[60]
+#define SWIGTYPE_p_fileGetFsFreeSpaceInp_t swig_types[61]
+#define SWIGTYPE_p_fileGetFsFreeSpaceOut_t swig_types[62]
+#define SWIGTYPE_p_fileMkdirInp_t swig_types[63]
+#define SWIGTYPE_p_fileOpenInp_t swig_types[64]
+#define SWIGTYPE_p_fileOpendirInp_t swig_types[65]
+#define SWIGTYPE_p_fileReaddirInp_t swig_types[66]
+#define SWIGTYPE_p_fileRenameInp_t swig_types[67]
+#define SWIGTYPE_p_fileRestart_t swig_types[68]
+#define SWIGTYPE_p_fileRmdirInp_t swig_types[69]
+#define SWIGTYPE_p_fileStageInp_t swig_types[70]
+#define SWIGTYPE_p_fileStatInp_t swig_types[71]
+#define SWIGTYPE_p_fileUnlinkInp_t swig_types[72]
+#define SWIGTYPE_p_fileWriteInp_t swig_types[73]
+#define SWIGTYPE_p_float swig_types[74]
+#define SWIGTYPE_p_funcPtr swig_types[75]
+#define SWIGTYPE_p_generalAdminInp_t swig_types[76]
+#define SWIGTYPE_p_getTempPasswordOut_t swig_types[77]
+#define SWIGTYPE_p_getXmsgTicketInp_t swig_types[78]
+#define SWIGTYPE_p_gsiAuthRequestOut_t swig_types[79]
+#define SWIGTYPE_p_int swig_types[80]
+#define SWIGTYPE_p_irodsProt_t swig_types[81]
+#define SWIGTYPE_p_long_long swig_types[82]
+#define SWIGTYPE_p_modAVUMetadataInp_t swig_types[83]
+#define SWIGTYPE_p_modAccessControlInp_t swig_types[84]
+#define SWIGTYPE_p_modDataObjMeta_t swig_types[85]
+#define SWIGTYPE_p_objStat_t swig_types[86]
+#define SWIGTYPE_p_objType_t swig_types[87]
+#define SWIGTYPE_p_operProgress_t swig_types[88]
+#define SWIGTYPE_p_p_CollEnt swig_types[89]
+#define SWIGTYPE_p_p_MsParam swig_types[90]
+#define SWIGTYPE_p_p_char swig_types[91]
+#define SWIGTYPE_p_p_rodsDirent swig_types[92]
+#define SWIGTYPE_p_portList_t swig_types[93]
+#define SWIGTYPE_p_portalOprOut swig_types[94]
+#define SWIGTYPE_p_procState_t swig_types[95]
+#define SWIGTYPE_p_pthread_cond_t swig_types[96]
+#define SWIGTYPE_p_pthread_mutex_t swig_types[97]
+#define SWIGTYPE_p_pthread_t swig_types[98]
+#define SWIGTYPE_p_rErrMsg_t swig_types[99]
+#define SWIGTYPE_p_rError_t swig_types[100]
+#define SWIGTYPE_p_rcComm_t swig_types[101]
+#define SWIGTYPE_p_regReplica_t swig_types[102]
+#define SWIGTYPE_p_rescInfo_t swig_types[103]
+#define SWIGTYPE_p_rodsArguments_t swig_types[104]
+#define SWIGTYPE_p_rodsDirent swig_types[105]
+#define SWIGTYPE_p_rodsEnv swig_types[106]
+#define SWIGTYPE_p_rodsHostAddr_t swig_types[107]
+#define SWIGTYPE_p_rodsObjStat swig_types[108]
+#define SWIGTYPE_p_rodsRestart_t swig_types[109]
+#define SWIGTYPE_p_rodsStat swig_types[110]
+#define SWIGTYPE_p_ruleExecDelInp_t swig_types[111]
+#define SWIGTYPE_p_ruleExecModInp_t swig_types[112]
+#define SWIGTYPE_p_ruleExecSubmitInp_t swig_types[113]
+#define SWIGTYPE_p_sendXmsgInfo_t swig_types[114]
+#define SWIGTYPE_p_sendXmsgInp_t swig_types[115]
+#define SWIGTYPE_p_simpleQueryInp_t swig_types[116]
+#define SWIGTYPE_p_simpleQueryOut_t swig_types[117]
+#define SWIGTYPE_p_size_t swig_types[118]
+#define SWIGTYPE_p_sockaddr_in swig_types[119]
+#define SWIGTYPE_p_specCollClass_t swig_types[120]
+#define SWIGTYPE_p_structFileType_t swig_types[121]
+#define SWIGTYPE_p_time_t swig_types[122]
+#define SWIGTYPE_p_transferStat_t swig_types[123]
+#define SWIGTYPE_p_uint swig_types[124]
+#define SWIGTYPE_p_unregDataObj_t swig_types[125]
+#define SWIGTYPE_p_unsigned_char swig_types[126]
+#define SWIGTYPE_p_userAdminInp_t swig_types[127]
+#define SWIGTYPE_p_userInfo_t swig_types[128]
+#define SWIGTYPE_p_userOtherInfo_t swig_types[129]
+#define SWIGTYPE_p_version_t swig_types[130]
+#define SWIGTYPE_p_void swig_types[131]
+static swig_type_info *swig_types[133];
+static swig_module_info swig_module = {swig_types, 132, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3436,6 +3437,7 @@ SWIG_AsCharArray(PyObject * obj, char *val, size_t size)
 #include "dataObjCreateAndStat.h"
 #include "dataObjGet.h"
 #include "dataObjInpOut.h"
+#include "dataObjLock.h"
 #include "dataObjLseek.h"
 #include "dataObjOpen.h"
 #include "dataObjOpenAndStat.h"
@@ -3718,6 +3720,66 @@ PyObject * rclReadCollection(rcComm_t *conn, collHandle_t *collHandle) {
                                             SWIGTYPE_p_CollEnt, 0 |  0 ));
 }
 
+SWIGINTERN execCmdOut_t *MsParam_getInOutAsExecCmdOut(struct MsParam *self){
+        return (execCmdOut_t *) self->inOutStruct;
+    }
+SWIGINTERN char *MsParam_getInOutAsChar(struct MsParam *self){
+        return (char *) self->inOutStruct;
+    }
+SWIGINTERN int MsParam_getInOutAsInt(struct MsParam *self){
+        return *(int *) self->inOutStruct;
+    }
+SWIGINTERN double MsParam_getInOutAsDouble(struct MsParam *self){
+        return *(double *) self->inOutStruct;
+    }
+
+  #define SWIG_From_double   PyFloat_FromDouble 
+
+SWIGINTERN keyValPair_t *MsParam_getInOutAsKeyValPair(struct MsParam *self){
+        return (keyValPair_t *) self->inOutStruct;
+    }
+SWIGINTERN tagStruct_t *MsParam_getInOutAsTagStruct(struct MsParam *self){
+        return (tagStruct_t *) self->inOutStruct;
+    }
+SWIGINTERN msParam_t *MsParamArray_getMsParam(struct MsParamArray *self,int n){
+        if ( (n >=0) && (n < self->len) )
+            return self->msParam[n];
+        else
+            return NULL;
+    }
+
+
+int addCharParamToArray(msParamArray_t *msParamArray, char *label,
+                          char *inOutStruct) {
+    return addMsParamToArray(msParamArray, label, (char *) STR_MS_T, 
+                     (void *) strdup ((char *)inOutStruct), NULL, 0);
+}
+
+int addDoubleParamToArray(msParamArray_t *msParamArray, char *label,
+                          double inpDouble) {
+    double *myDouble;
+    int status;
+
+    myDouble = (double *)malloc (sizeof (double));
+    *myDouble = inpDouble;
+    status = addMsParamToArray(msParamArray, label, (char *) DOUBLE_MS_T, 
+                              myDouble, NULL, 0);
+    return status;
+}
+
+int addKeyValParamToArray(msParamArray_t *msParamArray, char *label,
+                          keyValPair_t * keyVal) {
+    return addMsParamToArray(msParamArray, label, (char *) KeyValPair_MS_T, 
+                              keyVal, NULL, 0);
+}
+
+int addTagStructParamToArray(msParamArray_t *msParamArray, char *label,
+                             tagStruct_t * tagStruct) {
+    return addMsParamToArray(msParamArray, label, (char *) TagStruct_MS_T, 
+                              tagStruct, NULL, 0);
+}
+
+
 
 SWIGINTERN int
 SWIG_AsVal_char (PyObject * obj, char *val)
@@ -3866,6 +3928,9 @@ SWIGINTERN PyObject *BytesBuf_getBuf(struct BytesBuf *self){
                                                           self->len);
         return outString;
     }
+SWIGINTERN char *BytesBuf_getBufAsChar(struct BytesBuf *self){
+        return (char *) self->buf;
+    }
 
 #include "rodsErrorTable.h"
 
@@ -3876,17 +3941,23 @@ SWIGINTERN PyObject *BytesBuf_getBuf(struct BytesBuf *self){
 #include "ruleExecSubmit.h"
 
 
-execCmdOut_t * rcExecCmd(rcComm_t *conn, execCmd_t *execCmdInp) {
+PyObject * rcExecCmd(rcComm_t *conn, execCmd_t *execCmdInp) {
     execCmdOut_t *execCmdOut = NULL;
-    rcExecCmd(conn, execCmdInp, &execCmdOut);
-    return execCmdOut;
+    int status = rcExecCmd(conn, execCmdInp, &execCmdOut);
+    return Py_BuildValue("(iO)", 
+                         status, 
+                         SWIG_NewPointerObj(SWIG_as_voidptr(execCmdOut), 
+                                            SWIGTYPE_p_ExecCmdOut, 0 |  0 ));
 }
 
 
-msParamArray_t * rcExecMyRule(rcComm_t *conn, execMyRuleInp_t *execMyRuleInp) {
+PyObject * rcExecMyRule(rcComm_t *conn, execMyRuleInp_t *execMyRuleInp) {
     msParamArray_t *outParamArray = NULL;
-    rcExecMyRule(conn, execMyRuleInp, &outParamArray);
-    return outParamArray;
+    int status = rcExecMyRule(conn, execMyRuleInp, &outParamArray);
+    return Py_BuildValue("(iO)", 
+                         status, 
+                         SWIG_NewPointerObj(SWIG_as_voidptr(outParamArray), 
+                                            SWIGTYPE_p_MsParamArray, 0 |  0 ));
 }
 
 
@@ -3956,6 +4027,37 @@ rodsStat_t * rcFileStat(rcComm_t *conn, fileStatInp_t *fileStatInp) {
 #include "getMiscSvrInfo.h"
 #include "objStat.h"
 
+SWIGINTERN char **TagStruct_getPreTag__SWIG_0(struct TagStruct *self,size_t *len){
+        *len = self->len;
+        return self->preTag;
+    }
+SWIGINTERN char *TagStruct_getPreTag__SWIG_1(struct TagStruct *self,int n){
+        if ( (n >=0) && (n < self->len) ) {
+            char * tag = self->preTag[n];
+            return tag;
+        } else
+            return NULL;
+    }
+SWIGINTERN char *TagStruct_getPostTag__SWIG_0(struct TagStruct *self,int n){
+        if ( (n >=0) && (n < self->len) )
+            return self->postTag[n];
+        else
+            return NULL;
+    }
+SWIGINTERN char **TagStruct_getPostTag__SWIG_1(struct TagStruct *self,size_t *len){
+        *len = self->len;
+        return self->postTag;
+    }
+SWIGINTERN char **TagStruct_getKeyWord__SWIG_0(struct TagStruct *self,size_t *len){
+        *len = self->len;
+        return self->keyWord;
+    }
+SWIGINTERN char *TagStruct_getKeyWord__SWIG_1(struct TagStruct *self,int n){
+        if ( (n >=0) && (n < self->len) )
+            return self->keyWord[n];
+        else
+            return NULL;
+    }
 SWIGINTERN void KeyValPair_init(struct KeyValPair *self,char **keyWord,char **value,int len){ 
         int i;
         
@@ -3978,13 +4080,25 @@ SWIGINTERN void KeyValPair_init(struct KeyValPair *self,char **keyWord,char **va
 SWIGINTERN int KeyValPair_getLen(struct KeyValPair *self){
         return self->len;
     }
-SWIGINTERN char **KeyValPair_getKeyWord(struct KeyValPair *self,size_t *len){
+SWIGINTERN char **KeyValPair_getKeyWord__SWIG_0(struct KeyValPair *self,size_t *len){
         *len = self->len;
         return self->keyWord;
     }
-SWIGINTERN char **KeyValPair_getValue(struct KeyValPair *self,size_t *len){
+SWIGINTERN char *KeyValPair_getKeyWord__SWIG_1(struct KeyValPair *self,int n){
+        if ( (n >=0) && (n < self->len) )
+            return self->keyWord[n];
+        else
+            return NULL;
+    }
+SWIGINTERN char **KeyValPair_getValue__SWIG_0(struct KeyValPair *self,size_t *len){
         *len = self->len;
         return self->value;
+    }
+SWIGINTERN char *KeyValPair_getValue__SWIG_1(struct KeyValPair *self,int n){
+        if ( (n >=0) && (n < self->len) )
+            return self->value[n];
+        else
+            return NULL;
     }
 SWIGINTERN char *KeyValPair___str__(struct KeyValPair *self){
         char * str = (char *)malloc(1024 * sizeof(char));
@@ -8794,6 +8908,37 @@ SWIGINTERN PyObject *_wrap_rcDataObjGet(PyObject *SWIGUNUSEDPARM(self), PyObject
   return resultobj;
 fail:
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_rcDataObjLock(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  rcComm_t *arg1 = (rcComm_t *) 0 ;
+  dataObjInp_t *arg2 = (dataObjInp_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:rcDataObjLock",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_rcComm_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rcDataObjLock" "', argument " "1"" of type '" "rcComm_t *""'"); 
+  }
+  arg1 = (rcComm_t *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_DataObjInp, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rcDataObjLock" "', argument " "2"" of type '" "dataObjInp_t *""'"); 
+  }
+  arg2 = (dataObjInp_t *)(argp2);
+  result = (int)rcDataObjLock(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -15324,6 +15469,138 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsExecCmdOut(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  execCmdOut_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsExecCmdOut",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsExecCmdOut" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (execCmdOut_t *)MsParam_getInOutAsExecCmdOut(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ExecCmdOut, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsChar(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsChar",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsChar" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (char *)MsParam_getInOutAsChar(arg1);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsInt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsInt",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsInt" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (int)MsParam_getInOutAsInt(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsDouble(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsDouble",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsDouble" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (double)MsParam_getInOutAsDouble(arg1);
+  resultobj = SWIG_From_double((double)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsKeyValPair(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  keyValPair_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsKeyValPair",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsKeyValPair" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (keyValPair_t *)MsParam_getInOutAsKeyValPair(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_KeyValPair, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_msParam_t_getInOutAsTagStruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParam *arg1 = (struct MsParam *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  tagStruct_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:msParam_t_getInOutAsTagStruct",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParam, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParam_t_getInOutAsTagStruct" "', argument " "1"" of type '" "struct MsParam *""'"); 
+  }
+  arg1 = (struct MsParam *)(argp1);
+  result = (tagStruct_t *)MsParam_getInOutAsTagStruct(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_TagStruct, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_msParam_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct MsParam *result = 0 ;
@@ -15521,6 +15798,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_msParamArray_t_getMsParam(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct MsParamArray *arg1 = (struct MsParamArray *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  msParam_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:msParamArray_t_getMsParam",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "msParamArray_t_getMsParam" "', argument " "1"" of type '" "struct MsParamArray *""'"); 
+  }
+  arg1 = (struct MsParamArray *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "msParamArray_t_getMsParam" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (msParam_t *)MsParamArray_getMsParam(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_MsParam, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_msParamArray_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct MsParamArray *result = 0 ;
@@ -15629,6 +15937,224 @@ SWIGINTERN PyObject *_wrap_addMsParamToArray(PyObject *SWIGUNUSEDPARM(self), PyO
 fail:
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_addCharParamToArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:addCharParamToArray",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addCharParamToArray" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addCharParamToArray" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "addCharParamToArray" "', argument " "3"" of type '" "char *""'");
+  }
+  arg3 = (char *)(buf3);
+  result = (int)addCharParamToArray(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_addDoubleParamToArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  double arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:addDoubleParamToArray",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addDoubleParamToArray" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addDoubleParamToArray" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "addDoubleParamToArray" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = (double)(val3);
+  result = (int)addDoubleParamToArray(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_addKeyValParamToArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  keyValPair_t *arg3 = (keyValPair_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:addKeyValParamToArray",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addKeyValParamToArray" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addKeyValParamToArray" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_KeyValPair, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "addKeyValParamToArray" "', argument " "3"" of type '" "keyValPair_t *""'"); 
+  }
+  arg3 = (keyValPair_t *)(argp3);
+  result = (int)addKeyValParamToArray(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_addTagStructParamToArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  tagStruct_t *arg3 = (tagStruct_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:addTagStructParamToArray",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addTagStructParamToArray" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addTagStructParamToArray" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "addTagStructParamToArray" "', argument " "3"" of type '" "tagStruct_t *""'"); 
+  }
+  arg3 = (tagStruct_t *)(argp3);
+  result = (int)addTagStructParamToArray(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_addIntParamToArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:addIntParamToArray",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addIntParamToArray" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addIntParamToArray" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "addIntParamToArray" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = (int)(val3);
+  result = (int)addIntParamToArray(arg1,arg2,arg3);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -15856,6 +16382,40 @@ SWIGINTERN PyObject *_wrap_getMsParamByLabel(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg2 = (char *)(buf2);
   result = (msParam_t *)getMsParamByLabel(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_MsParam, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_getMsParamByType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  msParamArray_t *arg1 = (msParamArray_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  msParam_t *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:getMsParamByType",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_MsParamArray, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getMsParamByType" "', argument " "1"" of type '" "msParamArray_t *""'"); 
+  }
+  arg1 = (msParamArray_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "getMsParamByType" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  result = (msParam_t *)getMsParamByType(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_MsParam, 0 |  0 );
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
@@ -24055,6 +24615,64 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_addTagStruct(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  tagStruct_t *arg1 = (tagStruct_t *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:addTagStruct",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "addTagStruct" "', argument " "1"" of type '" "tagStruct_t *""'"); 
+  }
+  arg1 = (tagStruct_t *)(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "addTagStruct" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = (char *)(buf2);
+  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "addTagStruct" "', argument " "3"" of type '" "char *""'");
+  }
+  arg3 = (char *)(buf3);
+  res4 = SWIG_AsCharPtrAndSize(obj3, &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "addTagStruct" "', argument " "4"" of type '" "char *""'");
+  }
+  arg4 = (char *)(buf4);
+  result = (int)addTagStruct(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_int((int)(result));
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
+  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_chkStateForResume(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   rcComm_t *arg1 = (rcComm_t *) 0 ;
@@ -26251,6 +26869,28 @@ SWIGINTERN PyObject *_wrap_bytesBuf_t_getBuf(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = (struct BytesBuf *)(argp1);
   result = (PyObject *)BytesBuf_getBuf(arg1);
   resultobj = result;
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_bytesBuf_t_getBufAsChar(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct BytesBuf *arg1 = (struct BytesBuf *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:bytesBuf_t_getBufAsChar",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_BytesBuf, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bytesBuf_t_getBufAsChar" "', argument " "1"" of type '" "struct BytesBuf *""'"); 
+  }
+  arg1 = (struct BytesBuf *)(argp1);
+  result = (char *)BytesBuf_getBufAsChar(arg1);
+  resultobj = SWIG_FromCharPtr((const char *)result);
   return resultobj;
 fail:
   return NULL;
@@ -30736,7 +31376,7 @@ SWIGINTERN PyObject *_wrap_rcExecCmd(PyObject *SWIGUNUSEDPARM(self), PyObject *a
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  execCmdOut_t *result = 0 ;
+  PyObject *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:rcExecCmd",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_rcComm_t, 0 |  0 );
@@ -30749,8 +31389,8 @@ SWIGINTERN PyObject *_wrap_rcExecCmd(PyObject *SWIGUNUSEDPARM(self), PyObject *a
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rcExecCmd" "', argument " "2"" of type '" "execCmd_t *""'"); 
   }
   arg2 = (execCmd_t *)(argp2);
-  result = (execCmdOut_t *)rcExecCmd(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ExecCmdOut, 0 |  0 );
+  result = (PyObject *)rcExecCmd(arg1,arg2);
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -30767,7 +31407,7 @@ SWIGINTERN PyObject *_wrap_rcExecMyRule(PyObject *SWIGUNUSEDPARM(self), PyObject
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  msParamArray_t *result = 0 ;
+  PyObject *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"OO:rcExecMyRule",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_rcComm_t, 0 |  0 );
@@ -30780,8 +31420,8 @@ SWIGINTERN PyObject *_wrap_rcExecMyRule(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rcExecMyRule" "', argument " "2"" of type '" "execMyRuleInp_t *""'"); 
   }
   arg2 = (execMyRuleInp_t *)(argp2);
-  result = (msParamArray_t *)rcExecMyRule(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_MsParamArray, 0 |  0 );
+  result = (PyObject *)rcExecMyRule(arg1,arg2);
+  resultobj = result;
   return resultobj;
 fail:
   return NULL;
@@ -38675,6 +39315,420 @@ SWIGINTERN PyObject *rodsObjStat_t_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_tagStruct_t_len_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:tagStruct_t_len_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_len_set" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "tagStruct_t_len_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->len = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_len_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:tagStruct_t_len_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_len_get" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  result = (int) ((arg1)->len);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPreTag__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  size_t *arg2 = (size_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char **result = 0 ;
+  
+  size_t templen;
+  arg2 = &templen;
+  if (!PyArg_ParseTuple(args,(char *)"O:tagStruct_t_getPreTag",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getPreTag" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  result = (char **)TagStruct_getPreTag__SWIG_0(arg1,arg2);
+  {
+    unsigned int i;
+    resultobj = PyList_New(templen);
+    for (i = 0; i < templen; i++) {
+      PyObject *o = PyString_FromString(result[i]);
+      PyList_SetItem(resultobj,i,o);
+    }
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPreTag__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:tagStruct_t_getPreTag",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getPreTag" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "tagStruct_t_getPreTag" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (char *)TagStruct_getPreTag__SWIG_1(arg1,arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPreTag(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_tagStruct_t_getPreTag__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_tagStruct_t_getPreTag__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'tagStruct_t_getPreTag'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    TagStruct::getPreTag(size_t *)\n"
+    "    TagStruct::getPreTag(int)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPostTag__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:tagStruct_t_getPostTag",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getPostTag" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "tagStruct_t_getPostTag" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (char *)TagStruct_getPostTag__SWIG_0(arg1,arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPostTag__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  size_t *arg2 = (size_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char **result = 0 ;
+  
+  size_t templen;
+  arg2 = &templen;
+  if (!PyArg_ParseTuple(args,(char *)"O:tagStruct_t_getPostTag",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getPostTag" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  result = (char **)TagStruct_getPostTag__SWIG_1(arg1,arg2);
+  {
+    unsigned int i;
+    resultobj = PyList_New(templen);
+    for (i = 0; i < templen; i++) {
+      PyObject *o = PyString_FromString(result[i]);
+      PyList_SetItem(resultobj,i,o);
+    }
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getPostTag(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_tagStruct_t_getPostTag__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_tagStruct_t_getPostTag__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'tagStruct_t_getPostTag'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    TagStruct::getPostTag(int)\n"
+    "    TagStruct::getPostTag(size_t *)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getKeyWord__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  size_t *arg2 = (size_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char **result = 0 ;
+  
+  size_t templen;
+  arg2 = &templen;
+  if (!PyArg_ParseTuple(args,(char *)"O:tagStruct_t_getKeyWord",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getKeyWord" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  result = (char **)TagStruct_getKeyWord__SWIG_0(arg1,arg2);
+  {
+    unsigned int i;
+    resultobj = PyList_New(templen);
+    for (i = 0; i < templen; i++) {
+      PyObject *o = PyString_FromString(result[i]);
+      PyList_SetItem(resultobj,i,o);
+    }
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getKeyWord__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:tagStruct_t_getKeyWord",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "tagStruct_t_getKeyWord" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "tagStruct_t_getKeyWord" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (char *)TagStruct_getKeyWord__SWIG_1(arg1,arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_tagStruct_t_getKeyWord(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_tagStruct_t_getKeyWord__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_TagStruct, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_tagStruct_t_getKeyWord__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'tagStruct_t_getKeyWord'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    TagStruct::getKeyWord(size_t *)\n"
+    "    TagStruct::getKeyWord(int)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_tagStruct_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_tagStruct_t")) SWIG_fail;
+  result = (struct TagStruct *)calloc(1, sizeof(struct TagStruct));
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_TagStruct, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_tagStruct_t(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct TagStruct *arg1 = (struct TagStruct *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_tagStruct_t",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_TagStruct, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_tagStruct_t" "', argument " "1"" of type '" "struct TagStruct *""'"); 
+  }
+  arg1 = (struct TagStruct *)(argp1);
+  free((char *) arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *tagStruct_t_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_TagStruct, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_specColl_t_collClass_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct SpecColl *arg1 = (struct SpecColl *) 0 ;
@@ -39591,6 +40645,58 @@ SWIGINTERN PyObject *subFile_t_swigregister(PyObject *SWIGUNUSEDPARM(self), PyOb
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_keyValPair_t_len_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:keyValPair_t_len_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_KeyValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_len_set" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
+  }
+  arg1 = (struct KeyValPair *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "keyValPair_t_len_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->len = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_keyValPair_t_len_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:keyValPair_t_len_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_KeyValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_len_get" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
+  }
+  arg1 = (struct KeyValPair *)(argp1);
+  result = (int) ((arg1)->len);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_keyValPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
@@ -39703,7 +40809,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_keyValPair_t_getKeyWord(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_keyValPair_t_getKeyWord__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
   size_t *arg2 = (size_t *) 0 ;
@@ -39720,7 +40826,7 @@ SWIGINTERN PyObject *_wrap_keyValPair_t_getKeyWord(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_getKeyWord" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
   }
   arg1 = (struct KeyValPair *)(argp1);
-  result = (char **)KeyValPair_getKeyWord(arg1,arg2);
+  result = (char **)KeyValPair_getKeyWord__SWIG_0(arg1,arg2);
   {
     unsigned int i;
     resultobj = PyList_New(templen);
@@ -39735,7 +40841,82 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_keyValPair_t_getValue(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_keyValPair_t_getKeyWord__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:keyValPair_t_getKeyWord",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_KeyValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_getKeyWord" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
+  }
+  arg1 = (struct KeyValPair *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "keyValPair_t_getKeyWord" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (char *)KeyValPair_getKeyWord__SWIG_1(arg1,arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_keyValPair_t_getKeyWord(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_KeyValPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_keyValPair_t_getKeyWord__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_KeyValPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_keyValPair_t_getKeyWord__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'keyValPair_t_getKeyWord'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    KeyValPair::getKeyWord(size_t *)\n"
+    "    KeyValPair::getKeyWord(int)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_keyValPair_t_getValue__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
   size_t *arg2 = (size_t *) 0 ;
@@ -39752,7 +40933,7 @@ SWIGINTERN PyObject *_wrap_keyValPair_t_getValue(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_getValue" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
   }
   arg1 = (struct KeyValPair *)(argp1);
-  result = (char **)KeyValPair_getValue(arg1,arg2);
+  result = (char **)KeyValPair_getValue__SWIG_0(arg1,arg2);
   {
     unsigned int i;
     resultobj = PyList_New(templen);
@@ -39764,6 +40945,81 @@ SWIGINTERN PyObject *_wrap_keyValPair_t_getValue(PyObject *SWIGUNUSEDPARM(self),
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_keyValPair_t_getValue__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct KeyValPair *arg1 = (struct KeyValPair *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:keyValPair_t_getValue",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_KeyValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "keyValPair_t_getValue" "', argument " "1"" of type '" "struct KeyValPair *""'"); 
+  }
+  arg1 = (struct KeyValPair *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "keyValPair_t_getValue" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (char *)KeyValPair_getValue__SWIG_1(arg1,arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_keyValPair_t_getValue(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_KeyValPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_keyValPair_t_getValue__SWIG_0(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_KeyValPair, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_keyValPair_t_getValue__SWIG_1(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'keyValPair_t_getValue'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    KeyValPair::getValue(size_t *)\n"
+    "    KeyValPair::getValue(int)\n");
+  return 0;
 }
 
 
@@ -39829,6 +41085,58 @@ SWIGINTERN PyObject *keyValPair_t_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   SWIG_TypeNewClientData(SWIGTYPE_p_KeyValPair, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap_inxIvalPair_t_len_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct InxIvalPair *arg1 = (struct InxIvalPair *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:inxIvalPair_t_len_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_InxIvalPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "inxIvalPair_t_len_set" "', argument " "1"" of type '" "struct InxIvalPair *""'"); 
+  }
+  arg1 = (struct InxIvalPair *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "inxIvalPair_t_len_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->len = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_inxIvalPair_t_len_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct InxIvalPair *arg1 = (struct InxIvalPair *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:inxIvalPair_t_len_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_InxIvalPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "inxIvalPair_t_len_get" "', argument " "1"" of type '" "struct InxIvalPair *""'"); 
+  }
+  arg1 = (struct InxIvalPair *)(argp1);
+  result = (int) ((arg1)->len);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_inxIvalPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -40064,6 +41372,58 @@ SWIGINTERN PyObject *inxIvalPair_t_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   SWIG_TypeNewClientData(SWIGTYPE_p_InxIvalPair, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
+
+SWIGINTERN PyObject *_wrap_inxValPair_t_len_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct InxValPair *arg1 = (struct InxValPair *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:inxValPair_t_len_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_InxValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "inxValPair_t_len_set" "', argument " "1"" of type '" "struct InxValPair *""'"); 
+  }
+  arg1 = (struct InxValPair *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "inxValPair_t_len_set" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->len = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_inxValPair_t_len_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct InxValPair *arg1 = (struct InxValPair *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:inxValPair_t_len_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_InxValPair, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "inxValPair_t_len_get" "', argument " "1"" of type '" "struct InxValPair *""'"); 
+  }
+  arg1 = (struct InxValPair *)(argp1);
+  result = (int) ((arg1)->len);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_inxValPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -50018,6 +51378,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"rcDataObjCreate", _wrap_rcDataObjCreate, METH_VARARGS, NULL},
 	 { (char *)"rcDataObjCreateAndStat", _wrap_rcDataObjCreateAndStat, METH_VARARGS, NULL},
 	 { (char *)"rcDataObjGet", _wrap_rcDataObjGet, METH_VARARGS, NULL},
+	 { (char *)"rcDataObjLock", _wrap_rcDataObjLock, METH_VARARGS, NULL},
 	 { (char *)"rcDataObjLseek", _wrap_rcDataObjLseek, METH_VARARGS, NULL},
 	 { (char *)"rcDataObjOpen", _wrap_rcDataObjOpen, METH_VARARGS, NULL},
 	 { (char *)"rcDataObjOpenAndStat", _wrap_rcDataObjOpenAndStat, METH_VARARGS, NULL},
@@ -50257,6 +51618,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"msParam_t_inOutStruct_get", _wrap_msParam_t_inOutStruct_get, METH_VARARGS, NULL},
 	 { (char *)"msParam_t_inpOutBuf_set", _wrap_msParam_t_inpOutBuf_set, METH_VARARGS, NULL},
 	 { (char *)"msParam_t_inpOutBuf_get", _wrap_msParam_t_inpOutBuf_get, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsExecCmdOut", _wrap_msParam_t_getInOutAsExecCmdOut, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsChar", _wrap_msParam_t_getInOutAsChar, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsInt", _wrap_msParam_t_getInOutAsInt, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsDouble", _wrap_msParam_t_getInOutAsDouble, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsKeyValPair", _wrap_msParam_t_getInOutAsKeyValPair, METH_VARARGS, NULL},
+	 { (char *)"msParam_t_getInOutAsTagStruct", _wrap_msParam_t_getInOutAsTagStruct, METH_VARARGS, NULL},
 	 { (char *)"new_msParam_t", _wrap_new_msParam_t, METH_VARARGS, NULL},
 	 { (char *)"delete_msParam_t", _wrap_delete_msParam_t, METH_VARARGS, NULL},
 	 { (char *)"msParam_t_swigregister", msParam_t_swigregister, METH_VARARGS, NULL},
@@ -50266,10 +51633,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"msParamArray_t_oprType_get", _wrap_msParamArray_t_oprType_get, METH_VARARGS, NULL},
 	 { (char *)"msParamArray_t_msParam_set", _wrap_msParamArray_t_msParam_set, METH_VARARGS, NULL},
 	 { (char *)"msParamArray_t_msParam_get", _wrap_msParamArray_t_msParam_get, METH_VARARGS, NULL},
+	 { (char *)"msParamArray_t_getMsParam", _wrap_msParamArray_t_getMsParam, METH_VARARGS, NULL},
 	 { (char *)"new_msParamArray_t", _wrap_new_msParamArray_t, METH_VARARGS, NULL},
 	 { (char *)"delete_msParamArray_t", _wrap_delete_msParamArray_t, METH_VARARGS, NULL},
 	 { (char *)"msParamArray_t_swigregister", msParamArray_t_swigregister, METH_VARARGS, NULL},
 	 { (char *)"addMsParamToArray", _wrap_addMsParamToArray, METH_VARARGS, NULL},
+	 { (char *)"addCharParamToArray", _wrap_addCharParamToArray, METH_VARARGS, NULL},
+	 { (char *)"addDoubleParamToArray", _wrap_addDoubleParamToArray, METH_VARARGS, NULL},
+	 { (char *)"addKeyValParamToArray", _wrap_addKeyValParamToArray, METH_VARARGS, NULL},
+	 { (char *)"addTagStructParamToArray", _wrap_addTagStructParamToArray, METH_VARARGS, NULL},
+	 { (char *)"addIntParamToArray", _wrap_addIntParamToArray, METH_VARARGS, NULL},
 	 { (char *)"fillBufLenInMsParam", _wrap_fillBufLenInMsParam, METH_VARARGS, NULL},
 	 { (char *)"fillCharInMsParam", _wrap_fillCharInMsParam, METH_VARARGS, NULL},
 	 { (char *)"fillDoubleInMsParam", _wrap_fillDoubleInMsParam, METH_VARARGS, NULL},
@@ -50277,6 +51650,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"fillIntInMsParam", _wrap_fillIntInMsParam, METH_VARARGS, NULL},
 	 { (char *)"fillStrInMsParam", _wrap_fillStrInMsParam, METH_VARARGS, NULL},
 	 { (char *)"getMsParamByLabel", _wrap_getMsParamByLabel, METH_VARARGS, NULL},
+	 { (char *)"getMsParamByType", _wrap_getMsParamByType, METH_VARARGS, NULL},
 	 { (char *)"parseMspForFloat", _wrap_parseMspForFloat, METH_VARARGS, NULL},
 	 { (char *)"parseMspForPosInt", _wrap_parseMspForPosInt, METH_VARARGS, NULL},
 	 { (char *)"parseMspForStr", _wrap_parseMspForStr, METH_VARARGS, NULL},
@@ -50574,6 +51948,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"addInxIval", _wrap_addInxIval, METH_VARARGS, NULL},
 	 { (char *)"addInxVal", _wrap_addInxVal, METH_VARARGS, NULL},
 	 { (char *)"addKeyVal", _wrap_addKeyVal, METH_VARARGS, NULL},
+	 { (char *)"addTagStruct", _wrap_addTagStruct, METH_VARARGS, NULL},
 	 { (char *)"chkStateForResume", _wrap_chkStateForResume, METH_VARARGS, NULL},
 	 { (char *)"getLocalTimeFromRodsTime", _wrap_getLocalTimeFromRodsTime, METH_VARARGS, NULL},
 	 { (char *)"getMountedSubPhyPath", _wrap_getMountedSubPhyPath, METH_VARARGS, NULL},
@@ -50646,6 +52021,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_bytesBuf_t", _wrap_delete_bytesBuf_t, METH_VARARGS, NULL},
 	 { (char *)"bytesBuf_t_setBuf", _wrap_bytesBuf_t_setBuf, METH_VARARGS, NULL},
 	 { (char *)"bytesBuf_t_getBuf", _wrap_bytesBuf_t_getBuf, METH_VARARGS, NULL},
+	 { (char *)"bytesBuf_t_getBufAsChar", _wrap_bytesBuf_t_getBufAsChar, METH_VARARGS, NULL},
 	 { (char *)"new_bytesBuf_t", _wrap_new_bytesBuf_t, METH_VARARGS, NULL},
 	 { (char *)"bytesBuf_t_swigregister", bytesBuf_t_swigregister, METH_VARARGS, NULL},
 	 { (char *)"getTempPasswordOut_t_stringToHashWith_set", _wrap_getTempPasswordOut_t_stringToHashWith_set, METH_VARARGS, NULL},
@@ -51144,6 +52520,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_rodsObjStat_t", _wrap_new_rodsObjStat_t, METH_VARARGS, NULL},
 	 { (char *)"delete_rodsObjStat_t", _wrap_delete_rodsObjStat_t, METH_VARARGS, NULL},
 	 { (char *)"rodsObjStat_t_swigregister", rodsObjStat_t_swigregister, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_len_set", _wrap_tagStruct_t_len_set, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_len_get", _wrap_tagStruct_t_len_get, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_getPreTag", _wrap_tagStruct_t_getPreTag, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_getPostTag", _wrap_tagStruct_t_getPostTag, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_getKeyWord", _wrap_tagStruct_t_getKeyWord, METH_VARARGS, NULL},
+	 { (char *)"new_tagStruct_t", _wrap_new_tagStruct_t, METH_VARARGS, NULL},
+	 { (char *)"delete_tagStruct_t", _wrap_delete_tagStruct_t, METH_VARARGS, NULL},
+	 { (char *)"tagStruct_t_swigregister", tagStruct_t_swigregister, METH_VARARGS, NULL},
 	 { (char *)"specColl_t_collClass_set", _wrap_specColl_t_collClass_set, METH_VARARGS, NULL},
 	 { (char *)"specColl_t_collClass_get", _wrap_specColl_t_collClass_get, METH_VARARGS, NULL},
 	 { (char *)"specColl_t_type_set", _wrap_specColl_t_type_set, METH_VARARGS, NULL},
@@ -51180,6 +52564,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_subFile_t", _wrap_new_subFile_t, METH_VARARGS, NULL},
 	 { (char *)"delete_subFile_t", _wrap_delete_subFile_t, METH_VARARGS, NULL},
 	 { (char *)"subFile_t_swigregister", subFile_t_swigregister, METH_VARARGS, NULL},
+	 { (char *)"keyValPair_t_len_set", _wrap_keyValPair_t_len_set, METH_VARARGS, NULL},
+	 { (char *)"keyValPair_t_len_get", _wrap_keyValPair_t_len_get, METH_VARARGS, NULL},
 	 { (char *)"keyValPair_t_init", _wrap_keyValPair_t_init, METH_VARARGS, NULL},
 	 { (char *)"keyValPair_t_getLen", _wrap_keyValPair_t_getLen, METH_VARARGS, NULL},
 	 { (char *)"keyValPair_t_getKeyWord", _wrap_keyValPair_t_getKeyWord, METH_VARARGS, NULL},
@@ -51188,6 +52574,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_keyValPair_t", _wrap_new_keyValPair_t, METH_VARARGS, NULL},
 	 { (char *)"delete_keyValPair_t", _wrap_delete_keyValPair_t, METH_VARARGS, NULL},
 	 { (char *)"keyValPair_t_swigregister", keyValPair_t_swigregister, METH_VARARGS, NULL},
+	 { (char *)"inxIvalPair_t_len_set", _wrap_inxIvalPair_t_len_set, METH_VARARGS, NULL},
+	 { (char *)"inxIvalPair_t_len_get", _wrap_inxIvalPair_t_len_get, METH_VARARGS, NULL},
 	 { (char *)"inxIvalPair_t_init", _wrap_inxIvalPair_t_init, METH_VARARGS, NULL},
 	 { (char *)"inxIvalPair_t_getLen", _wrap_inxIvalPair_t_getLen, METH_VARARGS, NULL},
 	 { (char *)"inxIvalPair_t_getInx", _wrap_inxIvalPair_t_getInx, METH_VARARGS, NULL},
@@ -51196,6 +52584,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_inxIvalPair_t", _wrap_new_inxIvalPair_t, METH_VARARGS, NULL},
 	 { (char *)"delete_inxIvalPair_t", _wrap_delete_inxIvalPair_t, METH_VARARGS, NULL},
 	 { (char *)"inxIvalPair_t_swigregister", inxIvalPair_t_swigregister, METH_VARARGS, NULL},
+	 { (char *)"inxValPair_t_len_set", _wrap_inxValPair_t_len_set, METH_VARARGS, NULL},
+	 { (char *)"inxValPair_t_len_get", _wrap_inxValPair_t_len_get, METH_VARARGS, NULL},
 	 { (char *)"inxValPair_t_init", _wrap_inxValPair_t_init, METH_VARARGS, NULL},
 	 { (char *)"inxValPair_t_getLen", _wrap_inxValPair_t_getLen, METH_VARARGS, NULL},
 	 { (char *)"inxValPair_t_getInx", _wrap_inxValPair_t_getInx, METH_VARARGS, NULL},
@@ -51623,6 +53013,7 @@ static swig_type_info _swigt__p_SubStructFileFdOpr = {"_p_SubStructFileFdOpr", "
 static swig_type_info _swigt__p_SubStructFileLseekInp = {"_p_SubStructFileLseekInp", "subStructFileLseekInp_t *|struct SubStructFileLseekInp *|SubStructFileLseekInp *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SubStructFileRenameInp = {"_p_SubStructFileRenameInp", "subStructFileRenameInp_t *|struct SubStructFileRenameInp *|SubStructFileRenameInp *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Subfile = {"_p_Subfile", "subFile_t *|struct Subfile *|Subfile *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_TagStruct = {"_p_TagStruct", "tagStruct_t *|struct TagStruct *|TagStruct *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_UINT4 = {"_p_UINT4", "UINT4 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_XmsgTicketInfo = {"_p_XmsgTicketInfo", "struct XmsgTicketInfo *|XmsgTicketInfo *|xmsgTicketInfo_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_authCheckInp_t = {"_p_authCheckInp_t", "authCheckInp_t *", 0, 0, (void*)0, 0};
@@ -51756,6 +53147,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_SubStructFileLseekInp,
   &_swigt__p_SubStructFileRenameInp,
   &_swigt__p_Subfile,
+  &_swigt__p_TagStruct,
   &_swigt__p_UINT4,
   &_swigt__p_XmsgTicketInfo,
   &_swigt__p_authCheckInp_t,
@@ -51889,6 +53281,7 @@ static swig_cast_info _swigc__p_SubStructFileFdOpr[] = {  {&_swigt__p_SubStructF
 static swig_cast_info _swigc__p_SubStructFileLseekInp[] = {  {&_swigt__p_SubStructFileLseekInp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SubStructFileRenameInp[] = {  {&_swigt__p_SubStructFileRenameInp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Subfile[] = {  {&_swigt__p_Subfile, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_TagStruct[] = {  {&_swigt__p_TagStruct, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_UINT4[] = {  {&_swigt__p_UINT4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_XmsgTicketInfo[] = {  {&_swigt__p_XmsgTicketInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_authCheckInp_t[] = {  {&_swigt__p_authCheckInp_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -52022,6 +53415,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_SubStructFileLseekInp,
   _swigc__p_SubStructFileRenameInp,
   _swigc__p_Subfile,
+  _swigc__p_TagStruct,
   _swigc__p_UINT4,
   _swigc__p_XmsgTicketInfo,
   _swigc__p_authCheckInp_t,
@@ -52831,6 +54225,12 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "OPEN_FOR_WRITE_TYPE",SWIG_From_int((int)(3)));
   SWIG_Python_SetConstant(d, "STREAMING_FLAG",SWIG_From_int((int)(0x1)));
   SWIG_Python_SetConstant(d, "NO_CHK_COPY_LEN_FLAG",SWIG_From_int((int)(0x2)));
+  SWIG_Python_SetConstant(d, "READ_LOCK_TYPE",SWIG_FromCharPtr("readLockType"));
+  SWIG_Python_SetConstant(d, "WRITE_LOCK_TYPE",SWIG_FromCharPtr("writeLockType"));
+  SWIG_Python_SetConstant(d, "UNLOCK_TYPE",SWIG_FromCharPtr("unlockType"));
+  SWIG_Python_SetConstant(d, "SET_LOCK_CMD",SWIG_FromCharPtr("setLockCmd"));
+  SWIG_Python_SetConstant(d, "SET_LOCK_WAIT_CMD",SWIG_FromCharPtr("setLockWaitCmd"));
+  SWIG_Python_SetConstant(d, "GET_LOCK_CMD",SWIG_FromCharPtr("getLockCmd"));
   SWIG_Python_SetConstant(d, "LONG_METADATA_FG",SWIG_From_int((int)(0x1)));
   SWIG_Python_SetConstant(d, "VERY_LONG_METADATA_FG",SWIG_From_int((int)(0x2)));
   SWIG_Python_SetConstant(d, "RECUR_QUERY_FG",SWIG_From_int((int)(0x4)));
@@ -52841,6 +54241,89 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "COLL_OPENED",SWIG_From_int((int)(COLL_OPENED)));
   SWIG_Python_SetConstant(d, "COLL_DATA_OBJ_QUERIED",SWIG_From_int((int)(COLL_DATA_OBJ_QUERIED)));
   SWIG_Python_SetConstant(d, "COLL_COLL_OBJ_QUERIED",SWIG_From_int((int)(COLL_COLL_OBJ_QUERIED)));
+  SWIG_Python_SetConstant(d, "STR_MS_T",SWIG_FromCharPtr("STR_PI"));
+  SWIG_Python_SetConstant(d, "INT_MS_T",SWIG_FromCharPtr("INT_PI"));
+  SWIG_Python_SetConstant(d, "INT16_MS_T",SWIG_FromCharPtr("INT16_PI"));
+  SWIG_Python_SetConstant(d, "CHAR_MS_T",SWIG_FromCharPtr("CHAR_PI"));
+  SWIG_Python_SetConstant(d, "BUF_LEN_MS_T",SWIG_FromCharPtr("BUF_LEN_PI"));
+  SWIG_Python_SetConstant(d, "STREAM_MS_T",SWIG_FromCharPtr("INT_PI"));
+  SWIG_Python_SetConstant(d, "DOUBLE_MS_T",SWIG_FromCharPtr("DOUBLE_PI"));
+  SWIG_Python_SetConstant(d, "FLOAT_MS_T",SWIG_FromCharPtr("FLOAT_PI"));
+  SWIG_Python_SetConstant(d, "BOOL_MS_T",SWIG_FromCharPtr("BOOL_PI"));
+  SWIG_Python_SetConstant(d, "DataObjInp_MS_T",SWIG_FromCharPtr("DataObjInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjCloseInp_MS_T",SWIG_FromCharPtr("DataObjCloseInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjCopyInp_MS_T",SWIG_FromCharPtr("DataObjCopyInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjReadInp_MS_T",SWIG_FromCharPtr("dataObjReadInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjWriteInp_MS_T",SWIG_FromCharPtr("dataObjWriteInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjLseekInp_MS_T",SWIG_FromCharPtr("fileLseekInp_PI"));
+  SWIG_Python_SetConstant(d, "DataObjLseekOut_MS_T",SWIG_FromCharPtr("fileLseekOut_PI"));
+  SWIG_Python_SetConstant(d, "KeyValPair_MS_T",SWIG_FromCharPtr("KeyValPair_PI"));
+  SWIG_Python_SetConstant(d, "TagStruct_MS_T",SWIG_FromCharPtr("TagStruct_PI"));
+  SWIG_Python_SetConstant(d, "CollInp_MS_T",SWIG_FromCharPtr("CollInpNew_PI"));
+  SWIG_Python_SetConstant(d, "ExecCmd_MS_T",SWIG_FromCharPtr("ExecCmd_PI"));
+  SWIG_Python_SetConstant(d, "ExecCmdOut_MS_T",SWIG_FromCharPtr("ExecCmdOut_PI"));
+  SWIG_Python_SetConstant(d, "RodsObjStat_MS_T",SWIG_FromCharPtr("RodsObjStat_PI"));
+  SWIG_Python_SetConstant(d, "VaultPathPolicy_MS_T",SWIG_FromCharPtr("VaultPathPolicy_PI"));
+  SWIG_Python_SetConstant(d, "StrArray_MS_T",SWIG_FromCharPtr("StrArray_PI"));
+  SWIG_Python_SetConstant(d, "IntArray_MS_T",SWIG_FromCharPtr("IntArray_PI"));
+  SWIG_Python_SetConstant(d, "GenQueryInp_MS_T",SWIG_FromCharPtr("GenQueryInp_PI"));
+  SWIG_Python_SetConstant(d, "GenQueryOut_MS_T",SWIG_FromCharPtr("GenQueryOut_PI"));
+  SWIG_Python_SetConstant(d, "XmsgTicketInfo_MS_T",SWIG_FromCharPtr("XmsgTicketInfo_PI"));
+  SWIG_Python_SetConstant(d, "SendXmsgInfo_MS_T",SWIG_FromCharPtr("SendXmsgInfo_PI"));
+  SWIG_Python_SetConstant(d, "GetXmsgTicketInp_MS_T",SWIG_FromCharPtr("GetXmsgTicketInp_PI"));
+  SWIG_Python_SetConstant(d, "SendXmsgInp_MS_T",SWIG_FromCharPtr("SendXmsgInp_PI"));
+  SWIG_Python_SetConstant(d, "RcvXmsgInp_MS_T",SWIG_FromCharPtr("RcvXmsgInp_PI"));
+  SWIG_Python_SetConstant(d, "RcvXmsgOut_MS_T",SWIG_FromCharPtr("RcvXmsgOut_PI"));
+  SWIG_Python_SetConstant(d, "StructFileExtAndRegInp_MS_T",SWIG_FromCharPtr("StructFileExtAndRegInp_PI"));
+  SWIG_Python_SetConstant(d, "RuleSet_MS_T",SWIG_FromCharPtr("RuleSet_PI"));
+  SWIG_Python_SetConstant(d, "RuleStruct_MS_T",SWIG_FromCharPtr("RuleStruct_PI"));
+  SWIG_Python_SetConstant(d, "DVMapStruct_MS_T",SWIG_FromCharPtr("DVMapStruct_PI"));
+  SWIG_Python_SetConstant(d, "FNMapStruct_MS_T",SWIG_FromCharPtr("FNMapStruct_PI"));
+  SWIG_Python_SetConstant(d, "MsrvcStruct_MS_T",SWIG_FromCharPtr("MsrvcStruct_PI"));
+  SWIG_Python_SetConstant(d, "NcOpenInp_MS_T",SWIG_FromCharPtr("NcOpenInp_PI"));
+  SWIG_Python_SetConstant(d, "NcInqIdInp_MS_T",SWIG_FromCharPtr("NcInqIdInp_PI"));
+  SWIG_Python_SetConstant(d, "NcInqWithIdOut_MS_T",SWIG_FromCharPtr("NcInqWithIdOut_PI"));
+  SWIG_Python_SetConstant(d, "NcInqInp_MS_T",SWIG_FromCharPtr("NcInqInp_PI"));
+  SWIG_Python_SetConstant(d, "NcInqOut_MS_T",SWIG_FromCharPtr("NcInqOut_PI"));
+  SWIG_Python_SetConstant(d, "NcCloseInp_MS_T",SWIG_FromCharPtr("NcCloseInp_PI"));
+  SWIG_Python_SetConstant(d, "NcGetVarInp_MS_T",SWIG_FromCharPtr("NcGetVarInp_PI"));
+  SWIG_Python_SetConstant(d, "NcGetVarOut_MS_T",SWIG_FromCharPtr("NcGetVarOut_PI"));
+  SWIG_Python_SetConstant(d, "NccfGetVarInp_MS_T",SWIG_FromCharPtr("NccfGetVarInp_PI"));
+  SWIG_Python_SetConstant(d, "NccfGetVarOut_MS_T",SWIG_FromCharPtr("NccfGetVarOut_PI"));
+  SWIG_Python_SetConstant(d, "NcInqGrpsOut_MS_T",SWIG_FromCharPtr("NcInqGrpsOut_PI"));
+  SWIG_Python_SetConstant(d, "Dictionary_MS_T",SWIG_FromCharPtr("Dictionary_PI"));
+  SWIG_Python_SetConstant(d, "DictArray_MS_T",SWIG_FromCharPtr("DictArray_PI"));
+  SWIG_Python_SetConstant(d, "GenArray_MS_T",SWIG_FromCharPtr("GenArray_PI"));
+  SWIG_Python_SetConstant(d, "RESC_NAME_FLAG",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "DEST_RESC_NAME_FLAG",SWIG_From_int((int)(0x2)));
+  SWIG_Python_SetConstant(d, "BACKUP_RESC_NAME_FLAG",SWIG_From_int((int)(0x4)));
+  SWIG_Python_SetConstant(d, "FORCE_FLAG_FLAG",SWIG_From_int((int)(0x8)));
+  SWIG_Python_SetConstant(d, "ALL_FLAG",SWIG_From_int((int)(0x10)));
+  SWIG_Python_SetConstant(d, "LOCAL_PATH_FLAG",SWIG_From_int((int)(0x20)));
+  SWIG_Python_SetConstant(d, "VERIFY_CHKSUM_FLAG",SWIG_From_int((int)(0x40)));
+  SWIG_Python_SetConstant(d, "IRODS_ADMIN_FLAG",SWIG_From_int((int)(0x80)));
+  SWIG_Python_SetConstant(d, "UPDATE_REPL_FLAG",SWIG_From_int((int)(0x100)));
+  SWIG_Python_SetConstant(d, "REPL_NUM_FLAG",SWIG_From_int((int)(0x200)));
+  SWIG_Python_SetConstant(d, "DATA_TYPE_FLAG",SWIG_From_int((int)(0x400)));
+  SWIG_Python_SetConstant(d, "CHKSUM_ALL_FLAG",SWIG_From_int((int)(0x800)));
+  SWIG_Python_SetConstant(d, "FORCE_CHKSUM_FLAG",SWIG_From_int((int)(0x1000)));
+  SWIG_Python_SetConstant(d, "FILE_PATH_FLAG",SWIG_From_int((int)(0x2000)));
+  SWIG_Python_SetConstant(d, "CREATE_MODE_FLAG",SWIG_From_int((int)(0x4000)));
+  SWIG_Python_SetConstant(d, "OPEN_FLAGS_FLAG",SWIG_From_int((int)(0x8000)));
+  SWIG_Python_SetConstant(d, "COLL_FLAGS_FLAG",SWIG_From_int((int)(0x8000)));
+  SWIG_Python_SetConstant(d, "DATA_SIZE_FLAGS",SWIG_From_int((int)(0x10000)));
+  SWIG_Python_SetConstant(d, "NUM_THREADS_FLAG",SWIG_From_int((int)(0x20000)));
+  SWIG_Python_SetConstant(d, "OPR_TYPE_FLAG",SWIG_From_int((int)(0x40000)));
+  SWIG_Python_SetConstant(d, "OBJ_PATH_FLAG",SWIG_From_int((int)(0x80000)));
+  SWIG_Python_SetConstant(d, "COLL_NAME_FLAG",SWIG_From_int((int)(0x80000)));
+  SWIG_Python_SetConstant(d, "IRODS_RMTRASH_FLAG",SWIG_From_int((int)(0x100000)));
+  SWIG_Python_SetConstant(d, "IRODS_ADMIN_RMTRASH_FLAG",SWIG_From_int((int)(0x200000)));
+  SWIG_Python_SetConstant(d, "DEF_RESC_NAME_FLAG",SWIG_From_int((int)(0x400000)));
+  SWIG_Python_SetConstant(d, "RBUDP_TRANSFER_FLAG",SWIG_From_int((int)(0x800000)));
+  SWIG_Python_SetConstant(d, "RBUDP_SEND_RATE_FLAG",SWIG_From_int((int)(0x1000000)));
+  SWIG_Python_SetConstant(d, "RBUDP_PACK_SIZE_FLAG",SWIG_From_int((int)(0x2000000)));
+  SWIG_Python_SetConstant(d, "BULK_OPR_FLAG",SWIG_From_int((int)(0x4000000)));
+  SWIG_Python_SetConstant(d, "UNREG_FLAG",SWIG_From_int((int)(0x8000000)));
   SWIG_Python_SetConstant(d, "MAX_PASSWORD_LEN",SWIG_From_int((int)(50)));
   SWIG_Python_SetConstant(d, "MAX_PATH_ALLOWED",SWIG_From_int((int)(1024)));
   SWIG_Python_SetConstant(d, "MAX_NAME_LEN",SWIG_From_int((int)((1024+64))));

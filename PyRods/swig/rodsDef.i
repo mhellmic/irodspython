@@ -58,6 +58,10 @@ typedef struct BytesBuf {
                                                           $self->len);
         return outString;
     }
+    
+    char * getBufAsChar() {
+        return (char *) $self->buf;
+    }
 
 }
 

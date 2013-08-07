@@ -75,6 +75,7 @@ config/platform.mk
 config/platform.mk.template
 examples/add_user_group.py
 examples/coll_file.py
+examples/coll_info.py
 examples/coll_meta.py
 examples/connection.py
 examples/create_group.py
@@ -95,6 +96,7 @@ examples/group_meta.py
 examples/quotas.py
 examples/resc_info.py
 examples/resc_meta.py
+examples/rule_exec.py
 examples/user_info.py
 examples/user_meta.py
 examples/zone_info.py
