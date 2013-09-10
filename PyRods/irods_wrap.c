@@ -3120,78 +3120,77 @@ SWIG_pchar_descriptor(void)
 
 
 SWIGINTERN int
-SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
-{
-#if PY_VERSION_HEX>=0x03000000
-  if (PyUnicode_Check(obj))
-#else  
-  if (PyString_Check(obj))
-#endif
-  {
-    char *cstr; Py_ssize_t len;
-#if PY_VERSION_HEX>=0x03000000
-    if (!alloc && cptr) {
-        /* We can't allow converting without allocation, since the internal
-           representation of string in Python 3 is UCS-2/UCS-4 but we require
-           a UTF-8 representation.
-           TODO(bhy) More detailed explanation */
-        return SWIG_RuntimeError;
-    }
-    obj = PyUnicode_AsUTF8String(obj);
-    PyBytes_AsStringAndSize(obj, &cstr, &len);
-    if(alloc) *alloc = SWIG_NEWOBJ;
-#else
-    PyString_AsStringAndSize(obj, &cstr, &len);
-#endif
-    if (cptr) {
-      if (alloc) {
-	/* 
-	   In python the user should not be able to modify the inner
-	   string representation. To warranty that, if you define
-	   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
-	   buffer is always returned.
+SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc) {
+    if (PyString_Check(obj)) {
+        char *cstr; Py_ssize_t len;
+        PyString_AsStringAndSize(obj, &cstr, &len);
+        if (cptr) {
+            if (alloc) {
+                /* In python the user should not be able to modify the inner
+                   string representation. To warranty that, if you define
+                   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
+                   buffer is always returned.
 
-	   The default behavior is just to return the pointer value,
-	   so, be careful.
-	*/ 
-#if defined(SWIG_PYTHON_SAFE_CSTRINGS)
-	if (*alloc != SWIG_OLDOBJ) 
-#else
-	if (*alloc == SWIG_NEWOBJ) 
-#endif
-	  {
-	    *cptr = (char *)memcpy((char *)malloc((len + 1)*sizeof(char)), cstr, sizeof(char)*(len + 1));
-	    *alloc = SWIG_NEWOBJ;
-	  }
-	else {
-	  *cptr = cstr;
-	  *alloc = SWIG_OLDOBJ;
-	}
-      } else {
-        #if PY_VERSION_HEX>=0x03000000
-        assert(0); /* Should never reach here in Python 3 */
-        #endif
-	*cptr = SWIG_Python_str_AsChar(obj);
-      }
+                   The default behavior is just to return the pointer value,
+                   so, be careful.
+                */ 
+                if (*alloc == SWIG_NEWOBJ) {
+                    *cptr = (char *)memcpy((char *)malloc((len + 1)*sizeof(char)), cstr, sizeof(char)*(len + 1));
+                    *alloc = SWIG_NEWOBJ;
+                } else {
+                    *cptr = cstr;
+                    *alloc = SWIG_OLDOBJ;
+                }
+            } else {
+                *cptr = SWIG_Python_str_AsChar(obj);
+            }
+        }
+        if (psize) *psize = len + 1;
+        return SWIG_OK;
+    } else if (PyUnicode_Check(obj)) {
+        char *cstr; Py_ssize_t len;
+        if (!alloc && cptr) {
+            return SWIG_RuntimeError;
+        }
+        obj = PyUnicode_AsUTF8String(obj);
+        PyBytes_AsStringAndSize(obj, &cstr, &len);
+        if(alloc) *alloc = SWIG_NEWOBJ;
+        if (cptr) {
+            if (alloc) {
+                /* In python the user should not be able to modify the inner
+                   string representation. To warranty that, if you define
+                   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
+                   buffer is always returned.
+
+                   The default behavior is just to return the pointer value,
+                   so, be careful.
+                */ 
+                if (*alloc == SWIG_NEWOBJ) {
+                    *cptr = (char *)memcpy((char *)malloc((len + 1)*sizeof(char)), cstr, sizeof(char)*(len + 1));
+                    *alloc = SWIG_NEWOBJ;
+                } else {
+                    *cptr = cstr;
+                    *alloc = SWIG_OLDOBJ;
+                }
+            } else {
+                *cptr = SWIG_Python_str_AsChar(obj);
+            }
+        }
+        if (psize) *psize = len + 1;
+        return SWIG_OK;
+    } else {
+        swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+        if (pchar_descriptor) {
+            void* vptr = 0;
+            if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
+                if (cptr) *cptr = (char *) vptr;
+                if (psize) *psize = vptr ? (strlen((char *)vptr) + 1) : 0;
+                if (alloc) *alloc = SWIG_OLDOBJ;
+                return SWIG_OK;
+            }
+        }
     }
-    if (psize) *psize = len + 1;
-#if PY_VERSION_HEX>=0x03000000
-    Py_XDECREF(obj);
-#endif
-    return SWIG_OK;
-  } else {
-    swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-    if (pchar_descriptor) {
-      void* vptr = 0;
-      if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
-	if (cptr) *cptr = (char *) vptr;
-	if (psize) *psize = vptr ? (strlen((char *)vptr) + 1) : 0;
-	if (alloc) *alloc = SWIG_OLDOBJ;
-	return SWIG_OK;
-      }
-    }
-  }
-  return SWIG_TypeError;
+    return SWIG_TypeError;
 }
 
 
@@ -22740,7 +22739,7 @@ SWIGINTERN PyObject *_wrap_parseCmdLineOpt(PyObject *SWIGUNUSEDPARM(self), PyObj
       arg2 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj1,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg2[i] = PyString_AsString(PyList_GetItem(obj1,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -31523,7 +31522,7 @@ SWIGINTERN PyObject *_wrap_rcRuleExecSubmit(PyObject *SWIGUNUSEDPARM(self), PyOb
       arg3 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj2,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg3[i] = PyString_AsString(PyList_GetItem(obj2,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -35653,7 +35652,7 @@ SWIGINTERN PyObject *_wrap_rcFileChksum(PyObject *SWIGUNUSEDPARM(self), PyObject
       arg3 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj2,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg3[i] = PyString_AsString(PyList_GetItem(obj2,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -40726,7 +40725,7 @@ SWIGINTERN PyObject *_wrap_keyValPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyO
       arg2 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj1,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg2[i] = PyString_AsString(PyList_GetItem(obj1,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -40748,7 +40747,7 @@ SWIGINTERN PyObject *_wrap_keyValPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyO
       arg3 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj2,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg3[i] = PyString_AsString(PyList_GetItem(obj2,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -41474,7 +41473,7 @@ SWIGINTERN PyObject *_wrap_inxValPair_t_init(PyObject *SWIGUNUSEDPARM(self), PyO
       arg3 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj2,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg3[i] = PyString_AsString(PyList_GetItem(obj2,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");
@@ -44622,7 +44621,7 @@ SWIGINTERN PyObject *_wrap_parseCmdLinePath(PyObject *SWIGUNUSEDPARM(self), PyOb
       arg2 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
         PyObject *o = PyList_GetItem(obj1,i);
-        if (PyString_Check(o))
+        if (PyString_Check(o) || PyUnicode_Check(o))
         arg2[i] = PyString_AsString(PyList_GetItem(obj1,i));
         else {
           PyErr_SetString(PyExc_TypeError,"list must contain strings");

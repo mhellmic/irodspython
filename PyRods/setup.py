@@ -66,7 +66,7 @@ class MyBuild(build):
             extra_objects[i] = self.irods_dir + extra_objects[i]
 
 setup(name="PyRods", 
-      version="3.2.4",
+      version="3.2.5",
       author = "Jerome Fuselier",
       author_email = "jerome.fuselier@free.fr",
       license = "LGPL",

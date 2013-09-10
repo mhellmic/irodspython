@@ -18,19 +18,14 @@
 #
 
 from irods import *
+import irods
 
 if __name__ == "__main__":
-    status, myEnv = getRodsEnv()
-    conn, errMsg = rcConnect(myEnv.rodsHost, myEnv.rodsPort, 
-                             myEnv.rodsUserName, myEnv.rodsZone)
+    conn, errMsg = irods.rcConnect(u"localhost", 1247, u"rods", u"tempZone", 0)
+    print conn, errMsg
     status = clientLogin(conn)
-        
-    # Create a user with the name and the group
-    user = createUser(conn, "test", "rodsuser")
     
-    print user
-    
-    # Delete a user
-    deleteUser(conn, "test")
+    print status
+    print getUserInfo(conn, u"rods//??")
     
     conn.disconnect()

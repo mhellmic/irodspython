@@ -43,6 +43,26 @@ class testGetRodsEnv(iRODSTestCase):
         self.assertEqual(tmp.rodsAuthFileName, "rodsAuthFileName")
         self.assertEqual(tmp.rodsDebug, "rodsDebug")
 
+    def test_rodsEnv_unicode(self):
+        tmp = create_rodsEnv(u"rodsUserName", u"rodsHost", 12, u"xmsgHost", 12, 
+                             u"rodsHome", u"rodsCwd", u"rodsAuthScheme", 
+                             u"rodsDefResource", u"rodsZone", u"rodsServerDn",
+                             12, u"rodsAuthFileName", u"rodsDebug")
+        self.assertEqual(tmp.rodsUserName, u"rodsUserName")
+        self.assertEqual(tmp.rodsHost, u"rodsHost")
+        self.assertEqual(tmp.rodsPort, 12)
+        self.assertEqual(tmp.xmsgHost, u"xmsgHost")
+        self.assertEqual(tmp.xmsgPort, 12)
+        self.assertEqual(tmp.rodsHome, u"rodsHome")
+        self.assertEqual(tmp.rodsCwd, u"rodsCwd")
+        self.assertEqual(tmp.rodsAuthScheme, u"rodsAuthScheme")
+        self.assertEqual(tmp.rodsDefResource, u"rodsDefResource")
+        self.assertEqual(tmp.rodsZone, u"rodsZone")
+        self.assertEqual(tmp.rodsServerDn, u"rodsServerDn")
+        self.assertEqual(tmp.rodsLogLevel, 12)
+        self.assertEqual(tmp.rodsAuthFileName, u"rodsAuthFileName")
+        self.assertEqual(tmp.rodsDebug, u"rodsDebug")
+
 
 def suite():
     suite = unittest.TestSuite()

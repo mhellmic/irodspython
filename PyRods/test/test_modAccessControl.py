@@ -32,6 +32,15 @@ class testModAccessControl(iRODSTestCase):
         self.assertEqual(tmp.zone, "zone")
         self.assertEqual(tmp.path, "path")
 
+    def test_modAccessControlInp_t_unicode(self):
+        tmp = create_modAccessControlInp_t(12, u"accessLevel", u"userName", 
+                                           u"zone", u"path")
+        self.assertEqual(tmp.recursiveFlag, 12)
+        self.assertEqual(tmp.accessLevel, u"accessLevel")
+        self.assertEqual(tmp.userName, u"userName")
+        self.assertEqual(tmp.zone, u"zone")
+        self.assertEqual(tmp.path, u"path")
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(testModAccessControl))

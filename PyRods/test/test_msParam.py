@@ -40,6 +40,16 @@ class testMsParam(iRODSTestCase):
         self.assertEqual(tmp.oprType, 12)
         #self.assertEqual(tmp.msParam, msParam)
 
+    def test_msParam_t_unicode(self):
+        inpOutBuf = bytesBuf_t()
+        tmp = create_msParam_t(u"label", u"type", #"inOutStruct", 
+                               inpOutBuf)
+        
+        self.assertEqual(tmp.label, u"label")
+        self.assertEqual(tmp.type, u"type")
+        #self.assertEqual(tmp.inOutStruct, "inOutStruct")
+        #self.assertEqual(tmp.inpOutBuf, inpOutBuf)
+
 
 def suite():
     suite = unittest.TestSuite()

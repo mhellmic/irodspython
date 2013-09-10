@@ -14,8 +14,8 @@ The API has been tested with python 2.7. It requires the python development head
 QUICK INSTALL:
 ==============
 
-$ tar xvzf PyRods-3.2.4.tar.gz
-$ cd PyRods-3.2.4
+$ tar xvzf PyRods-3.2.5.tar.gz
+$ cd PyRods-3.2.5
 $ export CFLAGS=-fPIC
 $ ./scripts/configure --enable-gsi --globus-location=/usr/local/globus-5.2.4 --gsi-install-type=gcc64dbg
 $ make clients
@@ -26,7 +26,7 @@ INSTALLATION:
 =============
 
 - Expand the package:
-    $ tar xvzf PyRods-3.2.4.tar.gz   
+    $ tar xvzf PyRods-3.2.5.tar.gz
 
 - For a 64 bits OS add the -fPIC option to the compiler:
     $ export CFLAGS=-fPIC

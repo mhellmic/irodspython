@@ -44,10 +44,10 @@ def addObject(conn, objType, objName, arg3, arg4, arg5, arg6):
 def addResultToFormatDictList(genQueryOut, formatStr, l):
     if not genQueryOut:
         return 0
-    d = {}
     
     for r in xrange(genQueryOut.rowCnt):
         t = genQueryOut.getSqlResultIdx(r)
+        d = {}
         
         for idx in xrange(len(formatStr)):
             name = formatStr[idx]
@@ -57,7 +57,6 @@ def addResultToFormatDictList(genQueryOut, formatStr, l):
                 d[name] = localTime
             else:
                 d[name] = tResult
-                
         l.append(d)
     
     return 0
@@ -368,11 +367,11 @@ def queryToFormatDictList(conn, selectInp, sqlCondInp, formatStr):
     
     while genQueryOut and genQueryOut.continueInx > 0:
         genQueryInp.continueInx = genQueryOut.continueInx
-        genQueryOut = rcGenQuery(conn, genQueryInp)    
+        genQueryOut = rcGenQuery(conn, genQueryInp)
         if genQueryOut:
-            addResultToFormatDictList(genQueryOut, l);
+            addResultToFormatDictList(genQueryOut, l)
     
-    return l;
+    return l
 
 def queryToTupleList(conn, selectInp, sqlCondInp):
     genQueryInp = genQueryInp_t()

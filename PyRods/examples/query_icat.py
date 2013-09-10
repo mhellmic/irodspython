@@ -18,19 +18,35 @@
 #
 
 from irods import *
+import os
+
 
 if __name__ == "__main__":
+    # Parse the .irodsEnv file
     status, myEnv = getRodsEnv()
+    
+    # Connection to a server with the default values
     conn, errMsg = rcConnect(myEnv.rodsHost, myEnv.rodsPort, 
                              myEnv.rodsUserName, myEnv.rodsZone)
+    
     status = clientLogin(conn)
-        
-    # Create a user with the name and the group
-    user = createUser(conn, "test", "rodsuser")
     
-    print user
+    resc_name = "demoResc"
+    columnNames = ["mem_used", "create_ts"]
     
-    # Delete a user
-    deleteUser(conn, "test")
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_SL_MEM_USED,
+                    COL_SL_CREATE_TIME,
+                    ], 
+                   [0, 0], 2)
+    sqlCondInp.init([COL_SL_RESC_NAME],["='%s'" % resc_name], 1)
     
-    conn.disconnect()
+    l = queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
+    
+    for i in l[:5]:
+        print i
+    
+    # Disconnect
+    status = conn.disconnect()
+    

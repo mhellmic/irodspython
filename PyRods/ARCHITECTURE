@@ -421,4 +421,32 @@ setStateForRestart                     rcMisc.i
 splitPathByKey                         stringOpr.i
 
 
+/*****************/
+/* SWIG EXAMPLES */
+/*****************/
 
+Wrap an existing C function in a Python one (return tuples)
+
+%pythoncode %{
+def rcConnect(rodsHost, rodsPort, userName, rodsZone, reconnFlag=0):
+    errMsg = rErrMsg_t()
+    status = _irods.rcConnect(rodsHost, rodsPort, userName, rodsZone, reconnFlag, errMsg)
+    return (status, errMsg)
+%}
+
+
+Wrap an existing C function in a C version which will be more "Pythonic"
+%inline %{
+PyObject * rcAuthCheck(rcComm_t *conn, authCheckInp_t *authCheckInp) {
+    authCheckOut_t *authCheckOut = NULL;
+    int status = rcAuthCheck(conn, authCheckInp, &authCheckOut);
+    return Py_BuildValue("(iO)", 
+                         status, 
+                         SWIG_NewPointerObj(SWIG_as_voidptr(authCheckOut), 
+                                            SWIGTYPE_p_authCheckOut_t, 0 |  0 ));
+}
+%}
+
+Create a new Swig object to as a PyObject
+
+SWIG_NewPointerObj(SWIG_as_voidptr(authCheckOut), SWIGTYPE_p_authCheckOut_t, 0 |  0 ));

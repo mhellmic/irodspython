@@ -31,3 +31,8 @@
   - Modify rcExecCmd and rcExecMyRule in rodsExec (return a tuple with the status)
   - Extend keyValPair_t in rodsInfo.i
   - Add rcDataObjLock()
+  
+* 3.2.5:
+  - Fix a bug in queryToFormatDictList
+  - Add unicode support. It requires a patch for swig to generate .c wrapper, 
+    see the README file in the patch folder in the git repository.

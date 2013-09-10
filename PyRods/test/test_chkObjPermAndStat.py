@@ -33,6 +33,16 @@ class testChkObjPermAndStat(iRODSTestCase):
         self.assertEqual(tmp.status, 12)
         #self.assertEqual(tmp.condInput, condInput)
 
+    def test_chkObjPermAndStat_t_unicode(self):
+        condInput = keyValPair_t()
+        tmp = create_chkObjPermAndStat_t(u"objPath", u"permission", 12, 12, 
+                                         condInput)
+        self.assertEqual(tmp.objPath, u"objPath")
+        self.assertEqual(tmp.permission, u"permission")
+        self.assertEqual(tmp.flags, 12)
+        self.assertEqual(tmp.status, 12)
+        #self.assertEqual(tmp.condInput, condInput)
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(testChkObjPermAndStat))

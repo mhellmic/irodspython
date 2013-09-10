@@ -51,6 +51,6 @@ if __name__ == "__main__":
     #resc.setPath("/home/rods/build/iRODS/Vault")
     resc.setComment("Useful comment")
     resc.setInfo("Useful info")
-    resc.setFreeSpace("free comment")  
+    #resc.setFreeSpace("free comment")  
     
     conn.disconnect()

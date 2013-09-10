@@ -93,6 +93,7 @@ examples/get_users.py
 examples/get_zones.py
 examples/group_info.py
 examples/group_meta.py
+examples/query_icat.py
 examples/quotas.py
 examples/resc_info.py
 examples/resc_meta.py

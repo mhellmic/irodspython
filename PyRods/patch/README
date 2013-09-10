@@ -1,0 +1,80 @@
+Swig does not support unicode, this modification in /usr/share/swig2.0/python/pystrings.swg
+add unicode conversion to char *.
+
+Replace the existing SWIG_AsCharPtrAndSize by this version if you want to
+generate irods_wrap.c with swig
+
+SWIGINTERN int
+SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc) {
+    if (PyString_Check(obj)) {
+        char *cstr; Py_ssize_t len;
+        PyString_AsStringAndSize(obj, &cstr, &len);
+        if (cptr) {
+            if (alloc) {
+                /* In python the user should not be able to modify the inner
+                   string representation. To warranty that, if you define
+                   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
+                   buffer is always returned.
+
+                   The default behavior is just to return the pointer value,
+                   so, be careful.
+                */ 
+                if (*alloc == SWIG_NEWOBJ) {
+                    *cptr = %new_copy_array(cstr, len + 1, char);
+                    *alloc = SWIG_NEWOBJ;
+                } else {
+                    *cptr = cstr;
+                    *alloc = SWIG_OLDOBJ;
+                }
+            } else {
+                *cptr = SWIG_Python_str_AsChar(obj);
+            }
+        }
+        if (psize) *psize = len + 1;
+        return SWIG_OK;
+    } else if (PyUnicode_Check(obj)) {
+        char *cstr; Py_ssize_t len;
+        if (!alloc && cptr) {
+            return SWIG_RuntimeError;
+        }
+        obj = PyUnicode_AsUTF8String(obj);
+        PyBytes_AsStringAndSize(obj, &cstr, &len);
+        if(alloc) *alloc = SWIG_NEWOBJ;
+        if (cptr) {
+            if (alloc) {
+                /* In python the user should not be able to modify the inner
+                   string representation. To warranty that, if you define
+                   SWIG_PYTHON_SAFE_CSTRINGS, a new/copy of the python string
+                   buffer is always returned.
+
+                   The default behavior is just to return the pointer value,
+                   so, be careful.
+                */ 
+                if (*alloc == SWIG_NEWOBJ) {
+                    *cptr = %new_copy_array(cstr, len + 1, char);
+                    *alloc = SWIG_NEWOBJ;
+                } else {
+                    *cptr = cstr;
+                    *alloc = SWIG_OLDOBJ;
+                }
+            } else {
+                *cptr = SWIG_Python_str_AsChar(obj);
+            }
+        }
+        if (psize) *psize = len + 1;
+        return SWIG_OK;
+    } else {
+        swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+        if (pchar_descriptor) {
+            void* vptr = 0;
+            if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
+                if (cptr) *cptr = (char *) vptr;
+                if (psize) *psize = vptr ? (strlen((char *)vptr) + 1) : 0;
+                if (alloc) *alloc = SWIG_OLDOBJ;
+                return SWIG_OK;
+            }
+        }
+    }
+    return SWIG_TypeError;
+}
+}

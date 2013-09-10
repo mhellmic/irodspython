@@ -135,6 +135,56 @@ class testMiscUtil(iRODSTestCase):
 #        self.assertEqual(tmp.dataType, dataType)
 
 
+
+    def test_collEnt_t_unicode(self):
+        objType = UNKNOWN_OBJ_T
+        specColl = specColl_t()
+        tmp = create_collEnt_t(objType, 12, 12, 12, 12, u"collName", 
+                     u"dataName", u"dataId", u"createTime", u"modifyTime", 
+                     u"chksum", u"resource", 
+                     u"rescGrp", u"phyPath", u"ownerName", specColl)
+        self.assertEqual(tmp.objType, objType)
+        self.assertEqual(tmp.replNum, 12)
+        self.assertEqual(tmp.replStatus, 12)
+        self.assertEqual(tmp.dataMode, 12)
+        self.assertEqual(tmp.dataSize, 12)
+        self.assertEqual(tmp.collName, u"collName")
+        self.assertEqual(tmp.dataName, u"dataName")
+        self.assertEqual(tmp.dataId, u"dataId")
+        self.assertEqual(tmp.createTime, u"createTime")
+        self.assertEqual(tmp.modifyTime, u"modifyTime")
+        self.assertEqual(tmp.chksum, u"chksum")
+        self.assertEqual(tmp.resource, u"resource")
+        self.assertEqual(tmp.rescGrp, u"rescGrp")
+        self.assertEqual(tmp.phyPath, u"phyPath")
+        self.assertEqual(tmp.ownerName, u"ownerName")
+        #self.assertEqual(tmp.specColl, specColl)
+
+    def test_collHandle_t_unicode(self):
+        state = COLL_CLOSED
+        rodsObjStat = rodsObjStat_t()
+        genQueryInp = genQueryInp_t()
+        dataObjInp = dataObjInp_t()
+        dataObjSqlResult = dataObjSqlResult_t()
+        collSqlResult = collSqlResult_t()
+        
+        tmp = create_collHandle_t(state, 12, 12, 12, rodsObjStat, 
+                        genQueryInp, dataObjInp, dataObjSqlResult, 
+                        collSqlResult, u"linkedObjPath", u"prevdataId")
+        self.assertEqual(tmp.state, state)
+        self.assertEqual(tmp.inuseFlag, 12)
+        self.assertEqual(tmp.flags, 12)
+        self.assertEqual(tmp.rowInx, 12)
+        #self.assertEqual(tmp.rodsObjStat, rodsObjStat)
+        #self.assertEqual(tmp.queryHandle, queryHandle)
+        #self.assertEqual(tmp.genQueryInp, genQueryInp)
+        #self.assertEqual(tmp.dataObjInp, dataObjInp)
+        #self.assertEqual(tmp.dataObjSqlResult, dataObjSqlResult)
+        #self.assertEqual(tmp.collSqlResult, collSqlResult)
+        self.assertEqual(tmp.linkedObjPath, u"linkedObjPath")
+        self.assertEqual(tmp.prevdataId, u"prevdataId")
+
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(testMiscUtil))
