@@ -40,7 +40,7 @@ if __name__ == "__main__":
     
     f.seek(0) # begining
     print f.read()
-    f.seek(f.getSize(), SEEK_END) # begining (from the end)
+    f.seek(-f.getSize(), SEEK_END) # begining (from the end)
     print f.read()
     f.close()
     

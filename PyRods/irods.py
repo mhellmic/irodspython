@@ -4137,7 +4137,7 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
             dataObjLseekInp.offset = 0
             dataObjLseekInp.whence = SEEK_END
 
-            dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
+            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
             ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
         else:
             l1descInx = rcDataObjCreate(conn, dataObjInp)
@@ -4164,7 +4164,7 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
             dataObjLseekInp.offset = 0
             dataObjLseekInp.whence = SEEK_END
 
-            dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
+            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
             ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
         else:
             l1descInx = rcDataObjCreate(conn, dataObjInp)
@@ -4179,6 +4179,7 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
 
     if l1descInx > 0:
         ir_file.descInx = l1descInx
+        ir_file.set_size()
         return ir_file
     else:
         return None
@@ -4252,10 +4253,23 @@ class irodsFile:
         self.collName = ""
         self.dataName = ""
         self.resourceName = ""
-        
+        self.size = 0
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.position >= self.size:
+            raise StopIteration
+        return self.readline()
+
     def fullPath(self):
         return "%s/%s" % (self.collName, self.dataName)
-        
+
+    def addUserMetadata(self, name, value, units=""):
+        fullName = self.fullPath()
+        return addUserMetadata(self._conn, "-d", fullName, name, value, units)
+
     def close(self):
         dataObjCloseInp = openedDataObjInp_t()
         dataObjCloseInp.l1descInx = self.descInx
@@ -4276,6 +4290,12 @@ class irodsFile:
         dataObjInp.openFlags = O_RDONLY
         dataObjInp.objPath = self.fullPath()
         return rcDataObjUnlink(self._conn, dataObjInp)
+    
+    def fileno(self):
+        return self.descInx
+    
+    def flush(self):
+        pass
     
     def getCollName(self):
         return self.collName
@@ -4382,9 +4402,25 @@ class irodsFile:
             else:
                 f = _irodsOpen(self._conn, self.collName, self.dataName, 
                                "r+", resc_name)
-                              
         return res
+
+    def getUserMetadata(self):
+        sqlCondInp = inxValPair_t()
+        selectInp = inxIvalPair_t()
+                
+        selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
+                        COL_META_DATA_ATTR_UNITS],
+                       [0, 0, 0], 3)
         
+        sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
+                        ["='%s'" % self.collName,
+                         "='%s'" % self.dataName], 2)
+        
+        return queryToTupleList(self._conn, selectInp, sqlCondInp)
+
+    def isatty(self):
+        return false
+    
     # Optional parameter : number of bytes to read. if not present reads
     # TRANS_BUF_SZ bytes. If the size is greater it has to be refined...
     def read(self, buffSize=TRANS_BUF_SZ):
@@ -4406,13 +4442,34 @@ class irodsFile:
             dataObjLseekInp.offset = self.position
             dataObjLseekInp.whence = SEEK_SET
             
-            dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
+            status, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
             readSize, outString = rcDataObjRead(self._conn, dataObjReadInp)
             
             self.position += readSize
-            
             return outString
-          
+
+    def readline(f, size=None):
+        res = ""
+        end = False
+        
+        c = f.read(1)
+        readsize = 1
+        end = c == ''
+    
+        while not end:
+            res += c
+            c = f.read(1)
+            readsize += 1
+            if not c or c in ['\r', '\n']:
+                res += c
+                end = True
+            if size:
+                if readsize >= size:
+                    res += c
+                    end = True
+    
+        return res
+
     def seek(self, offset, whence=SEEK_SET):
         dataObjLseekInp = openedDataObjInp_t()
         dataObjLseekOut = fileLseekOut_t()
@@ -4421,7 +4478,7 @@ class irodsFile:
         dataObjLseekInp.offset = offset
         dataObjLseekInp.whence = whence
         
-        dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
+        status, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
         
         if (whence == SEEK_SET):
             self.position = offset
@@ -4429,31 +4486,15 @@ class irodsFile:
             self.position += offset
         elif (whence == SEEK_END):
             self.position = getDataObjSize(self._conn, self.collName, 
-                                           self.dataName, self.resourceName) - offset
-                                           
+                                           self.dataName, self.resourceName) + offset
         return dataObjLseekOut
-    
-    def write(self, inpBuff):
-        if self.openFlag == O_RDONLY:
-            # If the file is only open for reading and we try to write in it,
-            # the call to rcDataObjRead will fail.
-            return 0
-        else:
-            inpLen = len(inpBuff)
-            dataObjWriteInpBBuf = bytesBuf_t();
-            
-            fileWriteInp = openedDataObjInp_t()
-            fileWriteInp.l1descInx = self.descInx
-            fileWriteInp.len = inpLen
-            
-            dataObjWriteInpBBuf.setBuf(inpBuff, inpLen)
-            
-            status = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
-            
-            if status > 0:
-                self.position += status
-            
-            return status
+
+    def set_size(self):
+        self.size = getDataObjSize(self._conn, self.collName, 
+                                   self.dataName, self.resourceName)
+
+    def tell(self):
+        return self.getPosition()
         
     def update(self):
         dataObjInp = dataObjInp_t()
@@ -4478,27 +4519,32 @@ class irodsFile:
         addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, rescName)
         return rcDataObjRepl(self._conn, dataObjInp)
         
-    def addUserMetadata(self, name, value, units=""):
-        fullName = self.fullPath()
-        return addUserMetadata(self._conn, "-d", fullName, name, value, units)
-        
-    def getUserMetadata(self):
-        sqlCondInp = inxValPair_t()
-        selectInp = inxIvalPair_t()
-                
-        selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
-                        COL_META_DATA_ATTR_UNITS],
-                       [0, 0, 0], 3)
-        
-        sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
-                        ["='%s'" % self.collName,
-                         "='%s'" % self.dataName], 2)
-        
-        return queryToTupleList(self._conn, selectInp, sqlCondInp)
-        
     def rmUserMetadata(self, name, value, units=""):
         fullName = self.fullPath()
         return rmUserMetadata(self._conn, "-d", fullName, name, value, units)
+    
+    def write(self, inpBuff):
+        if self.openFlag == O_RDONLY:
+            # If the file is only open for reading and we try to write in it,
+            # the call to rcDataObjRead will fail.
+            return 0
+        else:
+            inpLen = len(inpBuff)
+            dataObjWriteInpBBuf = bytesBuf_t();
+            
+            fileWriteInp = openedDataObjInp_t()
+            fileWriteInp.l1descInx = self.descInx
+            fileWriteInp.len = inpLen
+            
+            dataObjWriteInpBBuf.setBuf(inpBuff, inpLen)
+            
+            status = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
+            
+            if status > 0:
+                self.position += status
+                self.size += status
+            
+            return status
 
 
 
@@ -5954,12 +6000,16 @@ def rcSubStructFileWrite(*args):
   return _irods.rcSubStructFileWrite(*args)
 rcSubStructFileWrite = _irods.rcSubStructFileWrite
 def createGroup(conn, groupName):
+    if groupName == "":
+        return None
     status, myEnv = getRodsEnv()
     status = addObject(conn, "user", groupName, "rodsgroup", myEnv.rodsZone, "", "")
     if status == 0:
         return irodsGroup(conn, groupName)
 
 def createResource(conn, name, type, cls, host, path):
+    if name == "":
+        return None
     status = addObject(conn, "resource", name, type, cls,
                         host, path)
     if status == 0:

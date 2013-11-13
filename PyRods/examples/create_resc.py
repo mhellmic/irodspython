@@ -29,8 +29,13 @@ if __name__ == "__main__":
     status = clientLogin(conn)
     
     # Create a resource
-    resc = createResource(conn, "testResc", "unix file system", "archive", 
+    resc = createResource(conn, "testResc", "unix file system", "cache", 
                           "localhost", HOME + "/testVault")
+    print resc     
+    print resc.getInfos()
+    print resc.getName()
+    print resc.getHost()
+
     # Delete the resource
     deleteResource(conn, "testResc")
     

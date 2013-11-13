@@ -98,6 +98,9 @@ examples/quotas.py
 examples/resc_info.py
 examples/resc_meta.py
 examples/rule_exec.py
+examples/test_pickle.py
+examples/test_readline.py
+examples/test_zipinfo.py
 examples/user_info.py
 examples/user_meta.py
 examples/zone_info.py

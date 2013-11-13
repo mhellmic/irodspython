@@ -22,12 +22,16 @@
 %pythoncode %{
 
 def createGroup(conn, groupName):
+    if groupName == "":
+        return None
     status, myEnv = getRodsEnv()
     status = addObject(conn, "user", groupName, "rodsgroup", myEnv.rodsZone, "", "")
     if status == 0:
         return irodsGroup(conn, groupName)
 
 def createResource(conn, name, type, cls, host, path):
+    if name == "":
+        return None
     status = addObject(conn, "resource", name, type, cls,
                         host, path)
     if status == 0:
@@ -36,12 +40,16 @@ def createResource(conn, name, type, cls, host, path):
         return None
 
 def createUser(conn, userName, type):
+    if userName == "":
+        return None
     status, myEnv = getRodsEnv()
     status = addObject(conn, "user", userName, type, myEnv.rodsZone, "", "")
     if status == 0:
         return irodsUser(conn, userName, myEnv.rodsZone)
 
 def createZone(conn, zone_name, type, connstr="", comment=""):
+    if zone_name == "":
+        return None
     status, myEnv = getRodsEnv()
     status = addObject(conn, "zone", zone_name, type, connstr, comment, "")
     if status == 0:

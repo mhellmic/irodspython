@@ -33,7 +33,6 @@ void usage(char *subOpt);
    necessary.  Called recursively.
 */
 int
-printSimpleQuery(char *buf) {
    char *cpTime, *endOfLine;
    char localTime[20];
    int fieldLen=10;

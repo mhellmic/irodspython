@@ -203,10 +203,6 @@ PyObject * rcDataGet(rcComm_t *conn, dataOprInp_t *dataGetInp) {
 
 /*****************************************************************************/
 
-//int
-//rcDataPut (rcComm_t *conn, dataOprInp_t *dataPutInp,
-//portalOprOut_t **portalOprOut);
-
 %inline %{
 PyObject * rcDataPut(rcComm_t *conn, dataOprInp_t *dataPutInp) {
     portalOprOut_t *portalOprOut = NULL;
@@ -219,9 +215,6 @@ PyObject * rcDataPut(rcComm_t *conn, dataOprInp_t *dataPutInp) {
 %}
 
 /*****************************************************************************/
-
-//int rcDataObjChksum (rcComm_t *conn, dataObjInp_t *dataObjChksumInp, 
-//char **outChksum);
 
 %inline %{
 PyObject * rcDataObjChksum(rcComm_t *conn, dataObjInp_t *dataObjChksumInp) {
@@ -247,9 +240,6 @@ int rcDataObjCreate (rcComm_t *conn, dataObjInp_t *dataObjInp);
 
 /*****************************************************************************/
 
-//int rcDataObjCreateAndStat (rcComm_t *conn, dataObjInp_t *dataObjInp,
-//openStat_t **openStat);
-
 %inline %{
 PyObject * rcDataObjCreateAndStat(rcComm_t *conn, dataObjInp_t *dataObjInp) {
     openStat_t *openStat = NULL;
@@ -271,10 +261,6 @@ int rcDataObjLock (rcComm_t *conn, dataObjInp_t *dataObjInp);
 
 /*****************************************************************************/
 
-//int
-//rcDataObjLseek (rcComm_t *conn, openedDataObjInp_t *dataObjLseekInp,
-//fileLseekOut_t **dataObjLseekOut);
-
 %inline %{
 PyObject * rcDataObjLseek(rcComm_t *conn, openedDataObjInp_t *dataObjLseekInp) {
     fileLseekOut_t *dataObjLseekOut = NULL;
@@ -291,9 +277,6 @@ PyObject * rcDataObjLseek(rcComm_t *conn, openedDataObjInp_t *dataObjLseekInp) {
 int rcDataObjOpen (rcComm_t *conn, dataObjInp_t *dataObjInp);
 
 /*****************************************************************************/
-
-//int rcDataObjOpenAndStat (rcComm_t *conn, dataObjInp_t *dataObjInp,
-//openStat_t **openStat);
 
 %inline %{
 PyObject * rcDataObjOpenAndStat(rcComm_t *conn, dataObjInp_t *dataObjInp) {

@@ -97,7 +97,7 @@ class testRodsIO(iRODSTestCase):
             
         f.seek(0) # begining   
         self.assertEqual(f.read(), "-" * 100) 
-        f.seek(f.getSize(), os.SEEK_END) # begining (from the end)
+        f.seek(-f.getSize(), os.SEEK_END) # begining (from the end)
         self.assertEqual(f.read(), "-" * 100) 
         f.close()
         

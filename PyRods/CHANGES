@@ -36,3 +36,17 @@
   - Fix a bug in queryToFormatDictList
   - Add unicode support. It requires a patch for swig to generate .c wrapper, 
     see the README file in the patch folder in the git repository.
+    
+* 3.2.6:
+  - Change irodsFile.seek() to be aligned with C seek(). If using SEEK_END be 
+    sure to use negative values of offset
+  - Modifications to iRodsFile:
+      Add iterator functions (for line in f: ...)
+      Add readline() function
+  - Experiment with pickle and zipfile modules, they can be used with a file
+    stored on iRODS. Potentially it can work with any library (see examples)
+
+* 3.2.7:
+  - Remove the possibility to create resources/groups/user/zone with an empty 
+    name
+
