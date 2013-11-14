@@ -138,8 +138,8 @@ BINS =		\
 		$(binDir)/igroupadmin
 
 ifdef NETCDF_CLIENT
-OBJS += $(objDir)/incattr.o $(objDir)/inc.o
-BINS += $(binDir)/incattr $(binDir)/inc
+OBJS += $(objDir)/incattr.o $(objDir)/inc.o $(objDir)/incarch.o
+BINS += $(binDir)/incattr $(binDir)/inc $(binDir)/incarch
 endif
 
 #
@@ -180,9 +180,9 @@ GSI_LIB_DIR=lib
 endif
 
 ifeq ($(GSI_INSTALL_TYPE),)
-  $GSI_INSTALL_TYPE2=
+GSI_INSTALL_TYPE2=
 else
-  $GSI_INSTALL_TYPE2=_$(GSI_INSTALL_TYPE)
+GSI_INSTALL_TYPE2=_$(GSI_INSTALL_TYPE)
 endif
 
 # GSI_SSL is set to ssl to use the system's SSL library, else use

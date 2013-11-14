@@ -6,9 +6,9 @@
 # reHost - This is only needed if the irods system is using more than one
 #   master icat enabled servers. This points to the master icat host that will
 #   run the irodsReServer.  Note that if "reHost" is used,
+#   the same configuration needs to be applied to all servers.
 # xmsgHost - the address of the irodsXmsgServer host. If this line is not
 #   specified, no irodsXmsgServer will be started.
-# The same configuration needs to be applied to all servers.
 #
 # For RCAT-Enabled hosts:
 # DBPassword - the database password
@@ -22,7 +22,7 @@ icatHost zuri.sdsc.edu
 DBUsername schroede
 #
 # The following keywords are needed for Rule Engine Initialization.
-# reRuleSet holds a comma-separated list of iRODS Rule Base (.irb) files 
+# reRuleSet holds a comma-separated list of iRODS Rule Base (.re) files 
 #    to be used by the Rule Engine
 # reFuncMapSet  holds a comma-separated list of Function Name Mapping (.fnm) 
 #    files to be used by the Rule Engine

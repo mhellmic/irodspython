@@ -420,6 +420,9 @@ LIB_API_OBJS += $(libApiObjDir)/rcNcInq.o
 LIB_API_OBJS += $(libApiObjDir)/rcNcOpenGroup.o
 LIB_API_OBJS += $(libApiObjDir)/rcNcInqGrps.o
 LIB_API_OBJS += $(libApiObjDir)/rcNcRegGlobalAttr.o
+LIB_API_OBJS += $(libApiObjDir)/rcNcGetAggElement.o
+LIB_API_OBJS += $(libApiObjDir)/rcNcGetAggInfo.o
+LIB_API_OBJS += $(libApiObjDir)/rcNcArchTimeSeries.o
 ifdef NETCDF_API
 SVR_API_OBJS += $(svrApiObjDir)/rsNcOpen.o
 SVR_API_OBJS += $(svrApiObjDir)/rsNcCreate.o
@@ -427,6 +430,9 @@ SVR_API_OBJS += $(svrApiObjDir)/rsNcClose.o
 SVR_API_OBJS += $(svrApiObjDir)/rsNcInqId.o
 SVR_API_OBJS += $(svrApiObjDir)/rsNcInqWithId.o
 SVR_API_OBJS += $(svrApiObjDir)/rsNcGetVarsByType.o
+SVR_API_OBJS += $(svrApiObjDir)/rsNcGetAggElement.o
+SVR_API_OBJS += $(svrApiObjDir)/rsNcGetAggInfo.o
+SVR_API_OBJS += $(svrApiObjDir)/rsNcArchTimeSeries.o
 ifdef LIB_CF
 SVR_API_OBJS += $(svrApiObjDir)/rsNccfGetVara.o
 endif
@@ -453,3 +459,8 @@ SVR_API_OBJS += $(svrApiObjDir)/rsOoiGenServReq.o
 LIB_API_OBJS += $(libApiObjDir)/rcOoiGenServReq.o
 endif
 
+
+
+
+SVR_API_OBJS += $(svrApiObjDir)/rsGetLimitedPassword.o
+LIB_API_OBJS += $(libApiObjDir)/rcGetLimitedPassword.o

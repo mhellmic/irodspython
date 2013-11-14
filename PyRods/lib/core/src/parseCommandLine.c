@@ -84,6 +84,19 @@ parseCmdLineOpt (int argc, char **argv, char *optString, int includeLong,
 	    rodsArgs->test=True;
 	    argv[i]="-Z";
 	 }
+	 if (strcmp("--ttl", argv[i])==0) {
+	    rodsArgs->ttl=True;
+	    argv[i]="-Z";
+	    if (i + 2 <= argc) {
+	       if (*argv[i+1] == '-') {
+		 rodsLog (LOG_ERROR,
+			  "--ttl option needs a time to live number");
+		 return USER_INPUT_OPTION_ERR;
+	       }
+	       rodsArgs->ttlValue=atoi(argv[i+1]);
+	       argv[i+1]="-Z";
+	    }
+	 }
 	 if (strcmp("--verify", argv[i])==0) {  /* also -x */
 	    rodsArgs->verify=True;
 	    argv[i]="-Z";
@@ -175,6 +188,10 @@ parseCmdLineOpt (int argc, char **argv, char *optString, int includeLong,
             rodsArgs->add=True;
             argv[i]="-Z";
          }
+         if (strcmp("--showFirstLine", argv[i])==0) {
+        	 rodsArgs->showFirstLine = True;
+        	 argv[i]="-Z";
+         }
 #ifdef NETCDF_CLIENT
          if (strcmp("--reg", argv[i])==0) {
             rodsArgs->reg=True;
@@ -252,7 +269,23 @@ parseCmdLineOpt (int argc, char **argv, char *optString, int includeLong,
             rodsArgs->ascitime=True;
             argv[i]="-Z";
          }
-
+         if (strcmp("--agginfo", argv[i])==0) {
+            rodsArgs->agginfo=True;
+            argv[i]="-Z";
+         }
+         if (strcmp("--new", argv[i])==0) { 
+            rodsArgs->newFlag=True;
+            argv[i]="-Z";
+            if (i + 2 <= argc) {
+               if (*argv[i+1] == '-') {
+                   rodsLog (LOG_ERROR,
+                    "--new option needs an starting time index iput ");
+                    return USER_INPUT_OPTION_ERR;
+               }
+               rodsArgs->startTimeInxStr = strdup(argv[i+1]);
+               argv[i+1]="-Z";
+            }
+         }
 #endif
          if (strcmp("--exclude-from", argv[i])==0) {
             rodsArgs->excludeFile=True;
@@ -430,6 +463,9 @@ parseCmdLineOpt (int argc, char **argv, char *optString, int includeLong,
 	 else {
 	    rodsLogLevel(LOG_DEBUG); /* multiple V's is for DEBUG level */
 	 }
+         break;
+      case 'w':
+         rodsArgs->writeFlag=True;
          break;
       case 'z':
          rodsArgs->zone=True;

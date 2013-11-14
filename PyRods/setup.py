@@ -34,6 +34,7 @@ sysconfig._init_posix = my_init_posix
 include_dirs = ['/lib/core/include', 
                 '/lib/api/include', 
                 '/lib/md5/include', 
+                '/lib/sha1/include', 
                 '/server/core/include', 
                 '/server/icat/include',
                 '/server/drivers/include', 

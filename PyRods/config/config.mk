@@ -312,12 +312,12 @@ UNZIP_EXEC_PATH=/usr/bin/unzip
 # GSI_CRYPTO to crypto).
 #
 #
-#GSI_AUTH=
+# GSI_AUTH = 1
 ifdef GSI_AUTH
-GLOBUS_LOCATION=/usr/local/globus-5.2.4
-GSI_INSTALL_TYPE=gcc64dbg
-GSI_SSL=ssl
-GSI_CRYPTO=crypto
+GLOBUS_LOCATION=/usr/local/apps/globus-4.0.1
+GSI_INSTALL_TYPE=gcc32dbg
+GSI_SSL=
+GSI_CRYPTO=
 endif
 
 # RBUDP_TRANSFER - specify whether RBUDP file transfer mechanism will be
@@ -343,6 +343,10 @@ COMPAT_201=1
 # Uncomment this line to log into syslog instead of the usual
 # server/log/ log files.
 #IRODS_SYSLOG = 1
+# When iRODS_SYSLOG is enabled, logging will be done using "LOG_DAEMON" by
+# default but this can be changed by uncommenting the following.  You can
+# also modify LOG_LOCAL0 to other available values (see /usr/include/syslog.h).
+#SYSLOG_FACILITY_CODE = LOG_LOCAL0
 
 # HPSS - Define whether HPSS is supported on this server. HPSS_UNIX_PASSWD_AUTH
 # specifies whether the UNix password authentication should be used. 
@@ -363,7 +367,6 @@ ifdef HPSS
 # path defined by HPSS_LIB_DIR to the path in the LD_LIBRARY_PATH env variable.
 HPSS_LIB_DIR=/opt/hpss/lib
 HPSS_HDR_DIR=/opt/hpss/include
-ADDR_64BITS=
 endif
 
 # AMAZON_S3 - Define whether AMAZON S3 is supported on this server.
@@ -401,13 +404,15 @@ endif
  
 # USE_BOOST -  specify whether the BOOST library should be used. BOOST_DIR is
 # the directory where the BOOST directory is located, which is normally
-# the .../iRODS/boost_irods directory.  First run 'buildboost.sh' in the
-# iRODS directory to create boost_irods.
+# /usr.  Previously it was in .../iRODS/boost_irods directory (after first
+# running 'buildboost.sh' to create it), but now we are using the
+# system installed Boost.
 # USE_BOOST=1
 ifdef USE_BOOST
 ifndef BOOST_DIR
 #BOOST_DIR=/home/mwan/myapps/boost/install
-BOOST_DIR=/tbox/IRODS_BUILD/iRODS/boost_irods
+#BOOST_DIR=/tbox/IRODS_BUILD/iRODS/boost_irods
+BOOST_DIR=/usr
 endif
 endif
 
@@ -439,7 +444,14 @@ endif
 # in iRODS.
 # PAM_AUTH = 1
 ifdef PAM_AUTH
-#PAM_AUTH_CHECK_PROG=../auth/PamAuthCheck
+#PAM_AUTH_CHECK_PROG=../server/bin/PamAuthCheck
+
+# Uncomment the following if you want to disallow extending the
+# lifetime of an already existing irods-pam password.  This will also
+# change (reduce) the IRODS_PAM_PASSWORD_DEFAULT_TIME and
+# IRODS_PAM_PASSWORD_MAX_TIME defined in icatHighLevelRoutines.c.  You
+# can edit those values in icatHighLevelRoutines.c to further adjust.
+# PAM_AUTH_NO_EXTEND = 1
 endif
 
 # USE_SSL - build in support for using SSL over the client/server 
@@ -448,27 +460,23 @@ endif
 # on a given connection. Right now this is only used for the PAM_AUTH 
 # mode, so must be turned on for the PAM_AUTH support to function properly.
 # USE_SSL = 1
+# EL5_SSL - add compatibility with openssl pre version 1.0 in Enterprise
+# Linux version 5
+# EL5_SSL = 1
 
 # NETCDF_API - specify whether to build iRODS with the NETCDF API. This 
 # option requires the installation of the NETCDF C library and header files.
 # NETCDF4_API - specify whether the NETCDF library supports NETCDF4 APIs -
-# built with --enable-netcdf-4.
+# built with --enable-netcdf-4. Since most NETCDF files are very large and 
+# Opendap support is needed for some NETCDF applications, NETCDF4 support 
+# is needed in most cases.
 # NETCDF_DIR - the install directory of NETCDF. 
 # NETCDF_CLIENT - build only the irods client with the NETCDF API. This
 # option does not require the installation of the NETCDF C library nor
 # header files. NETCDF_API must be off with is option.
-# LIB_CF - specify whether higher level libCF is present. libCF, uses the
-# netCDF API to aid in the creation, processing and sharing of scientific
-# data files which conform to the Climate and Forecast (CF) conventions
-# Currently, one libCF subsetting API - nccf_get_vara has been inplemented
-# as an iRods API (rcNccfGetVara). If LIB_CF is not set, only the low
-# level NETCDF APIs are present. LIB_CF_INC_DIR and LIB_CF_LIB_DIR defines
-# the path for the include directory and lib directory, respectively, for
-# libcf.
 # NETCDF_API=1
 # NETCDF4_API=1
 # NETCDF_CLIENT=1
-# LIB_CF=1
 
 ifdef NETCDF4_API
 NETCDF_API=1
@@ -476,18 +484,14 @@ endif
 ifdef NETCDF_API
 NETCDF_CLIENT=1
 NETCDF_DIR=/usr/local
-ifdef LIB_CF
-LIB_CF_INC_DIR=/usr/local/include
-LIB_CF_LIB_DIR=/usr/local/lib
-endif
 endif
 
 # PYDAP - Define whether PYDAP driver  is supported on this server. 
-# NETCDF_API must be enabled if PYDAP is enabled.
+# NETCDF4_API must be enabled if PYDAP is enabled.
 # PYDAP=1
 
 # TDS - Define whether the TDS (Thredds Data Server) driver is supported on 
-# this server. NETCDF_API must be enabled and libxml2 must be installed
+# this server. NETCDF4_API must be enabled and libxml2 must be installed
 # if TDS is enabled. LIB_XML2_INC_DIR and LIB_XML2_LIB_DIR defines
 # the path for the include directory and lib directory, respectively, for
 # libxml2.
@@ -498,7 +502,7 @@ LIB_XML2_LIB_DIR=/usr/local/lib
 endif
 
 # ERDDAP - Define whether the ERDDAP driver is supported on 
-# this server. NETCDF_API must be enabled and JANSSON library must be installed
+# this server. NETCDF4_API must be enabled and JANSSON library must be installed
 # if ERDDAP is enabled. LIB_JANSSON_INC_DIR and LIB_JANSSON_LIB_DIR defines
 # the path for the include directory and lib directory, respectively, for
 # libjansson.
@@ -540,3 +544,7 @@ endif
 # In this mode, you can run an iRODS server as a non-privileged user
 # so the data server doesn't need rodsadmin credentials.
 # STORAGE_ADMIN_ROLE = 1
+#
+# HDFS - Define whether Hadoop file system is supprted on this server
+# HDFS=1
+#

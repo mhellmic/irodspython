@@ -27,6 +27,7 @@ extendedICAT.h =	$(buildDir)/modules/extendedICAT/extendedICAT.h
 # Source files
 #	core	utility functions
 #	md5	MD5 hash generation functions
+#       sha1    SHA1 hash generation functions
 #	api	client API functions (LIB_API_OBJS is set by api.mk)
 #
 # Core
@@ -70,7 +71,8 @@ LIB_CORE_OBJS =	\
 		$(libCoreObjDir)/sslSockComm.o
 
 ifdef NETCDF_CLIENT
-LIB_CORE_OBJS += $(libCoreObjDir)/ncattrUtil.o $(libCoreObjDir)/ncUtil.o
+LIB_CORE_OBJS += $(libCoreObjDir)/ncattrUtil.o $(libCoreObjDir)/ncUtil.o  \
+		$(libCoreObjDir)/ncarchUtil.o
 endif
 
 ifdef USE_BOOST_ASIO
@@ -106,7 +108,12 @@ LOG_SRC =	$(libCoreSrcDir)/rodsLog.c
 LIB_MD5_OBJS =	\
 		$(libMd5ObjDir)/md5c.o \
 		$(libMd5ObjDir)/md5Checksum.o
-INCLUDES +=	-I$(libMd5IncDir)
+INCLUDES +=	-I$(libMd5IncDir) -I$(libSha1IncDir)
+
+# SHA1
+LIB_SHA1_OBJS =	\
+		$(libSha1ObjDir)/sha1.o
+INCLUDES +=	-I$(libSha1IncDir)
 
 # rbudp
 ifdef RBUDP_TRANSFER
@@ -118,7 +125,7 @@ endif
 
 # GSI
 ifdef GSI_AUTH
-INCLUDES += -I$(GLOBUS_LOCATION)/include/globus -I$(GLOBUS_LOCATION)/include/globus/$(GSI_INSTALL_TYPE)
+INCLUDES += 	-I$(GLOBUS_LOCATION)/include/$(GSI_INSTALL_TYPE)
 endif
 
 # Kerberos
@@ -135,7 +142,7 @@ INCLUDES +=	-I$(libApiIncDir)
 
 # All objects
 OBJS =		$(LIB_CORE_OBJS) $(LIB_API_OBJS) $(LIB_MD5_OBJS)	\
-		$(LIB_RBUDP_OBJS)
+		$(LIB_SHA1_OBJS) $(LIB_RBUDP_OBJS)
 
 
 # Server configuration
@@ -164,8 +171,14 @@ endif
 ifdef USE_SSL
 CFLAGS_OPTIONS += -D USE_SSL
 endif
+ifdef EL5_SSL
+CFLAGS_OPTIONS += -D EL5_SSL
+endif
 ifdef IRODS_SYSLOG
 CFLAGS_OPTIONS += -D IRODS_SYSLOG
+endif
+ifdef SYSLOG_FACILITY_CODE
+CFLAGS_OPTIONS += -D SYSLOG_FACILITY_CODE=$(SYSLOG_FACILITY_CODE)
 endif
 
 
@@ -174,7 +187,7 @@ endif
 #
 .PHONY:	all lib libs clean print_cflags
 vpath %c	$(libCoreSrcDir) $(libApiSrcDir) $(libMd5SrcDir) 	\
-		$(libRbudpSrcDir)
+		$(libSha1SrcDir) $(libRbudpSrcDir)
 
 
 
@@ -256,6 +269,11 @@ $(LIB_API_OBJS):  $(libApiObjDir)/%.o: $(libApiSrcDir)/%.c $(DEPEND)
 $(LIB_MD5_OBJS):  $(libMd5ObjDir)/%.o: $(libMd5SrcDir)/%.c $(configMk) $(platformMk)
 	@echo "Compile md5 `basename $@`..."
 	@$(CC) -c $(MD5_CFLAGS) -o $@ $<
+
+# Build SHA1
+$(LIB_SHA1_OBJS):  $(libSha1ObjDir)/%.o: $(libSha1SrcDir)/%.c $(configMk) $(platformMk)
+	@echo "Compile sha1 `basename $@`..."
+	@$(CC) -c $(CFLAGS) -o $@ $<
 
 ifdef RBUDP_TRANSFER
 $(LIB_RBUDP_OBJS):  $(libRbudpObjDir)/%.o: $(libRbudpSrcDir)/%.c $(configMk) $(platformMk)

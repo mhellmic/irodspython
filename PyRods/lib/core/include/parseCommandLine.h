@@ -26,6 +26,7 @@ typedef struct {
    int all;
    int accessControl;
    int admin;
+   int agginfo;
    int ascitime;
    int attr;
    int noattr;
@@ -66,6 +67,8 @@ typedef struct {
    char *mountType; 
    int replNum;
    char *replNumValue;
+   int newFlag;
+   char *startTimeInxStr;
    int noPage;
    int number;
    int numberValue;
@@ -88,6 +91,7 @@ typedef struct {
    int resource;
    char *resourceString;
    int remove;
+   int showFirstLine;
    int sizeFlag;
    rodsLong_t size;
    int srcResc;
@@ -98,12 +102,15 @@ typedef struct {
    int test;
    int ticket;
    char *ticketString;
+   int ttl;
+   int ttlValue;
    int reconnect;
    int user;
    char *userString;
    int unmount;
    int verbose;
    int veryVerbose;
+   int writeFlag;
    int zone;
    char *zoneName;
    int verify;

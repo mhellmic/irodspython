@@ -1241,20 +1241,20 @@ chmod( 0600, $irodsConfig );
 
 
 # Update irodsctl script
-#printStatus( "Updating irodsctl...\n" );
-#($status, $output) = replaceVariablesInFile( $irodsctl, "shell", 0, %irodsConfigVariables );
-#if ( $status == 0 )
-#{
-#	printError( "\nConfiguration problem:\n" );
-#	printError( "    Could not update script.\n" );
-#	printError( "        File:   $irodsctl\n" );
-#	printError( "        Error:  $output\n" );
-#	printError( "\nAbort.  Please re-run this script when the problem is fixed.\n" );
-#	exit( 1 );
-#}
+printStatus( "Updating irodsctl...\n" );
+($status, $output) = replaceVariablesInFile( $irodsctl, "shell", 0, %irodsConfigVariables );
+if ( $status == 0 )
+{
+	printError( "\nConfiguration problem:\n" );
+	printError( "    Could not update script.\n" );
+	printError( "        File:   $irodsctl\n" );
+	printError( "        Error:  $output\n" );
+	printError( "\nAbort.  Please re-run this script when the problem is fixed.\n" );
+	exit( 1 );
+}
 # Make sure script is executable.  Don't give world/other permissions
 # since it is meant for admin use only.
-#chmod( 0700, $irodsctl );
+chmod( 0700, $irodsctl );
 
 
 

@@ -34,6 +34,7 @@ sysconfig._init_posix = my_init_posix
 include_dirs = ['/lib/core/include', 
                 '/lib/api/include', 
                 '/lib/md5/include', 
+                '/lib/sha1/include', 
                 '/server/core/include', 
                 '/server/icat/include',
                 '/server/drivers/include', 
@@ -73,7 +74,7 @@ class MyBuild(build):
             extra_objects[i] = self.irods_dir + extra_objects[i]
 
 setup(name="PyRods", 
-      version="3.2.7",
+      version="3.3.0",
       author = "Jerome Fuselier",
       author_email = "jerome.fuselier@free.fr",
       license = "LGPL",

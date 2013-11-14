@@ -56,6 +56,7 @@ int chlDelColl(rsComm_t *rsComm, collInfo_t *collInfo);
 int chlCheckAuth(rsComm_t *rsComm, char *challenge, char *response,
     char *username, int *userPrivLevel, int *clientPrivLevel);
 int chlMakeTempPw(rsComm_t *rsComm, char *pwValueToHash, char *otherUser);
+int chlMakeLimitedPw(rsComm_t *rsComm, int ttl, char *pwValueToHash);
 int decodePw(rsComm_t *rsComm, char *in, char *out);
 int chlModUser(rsComm_t *rsComm, char *userName, char *option,
     char *newValue);
@@ -105,6 +106,8 @@ int chlRegZone(rsComm_t *rsComm, char *zoneName, char *zoneType,
 	       char *zoneConnInfo, char *zoneComment);
 int chlModZone(rsComm_t *rsComm, char *zoneName, char *option,
 	       char *optionValue);
+int chlModZoneCollAcl(rsComm_t *rsComm, char* accessLevel, char *userName, 
+		  char* pathName);
 int chlDelZone(rsComm_t *rsComm, char *zoneName);
 int chlRenameLocalZone(rsComm_t *rsComm, char *oldZoneName, char *newZoneName);
 int chlRenameColl(rsComm_t *rsComm, char *oldName, char *newName);
@@ -171,7 +174,8 @@ int chlVersionFnmBase(rsComm_t *rsComm,
 		  char *baseName, char *myTime); 
 int chlModTicket(rsComm_t *rsComm, char *opName, char *ticket,
 		    char *arg1, char *arg2, char *arg3);
-int chlUpdateIrodsPamPassword(rsComm_t *rsComm, char *userName, char *testTime,
+int chlUpdateIrodsPamPassword(rsComm_t *rsComm, char *userName, 
+			      int timeToLive, char *testTime, 
 			      char **irodsPassword);
 
 #endif /* ICAT_HIGHLEVEL_ROUTINES_H */

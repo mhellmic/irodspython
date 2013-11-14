@@ -391,8 +391,8 @@ main(int argc, char **argv) {
     }
 
     if (myRodsArgs.verbose == True) {
-    	printf ("rcExecMyRule: %s\n", rulegen ? execMyRuleInp.myRule + 10 : execMyRuleInp.myRule);
-    	printf ("outParamDesc: %s\n", execMyRuleInp.outParamDesc);
+        printf ("rcExecMyRule: %s\n", rulegen ? execMyRuleInp.myRule + 10 : execMyRuleInp.myRule);
+        printf ("outParamDesc: %s\n", execMyRuleInp.outParamDesc);
     }
 
     status = rcExecMyRule (conn, &execMyRuleInp, &outParamArray);
@@ -400,56 +400,56 @@ main(int argc, char **argv) {
     if (myRodsArgs.test == True) {
     	printErrorStack (conn->rError);
     }
-
+ 
     if (status < 0) {
-    	msParam_t *mP;
-    	execCmdOut_t *execCmdOut;
+      msParam_t *mP;
+      execCmdOut_t *execCmdOut;
 
-    	if(!rulegen) {
-    		rodsLogError (LOG_ERROR, status, "rcExecMyRule error. The rule engine is running under backward compatible mode. To run the rule(s) under normal mode, try renaming the file extension to \".r\". ");
+      if(!rulegen) {
+          rodsLogError (LOG_ERROR, status, "rcExecMyRule error. The rule engine is running under backward compatible mode. To run the rule(s) under normal mode, try renaming the file extension to \".r\". ");
 
-    	} else {
-    		rodsLogError (LOG_ERROR, status, "rcExecMyRule error. ");
+      } else {
+          rodsLogError (LOG_ERROR, status, "rcExecMyRule error. ");
 
-    	}
-    	printErrorStack (conn->rError);
-    	if ((mP = getMsParamByType (outParamArray, ExecCmdOut_MS_T)) != NULL) {
-    		execCmdOut = (execCmdOut_t *) mP->inOutStruct;
-    		if (execCmdOut->stdoutBuf.buf != NULL) {
-    			fprintf(stdout,"%s",(char *) execCmdOut->stdoutBuf.buf);
-    		}
-    		if (execCmdOut->stderrBuf.buf != NULL) {
-    			fprintf(stderr,"%s", (char *) execCmdOut->stderrBuf.buf);
-    		}
-    	}
-    	rcDisconnect(conn);
-    	exit (4);
+      }
+      printErrorStack (conn->rError); 
+      if ((mP = getMsParamByType (outParamArray, ExecCmdOut_MS_T)) != NULL) {
+	execCmdOut = (execCmdOut_t *) mP->inOutStruct;
+	if (execCmdOut->stdoutBuf.buf != NULL) {
+		fprintf(stdout,"%s",(char *) execCmdOut->stdoutBuf.buf);
+	}
+	if (execCmdOut->stderrBuf.buf != NULL) {
+		fprintf(stderr,"%s", (char *) execCmdOut->stderrBuf.buf);
+	}
+      }
+	rcDisconnect(conn);
+	exit (4);
     }
 
     if (myRodsArgs.verbose == True) {
-    	printf ("ExecMyRule completed successfully.    Output \n\n");
-    	printMsParamNew (outParamArray, 1);
+        printf ("ExecMyRule completed successfully.    Output \n\n");
+        printMsParamNew (outParamArray, 1);
     }
     else {
-    	printMsParamNew (outParamArray, 0);
-    	msParam_t *mP;
-    	execCmdOut_t *execCmdOut;
-    	if ((mP = getMsParamByType (outParamArray, ExecCmdOut_MS_T)) != NULL) {
-    		execCmdOut = (execCmdOut_t *) mP->inOutStruct;
-    		if (execCmdOut->stdoutBuf.buf != NULL)
-    			fprintf(stdout,"%s",(char *) execCmdOut->stdoutBuf.buf);
-    		if (execCmdOut->stderrBuf.buf != NULL)
-    			fprintf(stderr,"%s", (char *) execCmdOut->stderrBuf.buf);
-    	}
+        printMsParamNew (outParamArray, 0);
+      msParam_t *mP;
+      execCmdOut_t *execCmdOut;
+      if ((mP = getMsParamByType (outParamArray, ExecCmdOut_MS_T)) != NULL) {
+	execCmdOut = (execCmdOut_t *) mP->inOutStruct;
+	if (execCmdOut->stdoutBuf.buf != NULL) 
+	  fprintf(stdout,"%s",(char *) execCmdOut->stdoutBuf.buf);
+	if (execCmdOut->stderrBuf.buf != NULL) 
+	  fprintf(stderr,"%s", (char *) execCmdOut->stderrBuf.buf);
+      }
     }
     if (myRodsArgs.verbose == True && conn->rError != NULL) {
-    	int i, len;
-    	rErrMsg_t *errMsg;
-    	len = conn->rError->len;
-    	for (i = 0;i < len; i++) {
-    		errMsg = conn->rError->errMsg[i];
-    		printf ("%s\n", errMsg->msg);
-    	}
+	int i, len;
+	rErrMsg_t *errMsg;
+	len = conn->rError->len;
+        for (i = 0;i < len; i++) {
+            errMsg = conn->rError->errMsg[i];
+            printf ("%s\n", errMsg->msg);
+	}
     }
 
     printErrorStack(conn->rError);

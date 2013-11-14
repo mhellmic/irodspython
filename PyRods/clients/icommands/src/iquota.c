@@ -25,64 +25,64 @@ void usage();
  */
 int
 printNice(char *inArg, int minLen, char *Units) {
-	int i, n, k, len;
-	int nextComma, firstComma, commaCount;
-	char niceString[40];
-	char firstPart[10];
-	char *numberName;
-	char blanks[]="                                        ";
-	len=strlen(inArg);
-	nextComma = len % 3;
-	if (inArg[0]=='-') {
-		nextComma = (len-1) % 3;
-	}
-	if (nextComma == 0) nextComma=3;
-	n = 0;
-	k = 0;
-	firstComma=0;
-	commaCount=0;
-	for (i=0;i<len;i++) {
-		niceString[n++]=inArg[i];
-		if (firstComma==0) {
-			firstPart[k++]=inArg[i];
-		}
-		if (inArg[i]!='-') {
-			nextComma--;
-		}
-		if (nextComma==0 && i<len-1) {
-			niceString[n++]=',';
-			nextComma=3;
-			firstComma=1;
-			commaCount++;
-		}
-	}
-	niceString[n]='\0';
-	firstPart[k]='\0';
-	numberName="";
-	if (commaCount == 1) numberName="thousand";
-	if (commaCount == 2) numberName="million";
-	if (commaCount == 3) numberName="billion";
-	if (commaCount == 4) numberName="trillion";
-	if (commaCount == 5) numberName="quadrillion";
-	if (commaCount == 6) numberName="quintillion";
-	if (commaCount == 7) numberName="sextillion";
-	if (commaCount == 8) numberName="septillion";
-	if (commaCount > 8) numberName="very many";
-	len = strlen(niceString);
-	if (len < minLen) {
-		i = minLen-len;
-		blanks[i]='\0';
-		printf("%s", blanks);
-		blanks[i]=' ';
-	}
-	if (commaCount==0) {
-		printf("%s %s", niceString, Units);
-	}
-	else {
-		printf("%s (%s %s) %s", niceString,
-				firstPart, numberName, Units);
-	}
-	return(0);
+   int i, n, k, len;
+   int nextComma, firstComma, commaCount;
+   char niceString[40];
+   char firstPart[10];
+   char *numberName;
+   char blanks[]="                                        ";
+   len=strlen(inArg);
+   nextComma = len % 3;
+   if (inArg[0]=='-') {
+      nextComma = (len-1) % 3;
+   }
+   if (nextComma == 0) nextComma=3;
+   n = 0;
+   k = 0;
+   firstComma=0;
+   commaCount=0;
+   for (i=0;i<len;i++) {
+      niceString[n++]=inArg[i];
+      if (firstComma==0) {
+	 firstPart[k++]=inArg[i];
+      }
+      if (inArg[i]!='-') {
+	 nextComma--;
+      }
+      if (nextComma==0 && i<len-1) {
+	 niceString[n++]=',';
+	 nextComma=3;
+	 firstComma=1;
+	 commaCount++;
+      }
+   }
+   niceString[n]='\0';
+   firstPart[k]='\0';
+   numberName="";
+   if (commaCount == 1) numberName="thousand";
+   if (commaCount == 2) numberName="million";
+   if (commaCount == 3) numberName="billion";
+   if (commaCount == 4) numberName="trillion";
+   if (commaCount == 5) numberName="quadrillion";
+   if (commaCount == 6) numberName="quintillion";
+   if (commaCount == 7) numberName="sextillion";
+   if (commaCount == 8) numberName="septillion";
+   if (commaCount > 8) numberName="very many";
+   len = strlen(niceString);
+   if (len < minLen) {
+      i = minLen-len;
+      blanks[i]='\0';
+      printf("%s", blanks);
+      blanks[i]=' ';
+   }
+   if (commaCount==0) {
+      printf("%s %s", niceString, Units);
+   }
+   else {
+      printf("%s (%s %s) %s", niceString, 
+	       firstPart, numberName, Units);
+   }
+   return(0);
 }
 
 
@@ -144,37 +144,37 @@ showQuotas(char *userName, int userOrGroup, int rescOrGlobal)
    char userZone[NAME_LEN];
    genQueryInp.sqlCondInp.len=0;
    if (userName[0]!='\0') {
-	   status = parseUserName(userName, userName2, userZone);
-	   if (userZone[0]=='\0') {
-		   inputCond[0]=COL_QUOTA_USER_NAME;
-		   sprintf(v1,"='%s'",userName);
-		   condVal[0]=v1;
-		   genQueryInp.sqlCondInp.len++;
-	   }
-	   else {
-		   inputCond[0]=COL_QUOTA_USER_NAME;
-		   sprintf(v1,"='%s'",userName2);
-		   condVal[0]=v1;
-		   genQueryInp.sqlCondInp.len++;
-		   inputCond[1]=COL_QUOTA_USER_ZONE;
-		   sprintf(v1b,"='%s'",userZone);
-		   condVal[1]=v1b;
-		   genQueryInp.sqlCondInp.len++;
-	   }
+      status = parseUserName(userName, userName2, userZone);
+      if (userZone[0]=='\0') {
+	 inputCond[0]=COL_QUOTA_USER_NAME;
+	 snprintf(v1,sizeof(v1),"='%s'",userName);
+	 condVal[0]=v1;
+	 genQueryInp.sqlCondInp.len++;
+      }
+      else {
+	 inputCond[0]=COL_QUOTA_USER_NAME;
+	 snprintf(v1,sizeof(v1),"='%s'",userName2);
+	 condVal[0]=v1;
+	 genQueryInp.sqlCondInp.len++;
+	 inputCond[1]=COL_QUOTA_USER_ZONE;
+	 snprintf(v1b,sizeof(v1b),"='%s'",userZone);
+	 condVal[1]=v1b;
+	 genQueryInp.sqlCondInp.len++;
+      }
    }
    inputCond[genQueryInp.sqlCondInp.len] = COL_QUOTA_USER_TYPE;
    if (userOrGroup==0) {
-	   sprintf(v2,"!='%s'","rodsgroup");
+      snprintf(v2,sizeof(v2),"!='%s'","rodsgroup");
    }
    else {
-      sprintf(v2,"='%s'","rodsgroup");
+      snprintf(v2,sizeof(v2),"='%s'","rodsgroup");
    }
    condVal[genQueryInp.sqlCondInp.len] = v2;
    genQueryInp.sqlCondInp.len++;
 
    if (rescOrGlobal==1) {
       inputCond[genQueryInp.sqlCondInp.len] = COL_QUOTA_RESC_ID;
-      sprintf(v3, "='%s'", "0");
+      snprintf(v3, sizeof(v3),"='%s'", "0");
       condVal[genQueryInp.sqlCondInp.len] = v3;
       genQueryInp.sqlCondInp.len++;
    }
@@ -231,35 +231,35 @@ showQuotas(char *userName, int userOrGroup, int rescOrGlobal)
 	    }
 	 }
 	 else {
-		 printf("  %s",colName[j]);
-		 if (rescOrGlobal==1 && j==0) {
-			 tResult="All";
-		 }
-		 if (j==4 || j==3) {
-			 printNice(tResult, 0, "bytes");
-			 if (strncmp(colName[j],"Over:",5)==0) {
-				 rodsLong_t ival;
-				 ival = atoll(tResult);
-				 if (ival > 0) {
-					 printf(" OVER QUOTA");
-				 }
-				 else {
-					 if (ival > QUOTA_APPROACH_WARNING_SIZE) {
-						 printf(" (Nearing quota)");
-					 }
-					 else {
-						 printf(" (under quota)");
-					 }
-				 }
+	    printf("  %s",colName[j]);
+	    if (rescOrGlobal==1 && j==0) {
+	       tResult="All";
+	    }
+	    if (j==4 || j==3) {
+	       printNice(tResult, 0, "bytes");
+	       if (strncmp(colName[j],"Over:",5)==0) {
+		  rodsLong_t ival;
+		  ival = atoll(tResult);
+		  if (ival > 0) {
+		     printf(" OVER QUOTA");
+		  }
+		  else {
+		     if (ival > QUOTA_APPROACH_WARNING_SIZE) {
+			printf(" (Nearing quota)");
+		     }
+		     else {
+			printf(" (under quota)");
+		     }
+		  }
 
-			 }
-			 printf("\n");
-		 }
-		 else {
-			 k = strlen(tResult);
-			 printf("%s\n",tResult);
-		 }
-		 printCount++;
+	       }
+	       printf("\n");
+	    }
+	    else {
+	       k = strlen(tResult);
+	       printf("%s\n",tResult);
+	    }
+	    printCount++;
 	 }
       }
       printf("\n");
@@ -317,7 +317,7 @@ showUserUsage(char *userName, char *usersZone)
    genQueryInp.sqlCondInp.len=0;
    if (userName[0]!='\0') {
       inputCond[0]=COL_QUOTA_USER_NAME;
-      sprintf(v1,"='%s'",userName);
+      snprintf(v1,sizeof(v1),"='%s'",userName);
       condVal[0]=v1;
 
       genQueryInp.sqlCondInp.inx = inputCond;
@@ -343,45 +343,45 @@ showUserUsage(char *userName, char *usersZone)
    printCount=0;
 
    for (i=0;i<genQueryOut->rowCnt;i++) {
-	   for (j=1;j<genQueryOut->attriCnt;j++) {
-		   char *tResult;
-		   char *tResult2;
-		   tResult = genQueryOut->sqlResult[j].value;
-		   tResult += i*genQueryOut->sqlResult[j].len;
-		   if (j==1) {
-			   printf("%s ",tResult);
-			   k = strlen(tResult);
-		   }
-		   if (j==2) {
-			   j++;
-			   tResult2 = genQueryOut->sqlResult[j].value;
-			   tResult2 += i*genQueryOut->sqlResult[j].len;
-			   if (strncmp(tResult2, usersZone, NAME_LEN)==0) {
-				   printf("%s",tResult);
-				   k = strlen(tResult);
-			   }
-			   else {
-				   printf("%s#%s",tResult,tResult2);
-				   k = strlen(tResult) + 1 + strlen(tResult2);
-			   }
-		   }
-		   if (j==4) {
-			   printNice(tResult, 14, "");
-			   k = strlen(tResult);
-		   }
-		   if (k < 14) printf("%s",pad[k]);
-		   printCount++;
-	   }
-	   printf("\n");
+      for (j=1;j<genQueryOut->attriCnt;j++) {
+	 char *tResult;
+	 char *tResult2;
+	 tResult = genQueryOut->sqlResult[j].value;
+	 tResult += i*genQueryOut->sqlResult[j].len;
+	 if (j==1) {
+	    printf("%s ",tResult);
+	    k = strlen(tResult);
+	 }
+	 if (j==2) {
+	    j++;
+	    tResult2 = genQueryOut->sqlResult[j].value;
+	    tResult2 += i*genQueryOut->sqlResult[j].len;
+	    if (strncmp(tResult2, usersZone, NAME_LEN)==0) {
+	       printf("%s",tResult);
+	       k = strlen(tResult);
+	    }
+	    else {
+	       printf("%s#%s",tResult,tResult2);
+	       k = strlen(tResult) + 1 + strlen(tResult2);
+	    }
+	 }
+	 if (j==4) {
+	    printNice(tResult, 14, "");
+	    k = strlen(tResult);
+	 }
+	 if (k < 14) printf("%s",pad[k]);
+	 printCount++;
+      }
+      printf("\n");
    }
    for (i=0;i<genQueryOut->rowCnt;i++) {
-	   long itime;
-	   tResult = genQueryOut->sqlResult[i].value;
-	   itime = atoll(tResult);
-	   if (itime > localiTime) {
-		   localiTime = itime;
-		   getLocalTimeFromRodsTime(tResult, quotaTime);
-	   }
+      long itime;
+      tResult = genQueryOut->sqlResult[i].value;
+      itime = atoll(tResult);
+      if (itime > localiTime) {
+	 localiTime = itime;
+	 getLocalTimeFromRodsTime(tResult, quotaTime);
+      }
    }
    return (0);
 }
@@ -525,31 +525,31 @@ main(int argc, char **argv) {
       }
    }
    else {
-	   if (userName[0]=='\0') {
-		   printf("Resource quotas for users:\n");
-	   }
-	   else {
-		   printf("Resource quotas for user %s:\n", userName);
-	   }
-	   status = showQuotas(userName, 0, 0); /* users, resc */
+      if (userName[0]=='\0') {
+	 printf("Resource quotas for users:\n");
+      }
+      else {
+	 printf("Resource quotas for user %s:\n", userName);
+      }
+      status = showQuotas(userName, 0, 0); /* users, resc */
 
-	   if (userName[0]=='\0') {
-		   printf("Global (total) quotas for users:\n");
-	   }
-	   else {
-		   printf("Global (total) quotas for user %s:\n", userName);
-	   }
-	   status = showQuotas(userName, 0, 1); /* users, global */
+      if (userName[0]=='\0') {
+	 printf("Global (total) quotas for users:\n");
+      }
+      else {
+	 printf("Global (total) quotas for user %s:\n", userName);
+      }
+      status = showQuotas(userName, 0, 1); /* users, global */
 
-	   printf("Group quotas on resources:\n");
-	   status = showQuotas("", 1, 0);       /* all groups, resc */
+      printf("Group quotas on resources:\n");
+      status = showQuotas("", 1, 0);       /* all groups, resc */
 
-	   printf("Group global (total) quotas:\n");
-	   status = showQuotas("", 1, 1);       /* all groups, global */
+      printf("Group global (total) quotas:\n");
+      status = showQuotas("", 1, 1);       /* all groups, global */
 
-	   if (userName[0]!='\0') {
-		   status = showUserGroupMembership(userName, myEnv.rodsZone);
-	   }
+      if (userName[0]!='\0') {
+	 status = showUserGroupMembership(userName, myEnv.rodsZone);
+      }
    }
    if (quotaTime[0]!='\0') {
       printf("Information was set at %s\n", quotaTime);

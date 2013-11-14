@@ -8,10 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "debug.h"
-#ifdef DEBUG
-#include "re.h"
-#endif
 #ifndef DEBUG
 #include "objInfo.h"
 #include "reHelpers1.h"
@@ -67,7 +63,6 @@ char *cpString2(char *res, Region *oldr, Region *newr);
 void cpHashtable2(Hashtable *env, Region *oldr, Region *newr);
 void cpEnv2(Env *env, Region *oldr, Region *newr);
 
-Res *setVariableValue(char *varName, Res *val, ruleExecInfo_t *rei, Env *env, rError_t *errmsg, Region *r);
 int occursIn(ExprType *var, ExprType *type);
 ExprType* unifyWith(ExprType *type, ExprType* expected, Hashtable *varTypes, Region *r);
 ExprType* unifyNonTvars(ExprType *type, ExprType *expected, Hashtable *varTypes, Region *r);
@@ -140,9 +135,22 @@ void keyBuf(unsigned char *buf, int size, char *keyBuf);
 #include "restruct.templates.h"
 #include "end.instance.h"
 
-/*#include "region.check.proto.h"
+/*#define RE_CACHE_CHECK
+
+#ifdef RE_REGION_CHECK
+#include "region.check.proto.h"
+#include "proto.h"
 #include "restruct.templates.h"
-#include "end.instance.h"*/
+#include "end.instance.h"
+#endif
+
+#ifdef RE_CACHE_CHECK
+typedef struct cache Cache;
+#include "cache.check.proto.h"
+#include "proto.h"
+#include "restruct.templates.h"
+#include "end.instance.h"
+#endif*/
 
 /** debugging functions */
 int writeToTmp(char *fileName, char *text);

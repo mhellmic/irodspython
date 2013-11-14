@@ -100,7 +100,7 @@ class testRodsUser(iRODSTestCase):
         # just take the first group and check that this group has the user as a 
         # member        
         user = createUser(self.conn, USERNAME, "rodsadmin")
-        g_names =  [ group.getName() for group in user.getGroups() ]
+        g_names =  [ group.getName() for group in user.getGroups() if  group.getName() != USERNAME]
         
         group = getGroup(self.conn, g_names[0])
         members_names = [ user.getName() for user in group.getMembers() ] 

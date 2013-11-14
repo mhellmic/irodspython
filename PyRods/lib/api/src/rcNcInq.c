@@ -600,7 +600,16 @@ rodsLong_t *stride, rodsLong_t *count)
     ncGetVarInp.count = count;
     ncGetVarInp.stride = stride;
 
-    status = rcNcGetVarsByType (conn, &ncGetVarInp, ncGetVarOut);
+    if (conn == NULL) {
+        /* local call */
+#ifdef NETCDF_API
+        status = _rsNcGetVarsByType (ncid, &ncGetVarInp, ncGetVarOut);
+#else
+        status = NETCDF_BUILD_WITH_NETCDF_API_NEEDED;
+#endif
+    } else {
+        status = rcNcGetVarsByType (conn, &ncGetVarInp, ncGetVarOut);
+    }
 
     if (status < 0) {
         rodsLogError (LOG_ERROR, status,
@@ -972,7 +981,7 @@ ncInqOut_t *ncInqOut, ncVarSubset_t *ncVarSubset, char *outFileName)
     if (status != NC_NOERR) {
         rodsLog (LOG_ERROR,
           "dumpSubsetToFile: nc_create error.  %s ", nc_strerror(status));
-        status = NETCDF_CREATE_ERR - status;
+        status = NETCDF_CREATE_ERR + status;
         return status;
     }
     /* attrbutes */
@@ -1490,6 +1499,7 @@ ncVarSubset_t *ncVarSubset)
     }
     return 0;
 }
+#ifdef NETCDF_API
 int
 ncInq (ncInqInp_t *ncInqInp, ncInqOut_t **ncInqOut)
 {
@@ -1806,3 +1816,181 @@ ncGetVarOut_t *value)
     return status;
 }
 
+unsigned int
+getNcIntVar (int ncid, int varid, int dataType, rodsLong_t inx)
+{
+    size_t start[1], count[1];
+    short int myshort;
+    int myint;
+    rodsLong_t mylong;
+    float myfloat;
+    double mydouble;
+    unsigned int retint;
+    int status;
+
+
+    start[0] = inx;
+    count[0] = 1;
+
+    if (dataType == NC_SHORT || dataType == NC_USHORT) {
+        status = nc_get_vara (ncid, varid, start, count, (void *) &myshort);
+        if (status != NC_NOERR) {
+            rodsLog (LOG_ERROR,
+              "getNcIntVar: nc_get_vara error, status = %d, %s",
+              status, nc_strerror(status));
+            return NETCDF_GET_VARS_ERR - status;
+        }
+        retint = (unsigned int) myshort;
+    } else if (dataType == NC_INT || dataType == NC_UINT) {
+        status = nc_get_vara (ncid, varid, start, count, (void *) &myint);
+        if (status != NC_NOERR) {
+            rodsLog (LOG_ERROR,
+              "getNcIntVar: nc_get_vara error, status = %d, %s",
+              status, nc_strerror(status));
+            return NETCDF_GET_VARS_ERR - status;
+        }
+        retint = (unsigned int) myint;
+    } else if (dataType == NC_INT64 || dataType == NC_UINT64) {
+        status = nc_get_vara (ncid, varid, start, count, (void *) &mylong);
+        if (status != NC_NOERR) {
+            rodsLog (LOG_ERROR,
+              "getNcIntVar: nc_get_vara error, status = %d, %s",
+              status, nc_strerror(status));
+            return NETCDF_GET_VARS_ERR - status;
+        }
+        retint = (unsigned int) mylong;
+   } else if (dataType == NC_FLOAT) {
+        status = nc_get_vara (ncid, varid, start, count, (void *) &myfloat);
+        if (status != NC_NOERR) {
+            rodsLog (LOG_ERROR,
+              "getNcIntVar: nc_get_vara error, status = %d, %s",
+              status, nc_strerror(status));
+            return NETCDF_GET_VARS_ERR - status;
+        }
+        retint = (unsigned int) myfloat;
+    } else if (dataType == NC_DOUBLE) {
+        status = nc_get_vara (ncid, varid, start, count, (void *) &mydouble);
+        if (status != NC_NOERR) {
+            rodsLog (LOG_ERROR,
+              "getNcIntVar: nc_get_vara error, status = %d, %s",
+              status, nc_strerror(status));
+            return NETCDF_GET_VARS_ERR - status;
+        }
+        retint = (unsigned int) mydouble;
+    } else {
+        rodsLog (LOG_ERROR,
+          "getNcIntVar: Unsupported dataType %d", dataType);
+        return (NETCDF_INVALID_DATA_TYPE);
+    }
+
+    return retint;
+}
+#endif	/* NETCDF_API */
+
+int
+getTimeInxInVar (ncInqOut_t *ncInqOut, int varid)
+{
+    int i;
+    int timeDimId = -1;
+    int varInx = -1;
+
+    for (i = 0; i < ncInqOut->ndims; i++) {
+        if (strcasecmp (ncInqOut->dim[i].name, "time") == 0) {
+            timeDimId = i;
+            break;
+        }
+    }
+    if (timeDimId < 0) return NETCDF_AGG_ELE_FILE_NO_TIME_DIM;
+    for (i = 0; i < ncInqOut->nvars; i++) {
+        if (ncInqOut->var[i].id == varid) {
+            varInx = i;
+            break;
+        }
+    }
+    if (varInx < 0) return NETCDF_DEF_VAR_ERR;
+    /* try to fine the time range */
+    for (i = 0; i < ncInqOut->var[varInx].nvdims; i++) {
+        if (ncInqOut->var[varInx].dimId[i] == timeDimId) {
+            return i;
+        }
+    }
+    return NETCDF_AGG_ELE_FILE_NO_TIME_DIM; 
+}
+
+unsigned int
+ncValueToInt (int dataType, void **invalue)
+{
+    void *value = *invalue;
+    char **ptr = (char **) invalue;
+    unsigned short myshort;
+    unsigned int myInt;
+    rodsLong_t myLong;
+    float myFloat;
+    double myDouble;
+
+    switch (dataType) {
+        case NC_SHORT:
+        case NC_USHORT:
+            myshort = *(short int*) value;
+            myInt = myshort;
+	    *ptr+= sizeof (short);	/* advance pointer */
+	    break;
+	case NC_INT:
+	case NC_UINT:
+            myInt = *(unsigned int*) value;
+	    *ptr+= sizeof (int);	/* advance pointer */
+	    break;
+	case NC_INT64:
+	case NC_UINT64:
+            myLong = *(rodsLong_t *) value;
+            myInt = myLong;
+	    *ptr+= sizeof (rodsLong_t);	/* advance pointer */
+	    break;
+	case NC_FLOAT:
+            myFloat = *(float *) value;
+            myInt = myFloat;
+	    *ptr+= sizeof (float);	/* advance pointer */
+	    break;
+	case NC_DOUBLE:
+            myDouble = *(double *) value;
+            myInt = myDouble;
+	    *ptr+= sizeof (double);	/* advance pointer */
+	    break;
+      default:
+        rodsLog (LOG_ERROR,
+          "ncValueToInt: Unknow dataType %d for time", dataType);
+        return (NETCDF_INVALID_DATA_TYPE);
+    }
+    return myInt;
+}
+
+rodsLong_t
+getTimeStepSize (ncInqOut_t *ncInqOut)
+{
+    int timeDimInx;
+    int i, j;
+    rodsLong_t  totalSize = 0;
+
+    for (timeDimInx = 0; timeDimInx < ncInqOut->ndims; timeDimInx++) {
+        if (strcasecmp (ncInqOut->dim[timeDimInx].name, "time") == 0) break;
+    }
+    if (timeDimInx >= ncInqOut->ndims) {
+        /* no match */
+        rodsLog (LOG_ERROR,
+          "_rsNcArchTimeSeries: 'time' dim does not exist");
+        return NETCDF_DIM_MISMATCH_ERR;
+    }
+
+    for (i = 0; i < ncInqOut->nvars; i++) {
+        int varSize = getDataTypeSize (ncInqOut->var[i].dataType);
+        for (j = 0; j < ncInqOut->var[i].nvdims; j++) {
+            int dimId = ncInqOut->var[i].dimId[j];
+            /* skip time dim */
+            if (dimId == timeDimInx) continue;
+            varSize *= ncInqOut->dim[dimId].arrayLen;
+        }
+        totalSize += varSize;
+    }
+    return totalSize;
+}
+    

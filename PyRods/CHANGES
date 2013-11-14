@@ -50,3 +50,6 @@
   - Remove the possibility to create resources/groups/user/zone with an empty 
     name
 
+* 3.3.0:
+  - Switch to iRODS 3.3
+

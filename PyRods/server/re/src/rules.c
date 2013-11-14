@@ -1,6 +1,12 @@
 /* For copyright information please refer to files in the COPYRIGHT directory
  */
 #include "debug.h"
+#ifdef DEBUG
+#include "re.h"
+#else
+#include "reGlobalsExtern.h"
+#include "reHelpers1.h"
+#endif
 #include "rules.h"
 #include "index.h"
 #include "functions.h"
@@ -13,22 +19,6 @@
 #define RE_ERROR(cond) if(cond) { goto error; }
 
 extern int GlobalAllRuleExecFlag;
-
-#ifdef USE_EIRODS
-	#include "reAction.h"
-#else
-	#ifndef DEBUG
-		#include "reGlobalsExtern.h"
-		#include "reHelpers1.h"
-		typedef struct {
-		  char action[MAX_ACTION_SIZE];
-		  int numberOfStringArgs;
-		  funcPtr callAction;
-		} microsdef_t;
-		extern int NumOfAction;
-		extern microsdef_t MicrosTable[];
-	#endif
-#endif // ifdef USE_EIRODS
 
 /**
  * Read a set of rules from files.
@@ -282,7 +272,6 @@ int parseAndComputeRule(char *rule, Env *env, ruleExecInfo_t *rei, int reiSaveFl
 			ExprType *type = typeRule(ruleEngineConfig.extRuleSet->rules[i], ruleEngineConfig.extFuncDescIndex, varTypes, typingConstraints, errmsg, &errnode, r);
 
 			if(getNodeType(type)==T_ERROR) {
-/*				rescode = TYPE_ERROR;     #   TGR, since renamed to RE_TYPE_ERROR */
 				rescode = RE_TYPE_ERROR;
 				RETURN;
 			}
@@ -585,7 +574,7 @@ Res *parseAndComputeExpression(char *expr, Env *env, ruleExecInfo_t *rei, int re
             RETURN;
     } else {
         Token *token;
-        token = nextTokenRuleGen(e, pc, 0);
+        token = nextTokenRuleGen(e, pc, 0, 0);
         if(strcmp(token->text, "|")==0) {
         	recoNode = parseActionsRuleGen(e, rulegen, 1, pc);
             if(node==NULL) {
@@ -598,7 +587,7 @@ Res *parseAndComputeExpression(char *expr, Env *env, ruleExecInfo_t *rei, int re
 				res = newErrorRes(r, RE_PARSER_ERROR);
 				RETURN;
             }
-            token = nextTokenRuleGen(e, pc, 0);
+            token = nextTokenRuleGen(e, pc, 0, 0);
         }
         if(token->type!=TK_EOS) {
             Label pos;
@@ -658,9 +647,9 @@ RuleDesc* getRuleDesc(int ri)
 #ifdef USE_EIRODS
 // =-=-=-=-=-=-=-
 // function to look up and / or load a microservice for execution
-int actionTableLookUp ( eirods::ms_table_entry& _entry, char* _action ) {
-
-	std::string str_act( _action );
+int actionTableLookUp3 (MS_DEF_TYPE& microsdef, char *action)
+{
+    std::string str_act( _action );
 
     if( str_act[0] == 'a' && str_act[1] == 'c' )
 		return -1;
@@ -681,28 +670,35 @@ int actionTableLookUp ( eirods::ms_table_entry& _entry, char* _action ) {
 	_entry = *MicrosTable[ str_act ];
 
 	return 0;
-
 } // actionTableLookUp
 #else
 int actionTableLookUp (char *action)
 {
-
 	int i;
 
 	for (i = 0; i < NumOfAction; i++) {
-		if (!strcmp(MicrosTable[i].action,action))
+		if (!strcmp(MicrosTable[i].action,action)) {
 			return (i);
+		}
 	}
 
 	return (UNMATCHED_ACTION_ERR);
 }
+
+int actionTableLookUp3 (MS_DEF_TYPE* microsdef, char *action)
+{
+	int i = actionTableLookUp(action);
+	*microsdef = &(MicrosTable[i]);
+	return i;
+}
 #endif
+
 
 
 /*
  * Set retOutParam to 1 if you need to retrieve the output parameters from inMsParamArray and 0 if not
  */
-Res *parseAndComputeExpressionAdapter(char *inAction, msParamArray_t *inMsParamArray, int retOutParams, ruleExecInfo_t *rei, int reiSaveFlag, Region *r) { // JMC - backport 4540
+Res *parseAndComputeExpressionAdapter(char *inAction, msParamArray_t *inMsParamArray, int retOutParams, ruleExecInfo_t *rei, int reiSaveFlag, Region *r) {
     /* set clearDelayed to 0 so that nested calls to this function do not call clearDelay() */
     int recclearDelayed = ruleEngineConfig.clearDelayed;
     ruleEngineConfig.clearDelayed = 0;
@@ -730,12 +726,13 @@ Res *parseAndComputeExpressionAdapter(char *inAction, msParamArray_t *inMsParamA
     }
 
     res = parseAndComputeExpression(inAction, env, rei, reiSaveFlag, &errmsgBuf, r);
-    if(retOutParams) { // JMC - backport 4540
-       if(inMsParamArray != NULL) {
-                       clearMsParamArray(inMsParamArray, 0);
-                       convertEnvToMsParamArray(inMsParamArray, env, &errmsgBuf, r);
-               }
+    if(retOutParams) {
+    	if(inMsParamArray != NULL) {
+			clearMsParamArray(inMsParamArray, 0);
+			convertEnvToMsParamArray(inMsParamArray, env, &errmsgBuf, r);
+		}
     }
+
     rei->msParamArray = orig;
 
 	freeCmdExecOut(execOut);

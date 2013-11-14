@@ -115,6 +115,10 @@ typedef struct {
 int
 rsNcInq (rsComm_t *rsComm, ncInqInp_t *ncInqInp, ncInqOut_t **ncInqOut);
 int
+rsNcInqDataObj (rsComm_t *rsComm, ncInqInp_t *ncInqInp, ncInqOut_t **ncInqOut);
+int
+rsNcInqColl (rsComm_t *rsComm, ncInqInp_t *ncInqInp, ncInqOut_t **ncInqOut);
+int
 _rsNcInq (rsComm_t *rsComm, ncInqInp_t *ncInqInp, ncInqOut_t **ncInqOut);
 #else
 #define RS_NC_INQ NULL
@@ -202,7 +206,14 @@ ncGenAttOut_t *attOut);
 int
 getAttValue (int ncid, int varid, char *name, int dataType, int length,
 ncGetVarOut_t *value);
-
+unsigned int
+getNcIntVar (int ncid, int varid, int dataType, rodsLong_t inx);
+int
+getTimeInxInVar (ncInqOut_t *ncInqOut, int varid);
+unsigned int
+ncValueToInt (int dataType, void **invalue);
+rodsLong_t
+getTimeStepSize (ncInqOut_t *ncInqOut);
 #ifdef  __cplusplus
 }
 #endif

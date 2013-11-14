@@ -122,6 +122,9 @@ packInstructArray_t ApiPackTable[] = {
 	{"NcInqGrpsInp_PI", NcInqGrpsInp_PI},
 	{"NcInqGrpsOut_PI", NcInqGrpsOut_PI},
 	{"NcRegGlobalAttrInp_PI", NcRegGlobalAttrInp_PI},
+	{"NcAggElement_PI", NcAggElement_PI},
+	{"NcAggInfo_PI", NcAggInfo_PI},
+	{"NcArchTimeSeriesInp_PI", NcArchTimeSeriesInp_PI},
 #endif
         /* endof NETCDF_CLIENT */
 #ifdef OOI_CI
@@ -132,6 +135,8 @@ packInstructArray_t ApiPackTable[] = {
         {"pamAuthRequestOut_PI", pamAuthRequestOut_PI},
         {"sslStartInp_PI", sslStartInp_PI},
         {"sslEndInp_PI", sslEndInp_PI},
+        {"getLimitedPasswordInp_PI", getLimitedPasswordInp_PI},
+        {"getLimitedPasswordOut_PI", getLimitedPasswordOut_PI},
         {PACK_TABLE_END_PI, (char *) NULL},
 };
 

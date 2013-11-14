@@ -30,32 +30,17 @@ typedef struct {
 
 #define NcOpenInp_PI "str objPath[MAX_NAME_LEN]; int mode; int rootNcid; double intialsz; double bufrsizehint; struct KeyValPair_PI;"
 
-/* data struct for aggregation of netcdf files. Our first attempt assumes
- * the aggregation is based on the time dimension - time series */ 
-typedef struct {
-    int startTime;
-    int endTime;
-    int arraylen;
-    int flags;	/* not used */
-    char fileName[MAX_NAME_LEN];
-} ncAggElement_t;
-
-typedef struct {
-    int numFiles;
-    int flags;		/* not used */
-    char ncObjectName[MAX_NAME_LEN];
-    ncAggElement_t *ncAggElement;	/* pointer to numFiles of 
-                                         * ncAggElement_t */
-} ncAggrInfo_t;
-    
-#define NcAggElement_PI "int startTime; int endTime; int arraylen; int flags; str fileName[MAX_NAME_LEN];"
-#define NcAggrInfo_PI "int numFiles; int flags; str  ncObjectName[MAX_NAME_LEN]; struct *NcAggElement_PI(numFiles);"
-
 #if defined(RODS_SERVER) && defined(NETCDF_API)
 #define RS_NC_OPEN rsNcOpen
 /* prototype for the server handler */
 int
 rsNcOpen (rsComm_t *rsComm, ncOpenInp_t *ncOpenInp, int **ncid);
+int
+rsNcOpenDataObj (rsComm_t *rsComm, ncOpenInp_t *ncOpenInp, int **ncid);
+int
+rsNcOpenColl (rsComm_t *rsComm, ncOpenInp_t *ncOpenInp, int **ncid);
+int
+openAggrFile (rsComm_t *rsComm, int l1descInx, int aggElemetInx);
 #else
 #define RS_NC_OPEN NULL
 #endif
@@ -71,7 +56,7 @@ extern "C" {
  *   ncOpenInp_t *ncOpenInp - generic nc open/create input. Relevant items are:
  *	objPath - the path of the data object.
  *      mode - the mode of the open - valid values are given in netcdf.h -
- *       NC_NOWRITE (0), NC_WRITE (1)
+ *       NC_NOWRITE (0), NC_WRITE (1), NC_NETCDF4, ...
  *	condInput - condition input (not used).
  * OutPut - 
  *   int the ncid of the opened object - an integer descriptor.   

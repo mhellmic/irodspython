@@ -64,7 +64,7 @@ initCondForPhybunOpr (rodsEnv *myRodsEnv, rodsArguments_t *rodsArgs,
 structFileExtAndRegInp_t *phyBundleCollInp, 
 rodsPathInp_t *rodsPathInp)
 {
-	char tmpStr[NAME_LEN];
+	char tmpStr[NAME_LEN], tmpStr1[NAME_LEN];
 	
     if (phyBundleCollInp == NULL) {
        rodsLog (LOG_ERROR,
@@ -86,13 +86,20 @@ rodsPathInp_t *rodsPathInp)
         } else {
             addKeyVal (&phyBundleCollInp->condInput, 
 	      DEST_RESC_NAME_KW, rodsArgs->resourceString);
+#if 0
             addKeyVal (&phyBundleCollInp->condInput, RESC_NAME_KW,
               rodsArgs->resourceString);
+#endif
         }
     } else {
        rodsLog (LOG_ERROR,
           "initCondForPhybunOpr: A -Rresource must be input");
         return (USER__NULL_INPUT_ERR);
+    }
+
+    if (rodsArgs->srcResc == True) {
+        addKeyVal (&phyBundleCollInp->condInput, RESC_NAME_KW,
+          rodsArgs->srcRescString);
     }
 
     if (rodsArgs->verifyChecksum == True) {
@@ -129,6 +136,11 @@ rodsPathInp_t *rodsPathInp)
 	if (rodsArgs->number == True) {
 		snprintf (tmpStr, NAME_LEN, "%d", rodsArgs->numberValue);
 		addKeyVal (&phyBundleCollInp->condInput, MAX_SUB_FILE_KW, tmpStr);
+	}
+
+	if (rodsArgs->sizeFlag == True) {
+		snprintf (tmpStr1, NAME_LEN, "%lld", rodsArgs->size);
+		addKeyVal (&phyBundleCollInp->condInput, MAX_BUNDLE_SIZE_KW, tmpStr1);
 	}
 
     return (0);

@@ -126,11 +126,11 @@ showDataObj(char *name, char *attrName, int wild)
    }
 
    i2a[0]=COL_COLL_NAME;
-   sprintf(v1,"='%s'",cwd);
+   snprintf(v1,sizeof(v1),"='%s'",cwd);
    condVal[0]=v1;
 
    i2a[1]=COL_DATA_NAME;
-   sprintf(v2,"='%s'",name);
+   snprintf(v2,sizeof(v1),"='%s'",name);
    condVal[1]=v2;
 
    strncpy(fullName, cwd, MAX_NAME_LEN);
@@ -143,8 +143,8 @@ showDataObj(char *name, char *attrName, int wild)
       }
       status = splitPathByKey(fullName, 
 			      myDirName, myFileName, '/');
-      sprintf(v1,"='%s'",myDirName);
-      sprintf(v2,"='%s'",myFileName);
+      snprintf(v1,sizeof(v1),"='%s'",myDirName);
+      snprintf(v2,sizeof(v2),"='%s'",myFileName);
    }
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -154,10 +154,10 @@ showDataObj(char *name, char *attrName, int wild)
    if (attrName != NULL && *attrName!='\0') {
       i2a[2]=COL_META_DATA_ATTR_NAME;
       if (wild) {
-	 sprintf(v3,"like '%s'",attrName);
+	 snprintf(v3,sizeof(v3),"like '%s'",attrName);
       }
       else {
-	 sprintf(v3,"= '%s'",attrName);
+	 snprintf(v3,sizeof(v3),"= '%s'",attrName);
       }
       condVal[2]=v3;
       genQueryInp.sqlCondInp.len++;
@@ -181,7 +181,8 @@ showDataObj(char *name, char *attrName, int wild)
 	 return(0);
       }
       if (status == CAT_NO_ROWS_FOUND) {
-	 printf("Dataobject %s does not exist.\n", fullName);
+	 printf("Dataobject %s does not exist\n", fullName);
+         printf("or, if 'strict' access control is enabled, you may not have access.\n");
 	 return(0);
       }
       printGenQueryResults(Conn, status, genQueryOut, columnNames);
@@ -248,7 +249,7 @@ showColl(char *name, char *attrName, int wild)
       }
    }
    i2a[0]=COL_COLL_NAME;
-   sprintf(v1,"='%s'",fullName);
+   snprintf(v1,sizeof(v1),"='%s'",fullName);
    condVal[0]=v1;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -258,10 +259,10 @@ showColl(char *name, char *attrName, int wild)
    if (attrName != NULL && *attrName!='\0') {
       i2a[1]=COL_META_COLL_ATTR_NAME;
       if (wild) {
-	 sprintf(v2,"like '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"like '%s'",attrName);
       }
       else {
-	 sprintf(v2,"= '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"= '%s'",attrName);
       }
       condVal[1]=v2;
       genQueryInp.sqlCondInp.len++;
@@ -339,7 +340,7 @@ showResc(char *name, char *attrName, int wild)
    genQueryInp.selectInp.len = 3;
 
    i2a[0]=COL_R_RESC_NAME;
-   sprintf(v1,"='%s'",name);
+   snprintf(v1,sizeof(v1),"='%s'",name);
    condVal[0]=v1;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -349,10 +350,10 @@ showResc(char *name, char *attrName, int wild)
    if (attrName != NULL && *attrName!='\0') {
       i2a[1]=COL_META_RESC_ATTR_NAME;
       if (wild) {
-	 sprintf(v2,"like '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"like '%s'",attrName);
       }
       else {
-	 sprintf(v2,"= '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"= '%s'",attrName);
       }
       condVal[1]=v2;
       genQueryInp.sqlCondInp.len++;
@@ -430,7 +431,7 @@ showRescGroup(char *name, char *attrName, int wild)
    genQueryInp.selectInp.len = 3;
 
    i2a[0]=COL_RESC_GROUP_NAME;
-   sprintf(v1,"='%s'",name);
+   snprintf(v1,sizeof(v1),"='%s'",name);
    condVal[0]=v1;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -440,10 +441,10 @@ showRescGroup(char *name, char *attrName, int wild)
    if (attrName != NULL && *attrName!='\0') {
       i2a[1]=COL_META_RESC_GROUP_ATTR_NAME;
       if (wild) {
-	 sprintf(v2,"like '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"like '%s'",attrName);
       }
       else {
-	 sprintf(v2,"= '%s'",attrName);
+	 snprintf(v2,sizeof(v2),"= '%s'",attrName);
       }
       condVal[1]=v2;
       genQueryInp.sqlCondInp.len++;
@@ -537,11 +538,11 @@ showUser(char *name, char *attrName, int wild)
    genQueryInp.selectInp.len = 3;
 
    i2a[0]=COL_USER_NAME;
-   sprintf(v1,"='%s'",userName);
+   snprintf(v1,sizeof(v1),"='%s'",userName);
    condVal[0]=v1;
 
    i2a[1]=COL_USER_ZONE;
-   sprintf(v2,"='%s'",userZone);
+   snprintf(v2,sizeof(v2),"='%s'",userZone);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -551,10 +552,10 @@ showUser(char *name, char *attrName, int wild)
    if (attrName != NULL && *attrName!='\0') {
       i2a[2]=COL_META_USER_ATTR_NAME;
       if (wild) {
-	 sprintf(v3,"like '%s'",attrName);
+	 snprintf(v3,sizeof(v3),"like '%s'",attrName);
       }
       else {
-	 sprintf(v3,"= '%s'",attrName);
+	 snprintf(v3,sizeof(v3),"= '%s'",attrName);
       }
       condVal[2]=v3;
       genQueryInp.sqlCondInp.len++;
@@ -632,11 +633,11 @@ int queryDataObj(char *cmdToken[]) {
    genQueryInp.selectInp.len = 2;
 
    i2a[0]=COL_META_DATA_ATTR_NAME;
-   sprintf(v1,"='%s'", cmdToken[2]);
+   snprintf(v1,sizeof(v1),"='%s'", cmdToken[2]);
    condVal[0]=v1;
 
    i2a[1]=COL_META_DATA_ATTR_VALUE;
-   sprintf(v2, "%s '%s'", cmdToken[3], cmdToken[4]);
+   snprintf(v2, sizeof(v2),"%s '%s'", cmdToken[3], cmdToken[4]);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -644,7 +645,7 @@ int queryDataObj(char *cmdToken[]) {
    genQueryInp.sqlCondInp.len=2;
 
    if (strcmp(cmdToken[5], "or")==0) {
-      sprintf(v3, "|| %s '%s'", cmdToken[6], cmdToken[7]);
+      snprintf(v3, sizeof(v3), "|| %s '%s'", cmdToken[6], cmdToken[7]);
       rstrcat(v2, v3, BIG_STR);
    }
 
@@ -653,16 +654,22 @@ int queryDataObj(char *cmdToken[]) {
    while (strcmp(cmdToken[cmdIx], "and")==0) {
       i2a[condIx]=COL_META_DATA_ATTR_NAME;
       cmdIx++;
-      sprintf(vstr[condIx],"='%s'", cmdToken[cmdIx]);
+      snprintf(vstr[condIx],BIG_STR,"='%s'", cmdToken[cmdIx]);
       condVal[condIx]=vstr[condIx];
       condIx++;
 
       i2a[condIx]=COL_META_DATA_ATTR_VALUE;
-      sprintf(vstr[condIx], "%s '%s'", cmdToken[cmdIx+1], cmdToken[cmdIx+2]);
+      snprintf(vstr[condIx], BIG_STR,
+	       "%s '%s'", cmdToken[cmdIx+1], cmdToken[cmdIx+2]);
       cmdIx+=3;
       condVal[condIx]=vstr[condIx];
       condIx++;
       genQueryInp.sqlCondInp.len+=2;
+   }
+
+   if (*cmdToken[cmdIx] != '\0') {
+      printf("Unrecognized input\n");
+      return(-2);
    }
 
    genQueryInp.maxRows=10;
@@ -721,11 +728,11 @@ int queryCollection(char *cmdToken[]) {
    genQueryInp.selectInp.len = 1;
 
    i2a[0]=COL_META_COLL_ATTR_NAME;
-   sprintf(v1,"='%s'", cmdToken[2]);
+   snprintf(v1,sizeof(v1),"='%s'",cmdToken[2]);
    condVal[0]=v1;
 
    i2a[1]=COL_META_COLL_ATTR_VALUE;
-   sprintf(v2, "%s '%s'", cmdToken[3], cmdToken[4]);
+   snprintf(v2, sizeof(v2),"%s '%s'", cmdToken[3], cmdToken[4]);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -733,7 +740,7 @@ int queryCollection(char *cmdToken[]) {
    genQueryInp.sqlCondInp.len=2;
 
    if (strcmp(cmdToken[5], "or")==0) {
-      sprintf(v3, "|| %s '%s'", cmdToken[6], cmdToken[7]);
+      snprintf(v3, sizeof(v3), "|| %s '%s'", cmdToken[6], cmdToken[7]);
       rstrcat(v2, v3, BIG_STR);
    }
 
@@ -742,16 +749,22 @@ int queryCollection(char *cmdToken[]) {
    while (strcmp(cmdToken[cmdIx], "and")==0) {
       i2a[condIx]=COL_META_COLL_ATTR_NAME;
       cmdIx++;
-      sprintf(vstr[condIx],"='%s'", cmdToken[cmdIx]);
+      snprintf(vstr[condIx],BIG_STR,"='%s'", cmdToken[cmdIx]);
       condVal[condIx]=vstr[condIx];
       condIx++;
 
       i2a[condIx]=COL_META_COLL_ATTR_VALUE;
-      sprintf(vstr[condIx], "%s '%s'", cmdToken[cmdIx+1], cmdToken[cmdIx+2]);
+      snprintf(vstr[condIx], BIG_STR, 
+	       "%s '%s'", cmdToken[cmdIx+1], cmdToken[cmdIx+2]);
       cmdIx+=3;
       condVal[condIx]=vstr[condIx];
       condIx++;
       genQueryInp.sqlCondInp.len+=2;
+   }
+
+   if (*cmdToken[cmdIx] != '\0') {
+      printf("Unrecognized input\n");
+      return(-2);
    }
 
    genQueryInp.maxRows=10;
@@ -807,11 +820,11 @@ int queryResc(char *attribute, char *op, char *value) {
    genQueryInp.selectInp.len = 1;
 
    i2a[0]=COL_META_RESC_ATTR_NAME;
-   sprintf(v1,"='%s'",attribute);
+   snprintf(v1,sizeof(v1),"='%s'",attribute);
    condVal[0]=v1;
 
    i2a[1]=COL_META_RESC_ATTR_VALUE;
-   sprintf(v2, "%s '%s'", op, value);
+   snprintf(v2, sizeof(v2),"%s '%s'", op, value);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -870,11 +883,11 @@ int queryRescGroup(char *attribute, char *op, char *value) {
    genQueryInp.selectInp.len = 1;
 
    i2a[0]=COL_META_RESC_GROUP_ATTR_NAME;
-   sprintf(v1,"='%s'",attribute);
+   snprintf(v1,sizeof(v1),"='%s'",attribute);
    condVal[0]=v1;
 
    i2a[1]=COL_META_RESC_GROUP_ATTR_VALUE;
-   sprintf(v2, "%s '%s'", op, value);
+   snprintf(v2, sizeof(v2),"%s '%s'", op, value);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -937,11 +950,11 @@ int queryUser(char *attribute, char *op, char *value) {
    genQueryInp.selectInp.len = 2;
 
    i2a[0]=COL_META_USER_ATTR_NAME;
-   sprintf(v1,"='%s'",attribute);
+   snprintf(v1,sizeof(v1),"='%s'",attribute);
    condVal[0]=v1;
 
    i2a[1]=COL_META_USER_ATTR_VALUE;
-   sprintf(v2, "%s '%s'", op, value);
+   snprintf(v2, sizeof(v2),"%s '%s'", op, value);
    condVal[1]=v2;
 
    genQueryInp.sqlCondInp.inx = i2a;
@@ -1141,7 +1154,7 @@ modAVUMetadata(char *arg0, char *arg1, char *arg2, char *arg3,
 /* 
  Prompt for input and parse into tokens
 */
-void
+int
 getInput(char *cmdToken[], int maxTokens) {
    int lenstr, i;
    static char ttybuf[BIG_STR];
@@ -1170,7 +1183,7 @@ getInput(char *cmdToken[], int maxTokens) {
       if (ttybuf[i]=='\n') {
 	 ttybuf[i]='\0';
 	 cmdToken[nTokens++]=cpTokenStart;
-	 return;
+	 return(0);
       }
       if (tokenFlag==0) {
 	 if (ttybuf[i]=='\'') {
@@ -1211,6 +1224,10 @@ getInput(char *cmdToken[], int maxTokens) {
 	    cpTokenStart = &ttybuf[i+1];
 	    tokenFlag=0;
 	 }
+      }
+      if (nTokens>=maxTokens) {
+	printf("Limit reached (too many tokens, unrecognized input\n");
+	return(-1);
       }
    }
 }
@@ -1354,25 +1371,36 @@ doCommand(char *cmdToken[]) {
    }
 
    if (strcmp(cmdToken[0],"qu") == 0) {
+      int status;
       if (strcmp(cmdToken[1],"-d")==0) {
-	 queryDataObj(cmdToken);
-	 return(0);
+         status = queryDataObj(cmdToken);
+         if (status < 0) return(-2);
+         return(0);
       }
       if (strcmp(cmdToken[1],"-C")==0 || strcmp(cmdToken[1],"-c")==0) {
-	 queryCollection(cmdToken);
-	 return(0);
+         status = queryCollection(cmdToken);
+         if (status < 0) return(-2);
+         return(0);
       }
       if (strcmp(cmdToken[1],"-R")==0 || strcmp(cmdToken[1],"-r")==0) {
-	 queryResc(cmdToken[2], cmdToken[3], cmdToken[4]);
-	 return(0);
+         if (*cmdToken[5] != '\0') {
+           printf("Unrecognized input\n");
+           return(-2);
+         }
+         queryResc(cmdToken[2], cmdToken[3], cmdToken[4]);
+         return(0);
       }
       if (strcmp(cmdToken[1],"-G")==0 || strcmp(cmdToken[1],"-g")==0) {
-	 queryRescGroup(cmdToken[2], cmdToken[3], cmdToken[4]);
-	 return(0);
+         if (*cmdToken[5] != '\0') {
+           printf("Unrecognized input\n");
+           return(-2);
+         }
+         queryRescGroup(cmdToken[2], cmdToken[3], cmdToken[4]);
+         return(0);
       }
       if (strcmp(cmdToken[1],"-u")==0) {
-	 queryUser(cmdToken[2], cmdToken[3], cmdToken[4]);
-	 return(0);
+         queryUser(cmdToken[2], cmdToken[3], cmdToken[4]);
+         return(0);
       }
    }
 
@@ -1426,8 +1454,8 @@ main(int argc, char **argv) {
 
    int argOffset;
 
-   int maxCmdTokens=20;
-   char *cmdToken[20];
+   int maxCmdTokens=40;
+   char *cmdToken[40];
    int keepGoing;
    int firstTime;
 
@@ -1489,6 +1517,10 @@ main(int argc, char **argv) {
    }
    j=0;
    for (i=argOffset;i<argc;i++) {
+      if (j>=maxCmdTokens+1) {
+         printf("Unrecognzied input, too many input tokens\n");
+         exit(4);
+      }
       cmdToken[j++]=argv[i];
    }
 
@@ -1578,7 +1610,11 @@ main(int argc, char **argv) {
 	 firstTime=0;
       }
       if (keepGoing) {
-	 getInput(cmdToken, maxCmdTokens);
+         status = getInput(cmdToken, maxCmdTokens);
+         if (status<0) {
+           lastCommandStatus=status;
+           break;
+         }
       }
    }
 

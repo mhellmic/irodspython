@@ -33,6 +33,7 @@ void usage(char *subOpt);
    necessary.  Called recursively.
 */
 int
+printSimpleQuery(char *buf) {
    char *cpTime, *endOfLine;
    char localTime[20];
    int fieldLen=10;
@@ -298,7 +299,7 @@ showGroup(char *groupName)
    }
 
    conditionIndexes[0]=COL_USER_TYPE;
-   sprintf(conditionString1,"='rodsgroup'");
+   snprintf(conditionString1,sizeof(conditionString1),"='rodsgroup'");
    conditionValues[0]=conditionString1;
 
    genQueryInp.sqlCondInp.inx = conditionIndexes;
@@ -307,10 +308,10 @@ showGroup(char *groupName)
 
    if (groupName != NULL && *groupName!='\0') {
 
-      sprintf(conditionString1,"!='rodsgroup'");
+      snprintf(conditionString1,sizeof(conditionString1),"!='rodsgroup'");
 
       conditionIndexes[1]=COL_USER_GROUP_NAME;
-      sprintf(conditionString2,"='%s'",groupName);
+      snprintf(conditionString2,sizeof(conditionString2),"='%s'",groupName);
       conditionValues[1]=conditionString2;
       genQueryInp.sqlCondInp.len=2;
    }
@@ -1043,6 +1044,12 @@ doCommand(char *cmdToken[]) {
       }
       return(0);
    }
+   if (strcmp(cmdToken[0],"modzonecollacl") == 0) {
+      generalAdmin(0, "modify", "zonecollacl", cmdToken[1], cmdToken[2], 
+		  cmdToken[3], "", "", "");
+      return(0);
+   }
+
    if (strcmp(cmdToken[0],"rmzone") == 0) {
       generalAdmin(0, "rm", "zone", cmdToken[1], "",
 		   "", "", "", "");
@@ -1224,6 +1231,49 @@ doCommand(char *cmdToken[]) {
       printf("Version 2 unscrambled form is:%s\n", unscrambled);
       return(0);
    }
+
+   /* sha1 is only used for testing so is not included in the help */
+   if (strcmp(cmdToken[0],"sha1") == 0) {
+     unsigned char buffer[30];
+      obfMakeOneWayHash(HASH_TYPE_SHA1, (unsigned char *)cmdToken[1], 
+			strlen(cmdToken[1]), buffer);
+      printf("%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x\
+%2.2x%2.2x%2.2x%2.2x\n",
+	     buffer[0], buffer[1], buffer[2], buffer[3],
+	     buffer[4], buffer[5], buffer[6], buffer[7],
+	     buffer[8], buffer[9], buffer[10], buffer[11],
+	     buffer[12], buffer[13], buffer[14], buffer[15]);
+      return(0);
+   }
+
+   /* md5 is only used for testing so is not included in the help */
+   if (strcmp(cmdToken[0],"md5") == 0) {
+     unsigned char buffer[30];
+      obfMakeOneWayHash(HASH_TYPE_MD5, (unsigned char *)cmdToken[1], 
+			strlen(cmdToken[1]), buffer);
+      printf("%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x\
+%2.2x%2.2x%2.2x%2.2x\n",
+	     buffer[0], buffer[1], buffer[2], buffer[3],
+	     buffer[4], buffer[5], buffer[6], buffer[7],
+	     buffer[8], buffer[9], buffer[10], buffer[11],
+	     buffer[12], buffer[13], buffer[14], buffer[15]);
+      return(0);
+   }
+
+   /* sethash is only used for testing so is not included in the help */
+   if (strcmp(cmdToken[0],"sethash") == 0) {
+     if (strcmp(cmdToken[1],"md5") == 0) {
+       obfSetDefaultHashType(HASH_TYPE_MD5);
+       printf("Default hash type set to MD5\n");
+       return(0);
+     }
+     if (strcmp(cmdToken[1],"sha1") == 0) {
+       obfSetDefaultHashType(HASH_TYPE_MD5);
+       printf("Default hash type set to SHA1\n");
+       return(0);
+     }
+   }
+
    if (*cmdToken[0] != '\0') {
       printf("unrecognized command, try 'help'\n");
       return(-2);
@@ -1405,11 +1455,13 @@ void usageMain()
 " mkresc Name Type Class Host [Path] (make Resource)",
 " modresc Name [name, type, class, host, path, status, comment, info, ",
 "      freespace] Value (mod Resc)",
+" modresc Name host-add|host-rm host (for WOS resources)",
 " modrescdatapaths Name oldpath newpath [user] (update data-object paths,",
 "      sometimes needed after modresc path)",
 " rmresc Name (remove resource)",
 " mkzone Name Type(remote) [Connection-info] [Comment] (make zone)",
 " modzone Name [ name | conn | comment ] newValue  (modify zone)",
+" modzonecollacl null|read userOrGroup /remotezone (set strict-mode root ACLs)",
 " rmzone Name (remove zone)",
 " mkgroup Name (make group)",
 " rmgroup Name (remove group)",
@@ -1643,6 +1695,8 @@ usage(char *subOpt)
    char *modrescMsgs[]={
 " modresc Name [name, type, class, host, path, status, comment, info, or freespace] Value",
 "         (modify Resource)",
+" modresc Name host-add host (for WOS (multiple host) resources)",
+" modresc Name host-rm host (for WOS (multiple host) resources)",
 "Change some attribute of a resource.  For example:",
 "    modresc demoResc comment 'test resource'",
 "The 'host' field is the DNS host name, for example 'datastar.sdsc.edu',",
@@ -1656,6 +1710,11 @@ usage(char *subOpt)
 " ",
 "The freespace value can be simply specified, or if it starts with + or -",
 "the freespace amount will be incremented or decremented by the value.",
+" ",
+"WOS resources have multiple host-addresses, so for these you create the initial",
+"resource and then use host-add or host-rm to add or remove host names from the",
+"list.  The iRODS system will pick an appropriate one to access using some basic",
+"heuristics during initialization.",
 ""};
 
    char *modrescDataPathsMsgs[]={
@@ -1718,6 +1777,48 @@ usage(char *subOpt)
 "The name of the local zone can be changed via some special processing and",
 "since it also requires some manual changes, iadmin will explain those and",
 "prompt for confirmation in this case.",
+""};
+
+   char *modzonecollaclMsgs[]={
+" modzonecollacl null|read userOrGroup /remotezone (set strict-mode root ACLs)",
+"Modify a remote zone's local collection for strict-mode access.",
+" ",
+"This is only needed if you are running with strict access control",
+"enabled (see acAclPolicy in core.re) and you want users to be able to",
+"see (via 'ils /' or other queries) the existing remote zones in the",
+"root ('/') collection.",
+" ",
+"The problem only occurs at the '/' level because for zones there are",
+"both local and remote collections for the zone. As with any query in",
+"strict mode, when the user asks for information on a collection, the",
+"ICAT-generated SQL adds checks to restrict results to data-objects or",
+"sub-collections in that collection to which the user has read or",
+"better access. The problem is that collections for the remote zones",
+"(/zone) do not have ACLs set, even if ichmod is run try to give it",
+"(e.g. read access to public) because ichmod (like ils, iget, iput,",
+"etc) communicates to the appropriate zone based on the beginning part",
+"of the collection name.",
+" ",
+"The following iquest command returns the local ACLs (tempZone is the",
+"local zone and r3 is a remote zone):",
+"  iquest -z tempZone \"select COLL_ACCESS_TYPE where COLL_NAME = '/r3'\" ",
+"The '-z tempZone' is needed to have it connect locally instead of to the",
+"remote r3 zone.  Normally there will be one row returned for the",
+"owner.  With this command, others can be added.  Note that 'ils -A /r3'",
+"will also check with the remote zone, so use the above iquest",
+"command to see the local information.",
+" ",
+"The command syntax is similar to ichmod:",
+"  null|read userOrGroup /remoteZone",
+"Use null to remove ACLs and read access for another user or group.",
+" ",
+"For example, to allow all users to see the remote zones via 'ils /':",
+"iadmin modzoneacl read public /r3",
+" ",
+"To remove it:",
+"iadmin modzoneacl null public /r3",
+" ",
+"Access below this level is controlled at the remote zone.",
 ""};
 
    char *rmzoneMsgs[]={
@@ -1898,7 +1999,7 @@ usage(char *subOpt)
 		    "moduser", "aua", "rua", "rpp",
 		    "rmuser", "mkdir", "rmdir", "mkresc",
 		    "modresc", "modrescdatapaths", "rmresc", 
-		    "mkzone", "modzone", "rmzone",
+		    "mkzone", "modzone", "modzonecollacl", "rmzone",
 		    "mkgroup", "rmgroup", "atg",
 		    "rfg", "atrg", "rfrg", "at", "rt", "spass", "dspass", 
 		    "pv", "ctime", 
@@ -1913,7 +2014,7 @@ usage(char *subOpt)
 		    moduserMsgs, auaMsgs, ruaMsgs, rppMsgs,
 		    rmuserMsgs, mkdirMsgs, rmdirMsgs, mkrescMsgs, 
 		    modrescMsgs, modrescDataPathsMsgs, rmrescMsgs, 
-		    mkzoneMsgs, modzoneMsgs, rmzoneMsgs,
+		    mkzoneMsgs, modzoneMsgs, modzonecollaclMsgs, rmzoneMsgs,
 		    mkgroupMsgs, rmgroupMsgs,atgMsgs, 
 		    rfgMsgs, atrgMsgs, rfrgMsgs, atMsgs, rtMsgs, spassMsgs,
 		    dspassMsgs, pvMsgs, ctimeMsgs, 

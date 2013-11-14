@@ -5,6 +5,17 @@
 #include "rcMisc.h"
 
 void usage (char *prog);
+void usageTTL ();
+
+/* Uncomment the line below if you want TTL to be required for all
+   users; i.e. all credentials will be time-limited.  This is only
+   enforced on the client side so users can bypass this restriction by
+   building their own iinit but it would strongly encourage the use of
+   time-limited credentials. */
+/* #define TIME_TO_LIVE_REQUIRED 1 */
+/* Uncomment the line below if you also want a default TTL if none
+   is specified by the user. This TTL is specified in hours. */
+/* #define TIME_TO_LIVE_DEFAULT 8 */
 
 #define TTYBUF_LEN 100
 #define UPDATE_TEXT_LEN NAME_LEN*10
@@ -59,11 +70,13 @@ main(int argc, char **argv)
     rodsArguments_t myRodsArgs;
     int useGsi=0;
     int doPassword;
+    int pamMode=0;
     char ttybuf[TTYBUF_LEN];
     int doingEnvFileUpdate=0;
     char updateText[UPDATE_TEXT_LEN]="";
+    int ttl=0;
 
-    status = parseCmdLineOpt(argc, argv, "ehvVl", 0, &myRodsArgs);
+    status = parseCmdLineOpt(argc, argv, "ehvVlZ", 1, &myRodsArgs);
     if (status != 0) {
        printf("Use -h for help.\n");
        exit(1);
@@ -71,6 +84,11 @@ main(int argc, char **argv)
 
     if (myRodsArgs.echo==True) {
        echoFlag=1;
+    }
+
+    if (myRodsArgs.help==True && myRodsArgs.ttl==True) {
+       usageTTL();
+       exit(0);
     }
     if (myRodsArgs.help==True) {
        usage(argv[0]);
@@ -81,18 +99,39 @@ main(int argc, char **argv)
 	rodsLogLevel(LOG_NOTICE);
     }
  
-    ix = myRodsArgs.optind;
-
-    password="";
-    if (ix < argc) {
-       password = argv[ix];
-    }
-
     status = getRodsEnv (&myEnv);
     if (status < 0) {
        rodsLog (LOG_ERROR, "main: getRodsEnv error. status = %d",
 		status);
        exit (1);
+    }
+
+    if (myRodsArgs.ttl==True) {
+      ttl = myRodsArgs.ttlValue;
+      if (ttl < 1) {
+	printf("Time To Live value needs to be a positive integer\n");
+	exit(1);
+      }
+    }
+
+#ifdef TIME_TO_LIVE_REQUIRED 
+    if (myRodsArgs.ttl!=True) {
+#ifdef TIME_TO_LIVE_DEFAULT
+       ttl=TIME_TO_LIVE_DEFAULT;
+       printf("Notice: using default TTL (time to live) value of %d hours\n",
+	      ttl);
+#else
+       printf("--ttl (Time To Live) is required, please try again\n");
+       exit(2);
+#endif /* TIME_TO_LIVE_DEFAULT */
+    }
+#endif /* TIME_TO_LIVE_REQUIRED */
+
+    ix = myRodsArgs.optind;
+
+    password="";
+    if (ix < argc) {
+       password = argv[ix];
     }
 
     if (myRodsArgs.longOption==True) {
@@ -228,13 +267,13 @@ main(int argc, char **argv)
 #ifdef PAM_AUTH
     if (strncmp("PAM",myEnv.rodsAuthScheme,3)==0 ||
 	strncmp("pam",myEnv.rodsAuthScheme,3)==0) {
-       status = clientLoginPam(Conn, password);
+       status = clientLoginPam(Conn, password, ttl);
        if (status != 0) exit(8);
        /* if this succeeded, do the regular login below to check that the
 	generated password works properly.  */
+       pamMode=1;
     }
 #endif
-
     /* and check that the user/password is OK */
     status = clientLogin(Conn);
     if (status != 0) {
@@ -243,6 +282,23 @@ main(int argc, char **argv)
     }
 
     printErrorStack(Conn->rError);
+
+    if (ttl>0 && pamMode==0) {
+       /* if doing non-PAM TTL, now get the 
+	short-term password (after initial login) */
+       status = clientLoginTTL(Conn, ttl);
+       if (status != 0) {
+	  rcDisconnect(Conn);
+	  exit(8);
+       }
+
+       /* And check that it works */
+       status = clientLogin(Conn);
+       if (status != 0) {
+	  rcDisconnect(Conn);
+	  exit (7);
+       }
+    }
 
     rcDisconnect(Conn);
 
@@ -259,12 +315,28 @@ void usage (char *prog)
 {
   printf("Creates a file containing your iRODS password in a scrambled form,\n");
   printf("to be used automatically by the icommands.\n");
-  printf("Usage: %s [-ehvVl]\n", prog);
+  printf("Usage: %s [-ehvVl] [--ttl TimeToLive]\n", prog);
   printf(" -e  echo the password as you enter it (normally there is no echo)\n");
   printf(" -l  list the iRODS environment variables (only)\n");
   printf(" -v  verbose\n");
   printf(" -V  Very verbose\n");
+  printf("--ttl ttl  set the password Time To Live (specified in hours)\n");
+  printf("           Run 'iinit -h --ttl' for more\n");
   printf(" -h  this help\n");
   printReleaseInfo("iinit");
 }
 
+void usageTTL() {
+  printf("When using regular iRODS passwords you can use --ttl (Time To Live)\n");
+  printf("to request a credential (a temporary password) that will be valid\n");
+  printf("for only the number of hours you specify (up to a limit set by the\n");
+  printf("administrator).  This is more secure, as this temporary password\n");
+  printf("(not your permanent one) will be stored in the obfuscated\n");
+  printf("credential file (.irodsA) for use by the other i-commands.\n");
+  printf("\n");
+  printf("When using PAM, iinit always generates a temporary iRODS password\n");
+  printf("for use by the other i-commands, using a time-limit set by the\n");
+  printf("administrator (usually a few days).  With the --ttl option, you can\n");
+  printf("specify how long this derived password will be valid, within the\n");
+  printf("limits set by the administrator.\n");
+}

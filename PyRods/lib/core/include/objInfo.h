@@ -120,6 +120,7 @@ typedef enum {          /* specColl operation type */
 #define LINK_POINT_STR		"linkPoint"
 #define INHERIT_PAR_SPEC_COLL_STR	"inheritParentSpecColl"
 #define MSSO_STRUCT_FILE_STR           "mssoStructFile"
+#define MSO_STR           "mso"
 
 #define UNMOUNT_STR		"unmount"
 
@@ -308,6 +309,7 @@ typedef enum {
     PYDAP_FILE_TYPE,
     ERDDAP_FILE_TYPE,
     TDS_FILE_TYPE,
+    HDFS_FILE_TYPE
 } fileDriverType_t;
 
 #define DEFAULT_FILE_MODE	0600

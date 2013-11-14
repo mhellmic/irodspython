@@ -7,6 +7,7 @@
 #include "rodsErrorTable.h"
 #include "rodsLog.h"
 #include "miscUtil.h"
+#include "rcPortalOpr.h"
 #include "ncUtil.h"
 
 int
@@ -39,6 +40,12 @@ rodsPathInp_t *rodsPathInp)
 	}
 
 	if (rodsPathInp->srcPath[i].objType == DATA_OBJ_T) {
+            if (myRodsArgs->agginfo == True) {
+                rodsLog (LOG_ERROR,
+                 "ncUtil: %s is not a collection for --agginfo",
+                 rodsPathInp->srcPath[i].outPath);
+                continue;
+            }
             rmKeyVal (&ncOpenInp.condInput, TRANSLATED_PATH_KW);
 	   status = ncOperDataObjUtil (conn, 
              rodsPathInp->srcPath[i].outPath, myRodsEnv, myRodsArgs, 
@@ -47,8 +54,23 @@ rodsPathInp_t *rodsPathInp)
             /* The path given by collEnt.collName from rclReadCollection
              * has already been translated */
             addKeyVal (&ncOpenInp.condInput, TRANSLATED_PATH_KW, "");
-	    status = ncOperCollUtil (conn, rodsPathInp->srcPath[i].outPath,
-              myRodsEnv, myRodsArgs, &ncOpenInp, &ncVarSubset);
+            if (myRodsArgs->agginfo == True) {
+                if (myRodsArgs->longOption==True) {
+                    /* list the content of .aggInfo file */
+                    status = catAggInfo (conn, rodsPathInp->srcPath[i].outPath);
+                } else {
+                    status = setAggInfo (conn, rodsPathInp->srcPath[i].outPath,
+                      myRodsEnv, myRodsArgs, &ncOpenInp);
+                }
+            } else if (myRodsArgs->recursive == True) {
+                status = ncOperCollUtil (conn, rodsPathInp->srcPath[i].outPath,
+                  myRodsEnv, myRodsArgs, &ncOpenInp, &ncVarSubset);
+            } else {
+                /* assume it is an aggr collection */
+                status = ncOperDataObjUtil (conn,
+                 rodsPathInp->srcPath[i].outPath, myRodsEnv, myRodsArgs,
+                 &ncOpenInp, &ncVarSubset);
+            }
 	} else {
 	    /* should not be here */
 	    rodsLog (LOG_ERROR,
@@ -207,9 +229,22 @@ ncOpenInp_t *ncOpenInp, ncVarSubset_t *ncVarSubset)
         rodsArgs->header = True;
     }
 
+    if (rodsArgs->agginfo == True) {
+        if (rodsArgs->writeFlag == True) {
+            if (rodsArgs->resource == True) {
+                addKeyVal (&ncOpenInp->condInput, DEST_RESC_NAME_KW, 
+                  rodsArgs->resourceString);
+            }
+        } else if (rodsArgs->longOption == False) {
+            rodsArgs->longOption = True;
+        }
+    }
+#ifdef NETCDF4_API
+    ncOpenInp->mode = NC_NOWRITE|NC_NETCDF4;
+#else
     ncOpenInp->mode = NC_NOWRITE;
+#endif
     addKeyVal (&ncOpenInp->condInput, NO_STAGING_KW, "");
-
     if (rodsArgs->var == True) {
         status = parseVarStrForSubset (rodsArgs->varStr, ncVarSubset);
         if (status < 0) return status;
@@ -322,5 +357,38 @@ rodsArguments_t *rodsArgs, ncOpenInp_t *ncOpenInp, ncVarSubset_t *ncVarSubset)
     } else {
         return (status);
     }
+}
+
+int
+catAggInfo (rcComm_t *conn, char *srcColl)
+{
+    char aggInfoPath[MAX_NAME_LEN];
+    int status;
+
+    snprintf (aggInfoPath, MAX_NAME_LEN, "%s/%s", srcColl, 
+      NC_AGG_INFO_FILE_NAME);
+
+    status = catDataObj (conn, aggInfoPath);
+
+    return status;
+}
+
+int
+setAggInfo (rcComm_t *conn, char *srcColl, rodsEnv *myRodsEnv,
+rodsArguments_t *rodsArgs, ncOpenInp_t *ncOpenInp)
+{
+    int status;
+    ncAggInfo_t *ncAggInfo = NULL;
+
+    rstrcpy (ncOpenInp->objPath, srcColl, MAX_NAME_LEN);
+    ncOpenInp->mode = NC_WRITE;
+    status = rcNcGetAggInfo (conn, ncOpenInp, &ncAggInfo);
+    if (status < 0) {
+        rodsLogError (LOG_ERROR, status,
+          "setAggInfo: rcNcGetAggInfo error for %s", ncOpenInp->objPath);
+    } else {
+        freeAggInfo (&ncAggInfo);
+    }
+    return status;
 }
 

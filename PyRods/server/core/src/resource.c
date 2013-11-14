@@ -991,7 +991,7 @@ keyValPair_t *condInput, rescGrpInfo_t **outRescGrpInfo)
         }
     }
 
-    if (strcmp (optionStr, "preferred") == 0) {
+    if (optionStr != NULL && strcmp (optionStr, "preferred") == 0) {
         /* checkinput first, then default */
         status = getRescInfoAndStatus (rsComm, NULL, condInput,
           &myRescGrpInfo);
@@ -1033,7 +1033,7 @@ keyValPair_t *condInput, rescGrpInfo_t **outRescGrpInfo)
                 status = 0;
             }
         }
-    } else if (strcmp (optionStr, "forced") == 0 && 
+    } else if (optionStr != NULL && strcmp (optionStr, "forced") == 0 && 
       rsComm->clientUser.authInfo.authFlag < LOCAL_PRIV_USER_AUTH) {
         if (defRescGrpInfo != NULL) {
             myRescGrpInfo = defRescGrpInfo;
@@ -1306,7 +1306,13 @@ procAndQueRescResult (genQueryOut_t *genQueryOut)
         memset (&addr, 0, sizeof (addr));
         rstrcpy (addr.hostAddr, tmpRescLoc, LONG_NAME_LEN);
         rstrcpy (addr.zoneName, tmpZoneName, NAME_LEN);
-        status = resolveHost (&addr, &tmpRodsServerHost);
+        if (strchr (addr.hostAddr, ',') != NULL) {
+            status = resolveMultiHost (&addr, &tmpRodsServerHost);
+            if (status >= 0) 
+              rstrcpy (tmpRescLoc, addr.hostAddr, rescLoc->len);
+        } else {
+            status = resolveHost (&addr, &tmpRodsServerHost);
+        }
         if (status < 0) {
             rodsLog (LOG_NOTICE,
               "procAndQueRescResult: resolveHost error for %s",
@@ -1736,6 +1742,7 @@ matchSameHostRescByType (rescInfo_t *myRescInfo, int driverType)
     return NULL;
 }
 
+#if 0	/* use getRescType */
 int
 getFileDriverTypeByResc (rescInfo_t *rescInfo)
 {
@@ -1748,6 +1755,7 @@ getFileDriverTypeByResc (rescInfo_t *rescInfo)
     fileDriverType = RescTypeDef[rescTypeInx].driverType;
     return fileDriverType;
 }
+#endif
  
 int
 setDataTypeByResc (dataObjInfo_t *dataObjInfo)
@@ -1757,7 +1765,7 @@ setDataTypeByResc (dataObjInfo_t *dataObjInfo)
     if (dataObjInfo == NULL || dataObjInfo->rescInfo == NULL) 
         return USER__NULL_INPUT_ERR;
 
-    fileDriverType = getFileDriverTypeByResc (dataObjInfo->rescInfo);
+    fileDriverType = getRescType (dataObjInfo->rescInfo);
 
     if (fileDriverType == PYDAP_FILE_TYPE || 
       fileDriverType == ERDDAP_FILE_TYPE || fileDriverType == TDS_FILE_TYPE) {
@@ -1765,3 +1773,4 @@ setDataTypeByResc (dataObjInfo_t *dataObjInfo)
     }
     return 0;
 }
+

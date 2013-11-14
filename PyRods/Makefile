@@ -74,8 +74,7 @@ MAKEFLAGS += --no-print-directory
 
 
 # Build everything
-#all:	reaction libs modules server clients tests chmod
-all:	clients
+all:	reaction libs modules server clients tests chmod
 	@true
 
 
@@ -338,7 +337,7 @@ clean:
 	@rm -f $(svrReIncDir)/reAction.h
 	@$(MAKE) cleanlib
 	@$(MAKE) cleanclients
-#	@$(MAKE) cleanserver
+	@$(MAKE) cleanserver
 	@$(MAKE) cleanmodules
 
 cleanlib:
