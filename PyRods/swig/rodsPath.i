@@ -23,10 +23,6 @@
 
 /*****************************************************************************/
 
-#define ALLOW_NO_SRC_FLAG   0x1
-
-/*****************************************************************************/
-
 typedef struct RodsPath {
     objType_t objType;
     objStat_t objState;
@@ -84,17 +80,18 @@ getLastPathElement (char *inPath, char *lastElement);
 
 %pythoncode %{
 def getLastPathElement(inPath):
-	"""getLastPathElement - 
+    """getLastPathElement - 
   Input -
     str inPath -
   OutPut - (str, int)
     str lastElement
     int status - status of the operation."""
+    global lastStatus
     # TO IMPROVE: irods doesn't manage this out string well
-	lastElement = "_" * MAX_NAME_LEN
-	status = _irods.getLastPathElement(inPath, lastElement)
-	lastElement = lastElement[:lastElement.find('\0')]
-	return (status, lastElement)
+    lastElement = "_" * MAX_NAME_LEN
+    lastStatus = _irods.getLastPathElement(inPath, lastElement)
+    lastElement = lastElement[:lastElement.find('\0')]
+    return (lastStatus, lastElement)
 %}
 
 /*****************************************************************************/

@@ -32,8 +32,8 @@ iRODS code included in this package is released under a BSD license.
 QUICK INSTALL:
 ==============
 
-$ tar xvzf PyRods-3.3.0.tar.gz
-$ cd PyRods-3.3.0
+$ tar xvzf PyRods-3.3.3.tar.gz
+$ cd PyRods-3.3.3
 $ ./scripts/configure
 $ make clients
 $ ARCHFLAGS="-arch x86_64 -lpython" python setup.py build 
@@ -43,7 +43,7 @@ INSTALLATION:
 =============
 
 - Expand the package:
-    $ tar xvzf PyRods-3.3.0.tar.gz
+    $ tar xvzf PyRods-3.3.3.tar.gz
 
 - Configure the C client API:
    $ ./scripts/configure

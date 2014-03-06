@@ -17,101 +17,25 @@
  * Author       : Jerome Fuselier
  */
 
-/*****************************************************************************/
-
-#define MAX_PASSWORD_LEN 50
-
-/*****************************************************************************/
-
-%inline %{
-char * obfDecodeByKey(char *in, char *key) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfDecodeByKey(in, key, out);
-    return out;
-}
-%}
+%cstring_bounded_output(char *obf_out10, MAX_PASSWORD_LEN+10);
+%cstring_bounded_output(char *obf_out100, MAX_PASSWORD_LEN+100);
 
 /*****************************************************************************/
 
-%inline %{
-char * obfDecodeByKeyV2(char *in, char *key1, char *key2) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+10));
-    obfDecodeByKeyV2(in, key1, key2, out);
-    return out;
-}
-%}
-
-/*****************************************************************************/
-
-%inline %{
-char * obfEncodeByKey(char *in, char *key) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfEncodeByKey(in, key, out);
-    return out;
-}
-%}
-
-/*****************************************************************************/
-
-%inline %{
-char * obfEncodeByKeyV2(char *in, char *key, char *key2) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfEncodeByKeyV2(in, key, key2, out);
-    return out;
-}
-%}
-
-/*****************************************************************************/
-
-%cstring_bounded_output(char *obf_out1, MAX_PASSWORD_LEN+CHALLENGE_LEN+2);
-int obfGetPw(char *obf_out1);
-
-/*****************************************************************************/
-
-%cstring_bounded_output(char *obf_out2, MAX_PASSWORD_LEN+10);
-int obfiDecode(char *in, char *obf_out2, int extra);
-
-/*****************************************************************************/
-
-%inline %{
-char * obfiEncode(char *in, int extra) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+10));
-    obfiEncode(in, out, extra);
-    return out;
-}
-%}
-
-/*****************************************************************************/
-
+void obfDecodeByKey(char *in, char *key, char *obf_out100);
+void obfDecodeByKeyV2(char *in, char *key, char *key2, char *obf_out100);
+void obfEncodeByKey(char *in, char *key, char *obf_out100);
+void obfEncodeByKeyV2(char *in, char *key, char *key2, char *obf_out100);
+int obfGetPw(char *obf_out10);
+int obfiDecode(char *in, char *obf_out10, int extra);
+void obfiEncode(char *in, char *obf_out10, int extra);
 int obfiGetEnvKey();
-
-/*****************************************************************************/
-
-%cstring_bounded_output(char *obf_out3, MAX_PASSWORD_LEN+10);
-int obfiGetPw(char *fileName, char *obf_out3);
-
-/*****************************************************************************/
-
+int obfiGetPw(char *fileName, char *obf_out10);
 int obfiGetTv(char *fileName);
-
-/*****************************************************************************/
-
 int obfiOpenOutFile(char *fileName, int fileOpt);
-
-/*****************************************************************************/
-
 int obfiWritePw(int fd, char *pw);
-
-/*****************************************************************************/
-
 int obfRmPw(int opt);
-
-/*****************************************************************************/
-
 int obfSavePw(int promptOpt, int fileOpt, int printOpt, char *pwArg);
-
-/*****************************************************************************/
-
 int obfTempOps(int tmpOpt);
 
 /*****************************************************************************/

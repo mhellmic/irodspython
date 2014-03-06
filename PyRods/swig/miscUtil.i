@@ -21,13 +21,6 @@
 #include "miscUtil.h"
 %}
 
-#define LONG_METADATA_FG           0x1
-#define VERY_LONG_METADATA_FG      0x2
-#define RECUR_QUERY_FG             0x4
-#define DATA_QUERY_FIRST_FG        0x8
-#define NO_TRIM_REPL_FG            0x10
-#define INCLUDE_CONDINPUT_IN_QUERY 0x20
-
 typedef struct CollEnt {
     objType_t objType;
     int replNum;
@@ -134,10 +127,6 @@ int myChmod (char *inPath, uint dataMode);
 
 /*****************************************************************************/
 
-//int
-//queryCollAcl (rcComm_t *conn, char *collName, char *zoneHint,
-//              genQueryOut_t **genQueryOut);
-
 %inline %{
 PyObject * queryCollAcl(rcComm_t *conn, char *collName, char *zoneHint) {
     genQueryOut_t *genQueryOut = NULL;
@@ -151,9 +140,6 @@ PyObject * queryCollAcl(rcComm_t *conn, char *collName, char *zoneHint) {
 
 /*****************************************************************************/
 
-//int
-//queryCollAclSpecific (rcComm_t *conn, char *collName, char *zoneHint,
-//              genQueryOut_t **genQueryOut);
 %inline %{
 PyObject * queryCollAclSpecific(rcComm_t *conn, char *collName, 
                                 char *zoneHint) {
@@ -167,11 +153,6 @@ PyObject * queryCollAclSpecific(rcComm_t *conn, char *collName,
 %}
 
 /*****************************************************************************/
-
-//int
-//queryCollInColl (queryHandle_t *queryHandle, char *collection,
-//int flags, genQueryInp_t *genQueryInp,
-//genQueryOut_t **genQueryOut);
 
 %inline %{
 PyObject * queryCollInColl(queryHandle_t *queryHandle, char *collection,
@@ -187,10 +168,6 @@ PyObject * queryCollInColl(queryHandle_t *queryHandle, char *collection,
 
 /*****************************************************************************/
 
-//int
-//queryCollInheritance (rcComm_t *conn, char *collName, 
-//	      genQueryOut_t **genQueryOut);
-
 %inline %{
 PyObject * queryCollInheritance(rcComm_t *conn, char *collName) {
     genQueryOut_t *genQueryOut = NULL;
@@ -203,11 +180,6 @@ PyObject * queryCollInheritance(rcComm_t *conn, char *collName) {
 %}
 
 /*****************************************************************************/
-
-//int
-//queryDataObjInColl (queryHandle_t *queryHandle, char *collection,
-//int flags, genQueryInp_t *genQueryInp,
-//genQueryOut_t **genQueryOut, keyValPair_t *condInput);
 
 %inline %{
 PyObject * queryDataObjInColl(queryHandle_t *queryHandle, char *collection,
@@ -224,9 +196,6 @@ PyObject * queryDataObjInColl(queryHandle_t *queryHandle, char *collection,
 %}
 
 /*****************************************************************************/
-
-//int queryDataObjAcl (rcComm_t *conn, char *dataId, char *zoneHint,
-//                     genQueryOut_t **genQueryOut);
 
 %inline %{
 PyObject * queryDataObjAcl(rcComm_t *conn, char *dataId, char *zoneHint) {
@@ -260,18 +229,6 @@ def rclOpenCollection(conn, collection, flag):
 %}
 
 /*****************************************************************************/
-
-/*int rclReadCollection (rcComm_t *conn, collHandle_t *collHandle,
-collEnt_t *collEnt);
-
-%pythoncode %{
-def rclReadCollection(conn, collHandle):
-    collEnt = collEnt_t()
-    status = _irods.rclReadCollection(conn, collHandle, collEnt)
-    return (status, collEnt)
-%}
-
-*/
 
 %inline %{
 PyObject * rclReadCollection(rcComm_t *conn, collHandle_t *collHandle) {

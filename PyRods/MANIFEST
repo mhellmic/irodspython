@@ -9,6 +9,7 @@ README.gsi
 README.macosx
 irods.py
 irods_wrap.c
+irodsctl
 setup.py
 setup_gsi.py
 clients/icommands/Makefile
@@ -40,6 +41,7 @@ clients/icommands/src/imiscsvrinfo.c
 clients/icommands/src/imkdir.c
 clients/icommands/src/imv.c
 clients/icommands/src/inc.c
+clients/icommands/src/incarch.c
 clients/icommands/src/incattr.c
 clients/icommands/src/ipasswd.c
 clients/icommands/src/iphybun.c
@@ -82,17 +84,19 @@ examples/create_group.py
 examples/create_resc.py
 examples/create_user.py
 examples/create_zone.py
+examples/file_copy.py
 examples/file_info.py
 examples/file_meta.py
+examples/file_move.py
 examples/file_read.py
 examples/file_replicate.py
 examples/file_seek.py
 examples/get_groups.py
 examples/get_rescs.py
 examples/get_users.py
-examples/get_zones.py
 examples/group_info.py
 examples/group_meta.py
+examples/modify_user_password.py
 examples/query_icat.py
 examples/quotas.py
 examples/resc_info.py
@@ -185,6 +189,7 @@ lib/api/include/generalRowPurge.h
 lib/api/include/generalUpdate.h
 lib/api/include/getHostForGet.h
 lib/api/include/getHostForPut.h
+lib/api/include/getLimitedPassword.h
 lib/api/include/getMiscSvrInfo.h
 lib/api/include/getRemoteZoneResc.h
 lib/api/include/getRescQuota.h
@@ -199,8 +204,11 @@ lib/api/include/modAVUMetadata.h
 lib/api/include/modAccessControl.h
 lib/api/include/modColl.h
 lib/api/include/modDataObjMeta.h
+lib/api/include/ncArchTimeSeries.h
 lib/api/include/ncClose.h
 lib/api/include/ncCreate.h
+lib/api/include/ncGetAggElement.h
+lib/api/include/ncGetAggInfo.h
 lib/api/include/ncGetVarsByType.h
 lib/api/include/ncInq.h
 lib/api/include/ncInqGrps.h
@@ -337,6 +345,7 @@ lib/api/src/rcGeneralRowPurge.c
 lib/api/src/rcGeneralUpdate.c
 lib/api/src/rcGetHostForGet.c
 lib/api/src/rcGetHostForPut.c
+lib/api/src/rcGetLimitedPassword.c
 lib/api/src/rcGetMiscSvrInfo.c
 lib/api/src/rcGetRemoteZoneResc.c
 lib/api/src/rcGetRescQuota.c
@@ -351,8 +360,11 @@ lib/api/src/rcModAVUMetadata.c
 lib/api/src/rcModAccessControl.c
 lib/api/src/rcModColl.c
 lib/api/src/rcModDataObjMeta.c
+lib/api/src/rcNcArchTimeSeries.c
 lib/api/src/rcNcClose.c
 lib/api/src/rcNcCreate.c
+lib/api/src/rcNcGetAggElement.c
+lib/api/src/rcNcGetAggInfo.c
 lib/api/src/rcNcGetVarsByType.c
 lib/api/src/rcNcInq.c
 lib/api/src/rcNcInqGrps.c
@@ -439,6 +451,7 @@ lib/core/include/mkdirUtil.h
 lib/core/include/msParam.h
 lib/core/include/mvUtil.h
 lib/core/include/ncUtil.h
+lib/core/include/ncarchUtil.h
 lib/core/include/ncattrUtil.h
 lib/core/include/obf.h
 lib/core/include/objInfo.h
@@ -503,6 +516,7 @@ lib/core/src/mkdirUtil.c
 lib/core/src/msParam.c
 lib/core/src/mvUtil.c
 lib/core/src/ncUtil.c
+lib/core/src/ncarchUtil.c
 lib/core/src/ncattrUtil.c
 lib/core/src/obf.c
 lib/core/src/ooiCi.c
@@ -542,6 +556,11 @@ lib/rbudp/src/QUANTAnet_rbudpReceiver_c.c
 lib/rbudp/src/QUANTAnet_rbudpSender_c.c
 lib/rbudp/src/recvfile.c
 lib/rbudp/src/sendfile.c
+lib/sha1/include/sha1.h
+lib/sha1/obj/empty.txt
+lib/sha1/src/sha.c
+lib/sha1/src/sha1.c
+lib/sha1/src/shatest.c
 modules/extendedICAT/extendedICAT.h
 scripts/configure
 scripts/runperl
@@ -552,9 +571,7 @@ scripts/perl/utils_file.pl
 scripts/perl/utils_paths.pl
 scripts/perl/utils_platform.pl
 scripts/perl/utils_print.pl
-server/config/server.config
 server/config/server.config.in
-server/config/server.config.sav
 server/core/README.txt
 server/core/include/collection.h
 server/core/include/dataObjOpr.h
@@ -608,6 +625,7 @@ server/drivers/include/erddapDriver.h
 server/drivers/include/fileDriver.h
 server/drivers/include/fileDriverTable.h
 server/drivers/include/haawSubStructFileDriver.h
+server/drivers/include/hdfsFileDriver.h
 server/drivers/include/hpssFileDriver.h
 server/drivers/include/msoFileDriver.h
 server/drivers/include/mssoSubStructFileDriver.h
@@ -624,6 +642,7 @@ server/drivers/src/directAccessFileDriver.c
 server/drivers/src/erddapDriver.c
 server/drivers/src/fileDriver.c
 server/drivers/src/haawStructFileDriver.c
+server/drivers/src/hdfsFileDriver.c
 server/drivers/src/hpssFileDriver.c
 server/drivers/src/msoFileDriver.c
 server/drivers/src/mssoStructFileDriver.c
@@ -667,6 +686,7 @@ server/re/include/cache.instance.h
 server/re/include/cache.proto.h
 server/re/include/configuration.h
 server/re/include/conversion.h
+server/re/include/data.h
 server/re/include/datetime.h
 server/re/include/debug.h
 server/re/include/eirods_hash.h
@@ -679,8 +699,10 @@ server/re/include/hashtable.h
 server/re/include/index.h
 server/re/include/key.instance.h
 server/re/include/key.proto.h
+server/re/include/list.h
 server/re/include/locks.h
 server/re/include/msiHelper.h
+server/re/include/packinginstruction.h
 server/re/include/parser.h
 server/re/include/proto.h
 server/re/include/re.h
@@ -694,6 +716,8 @@ server/re/include/reIn2p3SysRule.h
 server/re/include/reNaraMetaData.h
 server/re/include/reNetcdf.h
 server/re/include/reSysDataObjOpr.h
+server/re/include/reVariableMap.gen.h
+server/re/include/reVariableMap.h
 server/re/include/reVariables.h
 server/re/include/readServerConfig.h
 server/re/include/reconstants.h
@@ -722,6 +746,7 @@ server/re/src/arithmetics.c
 server/re/src/cache.c
 server/re/src/configuration.c
 server/re/src/conversion.c
+server/re/src/data.c
 server/re/src/datetime.c
 server/re/src/debug.c
 server/re/src/eirods_ms_plugin.c
@@ -735,15 +760,16 @@ server/re/src/icatGeneralMS.c
 server/re/src/index.c
 server/re/src/juststubsMS.c
 server/re/src/keyValPairMS.c
+server/re/src/list.c
 server/re/src/locks.c
 server/re/src/mailMS.c
 server/re/src/miscMS.c
 server/re/src/msiHelper.c
-server/re/src/nre.genQueryMS.c
 server/re/src/nre.reHelpers1.c
 server/re/src/nre.reHelpers2.c
 server/re/src/nre.reLib1.c
 server/re/src/nre.reLib2.c
+server/re/src/nre.ruleAdminMS.c
 server/re/src/nre.systemMS.c
 server/re/src/parser.c
 server/re/src/printMS.c
@@ -762,6 +788,7 @@ server/re/src/reRDA.c
 server/re/src/reStruct.c
 server/re/src/reSysDataObjOpr.c
 server/re/src/reVariableMap.c
+server/re/src/reVariableMap.gen.c
 server/re/src/regExpMatch.c
 server/re/src/region.c
 server/re/src/restructs.c

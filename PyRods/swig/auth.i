@@ -24,10 +24,6 @@
 #include "gsiAuthRequest.h"
 %}
 
-/*****************************************************************************/
-
-#define CHALLENGE_LEN 64 /* 64 bytes of data and terminating null */
-#define RESPONSE_LEN 16  /* 16 bytes of data and terminating null */
 
 /*****************************************************************************/
 
@@ -58,9 +54,6 @@ typedef struct {
 
 /*****************************************************************************/
 
-//int
-//rcAuthCheck(rcComm_t *conn, authCheckInp_t *authCheckInp, 
-//         authCheckOut_t **authCheckOut );
 %inline %{
 PyObject * rcAuthCheck(rcComm_t *conn, authCheckInp_t *authCheckInp) {
     authCheckOut_t *authCheckOut = NULL;
@@ -74,8 +67,6 @@ PyObject * rcAuthCheck(rcComm_t *conn, authCheckInp_t *authCheckInp) {
 
 /*****************************************************************************/
 
-//int
-//rcAuthRequest(rcComm_t *conn, authRequestOut_t **authRequestOut );
 %inline %{
 PyObject * rcAuthRequest(rcComm_t *conn) {
     authRequestOut_t *authReqOut = NULL;
@@ -93,8 +84,6 @@ int rcAuthResponse(rcComm_t *conn, authResponseInp_t *authResponseInp );
 
 /*****************************************************************************/
 
-//int
-//rcGsiAuthRequest (rcComm_t *conn, gsiAuthRequestOut_t **gsiAuthRequestOut );
 %inline %{
 PyObject * rcGsiAuthRequest(rcComm_t *conn) {
     gsiAuthRequestOut_t *gsiAuthRequestOut = NULL;

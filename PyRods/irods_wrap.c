@@ -3093,19 +3093,6 @@ static swig_module_info swig_module = {swig_types, 132, 0, 0, 0, 0};
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
-#include "authCheck.h"
-#include "authRequest.h"
-#include "authResponse.h"
-#include "gsiAuthRequest.h"
-
-
-SWIGINTERNINLINE PyObject*
-  SWIG_From_int  (int value)
-{
-  return PyInt_FromLong((long) value);
-}
-
-
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
@@ -3117,6 +3104,40 @@ SWIG_pchar_descriptor(void)
   }
   return info;
 }
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_InternalNewPointerObj((char *)(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+#if PY_VERSION_HEX >= 0x03000000
+      return PyUnicode_FromStringAndSize(carray, (int)(size));
+#else
+      return PyString_FromStringAndSize(carray, (int)(size));
+#endif
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject * 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
+
+#include "authCheck.h"
+#include "authRequest.h"
+#include "authResponse.h"
+#include "gsiAuthRequest.h"
 
 
 SWIGINTERN int
@@ -3195,34 +3216,6 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc) {
 
 
 
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-{
-  if (carray) {
-    if (size > INT_MAX) {
-      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-      return pchar_descriptor ? 
-	SWIG_InternalNewPointerObj((char *)(carray), pchar_descriptor, 0) : SWIG_Py_Void();
-    } else {
-#if PY_VERSION_HEX >= 0x03000000
-      return PyUnicode_FromStringAndSize(carray, (int)(size));
-#else
-      return PyString_FromStringAndSize(carray, (int)(size));
-#endif
-    }
-  } else {
-    return SWIG_Py_Void();
-  }
-}
-
-
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
 
 
 #include <limits.h>
@@ -3367,6 +3360,13 @@ SWIG_AsVal_int (PyObject * obj, int *val)
     }
   }  
   return res;
+}
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_int  (int value)
+{
+  return PyInt_FromLong((long) value);
 }
 
 
@@ -3814,41 +3814,6 @@ SWIG_AsVal_float (PyObject * obj, float *val)
   return res;
 }
 
-
-char * obfDecodeByKey(char *in, char *key) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfDecodeByKey(in, key, out);
-    return out;
-}
-
-
-char * obfDecodeByKeyV2(char *in, char *key1, char *key2) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+10));
-    obfDecodeByKeyV2(in, key1, key2, out);
-    return out;
-}
-
-
-char * obfEncodeByKey(char *in, char *key) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfEncodeByKey(in, key, out);
-    return out;
-}
-
-
-char * obfEncodeByKeyV2(char *in, char *key, char *key2) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+100));
-    obfEncodeByKeyV2(in, key, key2, out);
-    return out;
-}
-
-
-char * obfiEncode(char *in, int extra) {
-    char * out = (char*) malloc(sizeof(MAX_PASSWORD_LEN+10));
-    obfiEncode(in, out, extra);
-    return out;
-}
-
 SWIGINTERN int rcComm_t_disconnect(rcComm_t *self){
         return rcDisconnect(self);
     }
@@ -3995,7 +3960,8 @@ rodsStat_t * rcFileFstat(rcComm_t *conn, fileFstatInp_t *fileFstatInp) {
 }
 
 
-fileGetFsFreeSpaceOut_t * rcFileGetFsFreeSpace(rcComm_t *conn, fileGetFsFreeSpaceInp_t *fileGetFsFreeSpaceInp) {
+fileGetFsFreeSpaceOut_t * rcFileGetFsFreeSpace(rcComm_t *conn, 
+        fileGetFsFreeSpaceInp_t *fileGetFsFreeSpaceInp) {
     fileGetFsFreeSpaceOut_t * fileGetFsFreeSpaceOut = NULL;
     rcFileGetFsFreeSpace(conn, fileGetFsFreeSpaceInp, &fileGetFsFreeSpaceOut);
     return fileGetFsFreeSpaceOut;
@@ -9662,7 +9628,7 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsHome_set(PyObject *SWIGUNUSEDPARM(self), 
   char *arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[MAX_NAME_LEN] ;
+  char temp2[(1024+64)] ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9673,13 +9639,13 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsHome_set(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rodsEnv_rodsHome_set" "', argument " "1"" of type '" "rodsEnv *""'"); 
   }
   arg1 = (rodsEnv *)(argp1);
-  res2 = SWIG_AsCharArray(obj1, temp2, MAX_NAME_LEN);
+  res2 = SWIG_AsCharArray(obj1, temp2, (1024+64));
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rodsEnv_rodsHome_set" "', argument " "2"" of type '" "char [MAX_NAME_LEN]""'");
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rodsEnv_rodsHome_set" "', argument " "2"" of type '" "char [(1024+64)]""'");
   }
   arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->rodsHome,arg2,MAX_NAME_LEN*sizeof(char));
-  else memset(arg1->rodsHome,0,MAX_NAME_LEN*sizeof(char));
+  if (arg2) memcpy(arg1->rodsHome,arg2,(1024+64)*sizeof(char));
+  else memset(arg1->rodsHome,0,(1024+64)*sizeof(char));
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9703,7 +9669,7 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsHome_get(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = (rodsEnv *)(argp1);
   result = (char *)(char *) ((arg1)->rodsHome);
   {
-    size_t size = MAX_NAME_LEN;
+    size_t size = (1024+64);
     
     while (size && (result[size - 1] == '\0')) --size;
     
@@ -9721,7 +9687,7 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsCwd_set(PyObject *SWIGUNUSEDPARM(self), P
   char *arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[MAX_NAME_LEN] ;
+  char temp2[(1024+64)] ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9732,13 +9698,13 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsCwd_set(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "rodsEnv_rodsCwd_set" "', argument " "1"" of type '" "rodsEnv *""'"); 
   }
   arg1 = (rodsEnv *)(argp1);
-  res2 = SWIG_AsCharArray(obj1, temp2, MAX_NAME_LEN);
+  res2 = SWIG_AsCharArray(obj1, temp2, (1024+64));
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rodsEnv_rodsCwd_set" "', argument " "2"" of type '" "char [MAX_NAME_LEN]""'");
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "rodsEnv_rodsCwd_set" "', argument " "2"" of type '" "char [(1024+64)]""'");
   }
   arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->rodsCwd,arg2,MAX_NAME_LEN*sizeof(char));
-  else memset(arg1->rodsCwd,0,MAX_NAME_LEN*sizeof(char));
+  if (arg2) memcpy(arg1->rodsCwd,arg2,(1024+64)*sizeof(char));
+  else memset(arg1->rodsCwd,0,(1024+64)*sizeof(char));
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9762,7 +9728,7 @@ SWIGINTERN PyObject *_wrap_rodsEnv_rodsCwd_get(PyObject *SWIGUNUSEDPARM(self), P
   arg1 = (rodsEnv *)(argp1);
   result = (char *)(char *) ((arg1)->rodsCwd);
   {
-    size_t size = MAX_NAME_LEN;
+    size_t size = (1024+64);
     
     while (size && (result[size - 1] == '\0')) --size;
     
@@ -12145,7 +12111,7 @@ SWIGINTERN PyObject *_wrap_collHandle_t_linkedObjPath_set(PyObject *SWIGUNUSEDPA
   char *arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  char temp2[MAX_NAME_LEN] ;
+  char temp2[(1024+64)] ;
   int res2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -12156,13 +12122,13 @@ SWIGINTERN PyObject *_wrap_collHandle_t_linkedObjPath_set(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collHandle_t_linkedObjPath_set" "', argument " "1"" of type '" "struct CollHandle *""'"); 
   }
   arg1 = (struct CollHandle *)(argp1);
-  res2 = SWIG_AsCharArray(obj1, temp2, MAX_NAME_LEN);
+  res2 = SWIG_AsCharArray(obj1, temp2, (1024+64));
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "collHandle_t_linkedObjPath_set" "', argument " "2"" of type '" "char [MAX_NAME_LEN]""'");
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "collHandle_t_linkedObjPath_set" "', argument " "2"" of type '" "char [(1024+64)]""'");
   }
   arg2 = (char *)(temp2);
-  if (arg2) memcpy(arg1->linkedObjPath,arg2,MAX_NAME_LEN*sizeof(char));
-  else memset(arg1->linkedObjPath,0,MAX_NAME_LEN*sizeof(char));
+  if (arg2) memcpy(arg1->linkedObjPath,arg2,(1024+64)*sizeof(char));
+  else memset(arg1->linkedObjPath,0,(1024+64)*sizeof(char));
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -12186,7 +12152,7 @@ SWIGINTERN PyObject *_wrap_collHandle_t_linkedObjPath_get(PyObject *SWIGUNUSEDPA
   arg1 = (struct CollHandle *)(argp1);
   result = (char *)(char *) ((arg1)->linkedObjPath);
   {
-    size_t size = MAX_NAME_LEN;
+    size_t size = (1024+64);
     
     while (size && (result[size - 1] == '\0')) --size;
     
@@ -16503,16 +16469,18 @@ SWIGINTERN PyObject *_wrap_obfDecodeByKey(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
   int res2 ;
   char *buf2 = 0 ;
   int alloc2 = 0 ;
+  char temp3[50+100+1] ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  char *result = 0 ;
   
+  arg3 = (char *) temp3;
   if (!PyArg_ParseTuple(args,(char *)"OO:obfDecodeByKey",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
@@ -16524,8 +16492,10 @@ SWIGINTERN PyObject *_wrap_obfDecodeByKey(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "obfDecodeByKey" "', argument " "2"" of type '" "char *""'");
   }
   arg2 = (char *)(buf2);
-  result = (char *)obfDecodeByKey(arg1,arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
+  obfDecodeByKey(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  arg3[50+100] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg3));
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
@@ -16541,6 +16511,7 @@ SWIGINTERN PyObject *_wrap_obfDecodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
   char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
@@ -16550,11 +16521,12 @@ SWIGINTERN PyObject *_wrap_obfDecodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
   int res3 ;
   char *buf3 = 0 ;
   int alloc3 = 0 ;
+  char temp4[50+100+1] ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  char *result = 0 ;
   
+  arg4 = (char *) temp4;
   if (!PyArg_ParseTuple(args,(char *)"OOO:obfDecodeByKeyV2",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
@@ -16571,8 +16543,10 @@ SWIGINTERN PyObject *_wrap_obfDecodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "obfDecodeByKeyV2" "', argument " "3"" of type '" "char *""'");
   }
   arg3 = (char *)(buf3);
-  result = (char *)obfDecodeByKeyV2(arg1,arg2,arg3);
-  resultobj = SWIG_FromCharPtr((const char *)result);
+  obfDecodeByKeyV2(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  arg4[50+100] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg4));
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
@@ -16589,16 +16563,18 @@ SWIGINTERN PyObject *_wrap_obfEncodeByKey(PyObject *SWIGUNUSEDPARM(self), PyObje
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
   int res2 ;
   char *buf2 = 0 ;
   int alloc2 = 0 ;
+  char temp3[50+100+1] ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  char *result = 0 ;
   
+  arg3 = (char *) temp3;
   if (!PyArg_ParseTuple(args,(char *)"OO:obfEncodeByKey",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
@@ -16610,8 +16586,10 @@ SWIGINTERN PyObject *_wrap_obfEncodeByKey(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "obfEncodeByKey" "', argument " "2"" of type '" "char *""'");
   }
   arg2 = (char *)(buf2);
-  result = (char *)obfEncodeByKey(arg1,arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
+  obfEncodeByKey(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  arg3[50+100] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg3));
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return resultobj;
@@ -16627,6 +16605,7 @@ SWIGINTERN PyObject *_wrap_obfEncodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
   char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
@@ -16636,11 +16615,12 @@ SWIGINTERN PyObject *_wrap_obfEncodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
   int res3 ;
   char *buf3 = 0 ;
   int alloc3 = 0 ;
+  char temp4[50+100+1] ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  char *result = 0 ;
   
+  arg4 = (char *) temp4;
   if (!PyArg_ParseTuple(args,(char *)"OOO:obfEncodeByKeyV2",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
@@ -16657,8 +16637,10 @@ SWIGINTERN PyObject *_wrap_obfEncodeByKeyV2(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "obfEncodeByKeyV2" "', argument " "3"" of type '" "char *""'");
   }
   arg3 = (char *)(buf3);
-  result = (char *)obfEncodeByKeyV2(arg1,arg2,arg3);
-  resultobj = SWIG_FromCharPtr((const char *)result);
+  obfEncodeByKeyV2(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_Py_Void();
+  arg4[50+100] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg4));
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   if (alloc3 == SWIG_NEWOBJ) free((char*)buf3);
@@ -16674,14 +16656,14 @@ fail:
 SWIGINTERN PyObject *_wrap_obfGetPw(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
-  char temp1[50+64+2+1] ;
+  char temp1[50+10+1] ;
   int result;
   
   arg1 = (char *) temp1;
   if (!PyArg_ParseTuple(args,(char *)":obfGetPw")) SWIG_fail;
   result = (int)obfGetPw(arg1);
   resultobj = SWIG_From_int((int)(result));
-  arg1[50+64+2] = 0;  
+  arg1[50+10] = 0;  
   resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg1));
   return resultobj;
 fail:
@@ -16731,29 +16713,33 @@ fail:
 SWIGINTERN PyObject *_wrap_obfiEncode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
-  int arg2 ;
+  char *arg2 = (char *) 0 ;
+  int arg3 ;
   int res1 ;
   char *buf1 = 0 ;
   int alloc1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
+  char temp2[50+10+1] ;
+  int val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  char *result = 0 ;
   
+  arg2 = (char *) temp2;
   if (!PyArg_ParseTuple(args,(char *)"OO:obfiEncode",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "obfiEncode" "', argument " "1"" of type '" "char *""'");
   }
   arg1 = (char *)(buf1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "obfiEncode" "', argument " "2"" of type '" "int""'");
+  ecode3 = SWIG_AsVal_int(obj1, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "obfiEncode" "', argument " "3"" of type '" "int""'");
   } 
-  arg2 = (int)(val2);
-  result = (char *)obfiEncode(arg1,arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
+  arg3 = (int)(val3);
+  obfiEncode(arg1,arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  arg2[50+10] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg2));
   if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
   return resultobj;
 fail:
@@ -54187,6 +54173,7 @@ SWIG_init(void) {
   
   SWIG_InstallConstants(d,swig_const_table);
   
+  SWIG_Python_SetConstant(d, "PYRODS_VERSION",SWIG_FromCharPtr("3.3.3"));
   SWIG_Python_SetConstant(d, "CHALLENGE_LEN",SWIG_From_int((int)(64)));
   SWIG_Python_SetConstant(d, "RESPONSE_LEN",SWIG_From_int((int)(16)));
   SWIG_Python_SetConstant(d, "DONE_OPR",SWIG_From_int((int)(9999)));
@@ -54236,10 +54223,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "DATA_QUERY_FIRST_FG",SWIG_From_int((int)(0x8)));
   SWIG_Python_SetConstant(d, "NO_TRIM_REPL_FG",SWIG_From_int((int)(0x10)));
   SWIG_Python_SetConstant(d, "INCLUDE_CONDINPUT_IN_QUERY",SWIG_From_int((int)(0x20)));
-  SWIG_Python_SetConstant(d, "COLL_CLOSED",SWIG_From_int((int)(COLL_CLOSED)));
-  SWIG_Python_SetConstant(d, "COLL_OPENED",SWIG_From_int((int)(COLL_OPENED)));
-  SWIG_Python_SetConstant(d, "COLL_DATA_OBJ_QUERIED",SWIG_From_int((int)(COLL_DATA_OBJ_QUERIED)));
-  SWIG_Python_SetConstant(d, "COLL_COLL_OBJ_QUERIED",SWIG_From_int((int)(COLL_COLL_OBJ_QUERIED)));
   SWIG_Python_SetConstant(d, "STR_MS_T",SWIG_FromCharPtr("STR_PI"));
   SWIG_Python_SetConstant(d, "INT_MS_T",SWIG_FromCharPtr("INT_PI"));
   SWIG_Python_SetConstant(d, "INT16_MS_T",SWIG_FromCharPtr("INT16_PI"));
@@ -54328,6 +54311,477 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "MAX_NAME_LEN",SWIG_From_int((int)((1024+64))));
   SWIG_Python_SetConstant(d, "TRANS_BUF_SZ",SWIG_From_int((int)((4*1024*1024))));
   SWIG_Python_SetConstant(d, "PUBLIC_USER_NAME",SWIG_FromCharPtr("public"));
+  SWIG_Python_SetConstant(d, "NO_CHK_PERM_FLAG",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "UNIQUE_REM_COMM_FLAG",SWIG_From_int((int)(0x2)));
+  SWIG_Python_SetConstant(d, "FORCE_FLAG",SWIG_From_int((int)(0x4)));
+  SWIG_Python_SetConstant(d, "RMDIR_RECUR",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "PURGE_STRUCT_FILE_CACHE",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "DELETE_STRUCT_FILE",SWIG_From_int((int)(0x2)));
+  SWIG_Python_SetConstant(d, "NO_REG_COLL_INFO",SWIG_From_int((int)(0x4)));
+  SWIG_Python_SetConstant(d, "LOGICAL_BUNDLE",SWIG_From_int((int)(0x8)));
+  SWIG_Python_SetConstant(d, "CREATE_TAR_OPR",SWIG_From_int((int)(0x0)));
+  SWIG_Python_SetConstant(d, "ADD_TO_TAR_OPR",SWIG_From_int((int)(0x10)));
+  SWIG_Python_SetConstant(d, "PRESERVE_COLL_PATH",SWIG_From_int((int)(0x20)));
+  SWIG_Python_SetConstant(d, "PRESERVE_DIR_CONT",SWIG_From_int((int)(0x40)));
+  SWIG_Python_SetConstant(d, "O_RDONLY",SWIG_From_int((int)(0)));
+  SWIG_Python_SetConstant(d, "O_WRONLY",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "O_RDWR",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "O_CREAT",SWIG_From_int((int)(64)));
+  SWIG_Python_SetConstant(d, "SEEK_SET",SWIG_From_int((int)(0)));
+  SWIG_Python_SetConstant(d, "SEEK_CUR",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "SEEK_END",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "LOG_SQL",SWIG_From_int((int)(11)));
+  SWIG_Python_SetConstant(d, "LOG_DEBUG1",SWIG_From_int((int)(10)));
+  SWIG_Python_SetConstant(d, "LOG_DEBUG2",SWIG_From_int((int)(9)));
+  SWIG_Python_SetConstant(d, "LOG_DEBUG3",SWIG_From_int((int)(8)));
+  SWIG_Python_SetConstant(d, "LOG_DEBUG",SWIG_From_int((int)(7)));
+  SWIG_Python_SetConstant(d, "LOG_NOTICE",SWIG_From_int((int)(5)));
+  SWIG_Python_SetConstant(d, "LOG_ERROR",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "LOG_SYS_WARNING",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "LOG_SYS_FATAL",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "ALLOW_NO_SRC_FLAG",SWIG_From_int((int)(0x1)));
+  SWIG_Python_SetConstant(d, "MAX_SQL_ATTR",SWIG_From_int((int)(50)));
+  SWIG_Python_SetConstant(d, "MAX_SQL_ROWS",SWIG_From_int((int)(256)));
+  SWIG_Python_SetConstant(d, "ORDER_BY",SWIG_From_int((int)(0x400)));
+  SWIG_Python_SetConstant(d, "ORDER_BY_DESC",SWIG_From_int((int)(0x800)));
+  SWIG_Python_SetConstant(d, "RETURN_TOTAL_ROW_COUNT",SWIG_From_int((int)(0x20)));
+  SWIG_Python_SetConstant(d, "NO_DISTINCT",SWIG_From_int((int)(0x40)));
+  SWIG_Python_SetConstant(d, "QUOTA_QUERY",SWIG_From_int((int)(0x80)));
+  SWIG_Python_SetConstant(d, "AUTO_CLOSE",SWIG_From_int((int)(0x100)));
+  SWIG_Python_SetConstant(d, "UPPER_CASE_WHERE",SWIG_From_int((int)(0x200)));
+  SWIG_Python_SetConstant(d, "SELECT_MIN",SWIG_From_int((int)(2)));
+  SWIG_Python_SetConstant(d, "SELECT_MAX",SWIG_From_int((int)(3)));
+  SWIG_Python_SetConstant(d, "SELECT_SUM",SWIG_From_int((int)(4)));
+  SWIG_Python_SetConstant(d, "SELECT_AVG",SWIG_From_int((int)(5)));
+  SWIG_Python_SetConstant(d, "SELECT_COUNT",SWIG_From_int((int)(6)));
+  SWIG_Python_SetConstant(d, "MAX_CORE_TABLE_VALUE",SWIG_From_int((int)(10000)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_ID",SWIG_From_int((int)(101)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_NAME",SWIG_From_int((int)(102)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_TYPE",SWIG_From_int((int)(103)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_CONNECTION",SWIG_From_int((int)(104)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_COMMENT",SWIG_From_int((int)(105)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_CREATE_TIME",SWIG_From_int((int)(106)));
+  SWIG_Python_SetConstant(d, "COL_ZONE_MODIFY_TIME",SWIG_From_int((int)(107)));
+  SWIG_Python_SetConstant(d, "COL_USER_ID",SWIG_From_int((int)(201)));
+  SWIG_Python_SetConstant(d, "COL_USER_NAME",SWIG_From_int((int)(202)));
+  SWIG_Python_SetConstant(d, "COL_USER_TYPE",SWIG_From_int((int)(203)));
+  SWIG_Python_SetConstant(d, "COL_USER_ZONE",SWIG_From_int((int)(204)));
+  SWIG_Python_SetConstant(d, "COL_USER_INFO",SWIG_From_int((int)(206)));
+  SWIG_Python_SetConstant(d, "COL_USER_COMMENT",SWIG_From_int((int)(207)));
+  SWIG_Python_SetConstant(d, "COL_USER_CREATE_TIME",SWIG_From_int((int)(208)));
+  SWIG_Python_SetConstant(d, "COL_USER_MODIFY_TIME",SWIG_From_int((int)(209)));
+  SWIG_Python_SetConstant(d, "COL_USER_DN_INVALID",SWIG_From_int((int)(205)));
+  SWIG_Python_SetConstant(d, "COL_R_RESC_ID",SWIG_From_int((int)(301)));
+  SWIG_Python_SetConstant(d, "COL_R_RESC_NAME",SWIG_From_int((int)(302)));
+  SWIG_Python_SetConstant(d, "COL_R_ZONE_NAME",SWIG_From_int((int)(303)));
+  SWIG_Python_SetConstant(d, "COL_R_TYPE_NAME",SWIG_From_int((int)(304)));
+  SWIG_Python_SetConstant(d, "COL_R_CLASS_NAME",SWIG_From_int((int)(305)));
+  SWIG_Python_SetConstant(d, "COL_R_LOC",SWIG_From_int((int)(306)));
+  SWIG_Python_SetConstant(d, "COL_R_VAULT_PATH",SWIG_From_int((int)(307)));
+  SWIG_Python_SetConstant(d, "COL_R_FREE_SPACE",SWIG_From_int((int)(308)));
+  SWIG_Python_SetConstant(d, "COL_R_RESC_INFO",SWIG_From_int((int)(309)));
+  SWIG_Python_SetConstant(d, "COL_R_RESC_COMMENT",SWIG_From_int((int)(310)));
+  SWIG_Python_SetConstant(d, "COL_R_CREATE_TIME",SWIG_From_int((int)(311)));
+  SWIG_Python_SetConstant(d, "COL_R_MODIFY_TIME",SWIG_From_int((int)(312)));
+  SWIG_Python_SetConstant(d, "COL_R_RESC_STATUS",SWIG_From_int((int)(313)));
+  SWIG_Python_SetConstant(d, "COL_R_FREE_SPACE_TIME",SWIG_From_int((int)(314)));
+  SWIG_Python_SetConstant(d, "COL_D_DATA_ID",SWIG_From_int((int)(401)));
+  SWIG_Python_SetConstant(d, "COL_D_COLL_ID",SWIG_From_int((int)(402)));
+  SWIG_Python_SetConstant(d, "COL_DATA_NAME",SWIG_From_int((int)(403)));
+  SWIG_Python_SetConstant(d, "COL_DATA_REPL_NUM",SWIG_From_int((int)(404)));
+  SWIG_Python_SetConstant(d, "COL_DATA_VERSION",SWIG_From_int((int)(405)));
+  SWIG_Python_SetConstant(d, "COL_DATA_TYPE_NAME",SWIG_From_int((int)(406)));
+  SWIG_Python_SetConstant(d, "COL_DATA_SIZE",SWIG_From_int((int)(407)));
+  SWIG_Python_SetConstant(d, "COL_D_RESC_GROUP_NAME",SWIG_From_int((int)(408)));
+  SWIG_Python_SetConstant(d, "COL_D_RESC_NAME",SWIG_From_int((int)(409)));
+  SWIG_Python_SetConstant(d, "COL_D_DATA_PATH",SWIG_From_int((int)(410)));
+  SWIG_Python_SetConstant(d, "COL_D_OWNER_NAME",SWIG_From_int((int)(411)));
+  SWIG_Python_SetConstant(d, "COL_D_OWNER_ZONE",SWIG_From_int((int)(412)));
+  SWIG_Python_SetConstant(d, "COL_D_REPL_STATUS",SWIG_From_int((int)(413)));
+  SWIG_Python_SetConstant(d, "COL_D_DATA_STATUS",SWIG_From_int((int)(414)));
+  SWIG_Python_SetConstant(d, "COL_D_DATA_CHECKSUM",SWIG_From_int((int)(415)));
+  SWIG_Python_SetConstant(d, "COL_D_EXPIRY",SWIG_From_int((int)(416)));
+  SWIG_Python_SetConstant(d, "COL_D_MAP_ID",SWIG_From_int((int)(417)));
+  SWIG_Python_SetConstant(d, "COL_D_COMMENTS",SWIG_From_int((int)(418)));
+  SWIG_Python_SetConstant(d, "COL_D_CREATE_TIME",SWIG_From_int((int)(419)));
+  SWIG_Python_SetConstant(d, "COL_D_MODIFY_TIME",SWIG_From_int((int)(420)));
+  SWIG_Python_SetConstant(d, "COL_DATA_MODE",SWIG_From_int((int)(421)));
+  SWIG_Python_SetConstant(d, "COL_COLL_ID",SWIG_From_int((int)(500)));
+  SWIG_Python_SetConstant(d, "COL_COLL_NAME",SWIG_From_int((int)(501)));
+  SWIG_Python_SetConstant(d, "COL_COLL_PARENT_NAME",SWIG_From_int((int)(502)));
+  SWIG_Python_SetConstant(d, "COL_COLL_OWNER_NAME",SWIG_From_int((int)(503)));
+  SWIG_Python_SetConstant(d, "COL_COLL_OWNER_ZONE",SWIG_From_int((int)(504)));
+  SWIG_Python_SetConstant(d, "COL_COLL_MAP_ID",SWIG_From_int((int)(505)));
+  SWIG_Python_SetConstant(d, "COL_COLL_INHERITANCE",SWIG_From_int((int)(506)));
+  SWIG_Python_SetConstant(d, "COL_COLL_COMMENTS",SWIG_From_int((int)(507)));
+  SWIG_Python_SetConstant(d, "COL_COLL_CREATE_TIME",SWIG_From_int((int)(508)));
+  SWIG_Python_SetConstant(d, "COL_COLL_MODIFY_TIME",SWIG_From_int((int)(509)));
+  SWIG_Python_SetConstant(d, "COL_COLL_TYPE",SWIG_From_int((int)(510)));
+  SWIG_Python_SetConstant(d, "COL_COLL_INFO1",SWIG_From_int((int)(511)));
+  SWIG_Python_SetConstant(d, "COL_COLL_INFO2",SWIG_From_int((int)(512)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_NAME",SWIG_From_int((int)(600)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_VALUE",SWIG_From_int((int)(601)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_UNITS",SWIG_From_int((int)(602)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_ID",SWIG_From_int((int)(603)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_CREATE_TIME",SWIG_From_int((int)(604)));
+  SWIG_Python_SetConstant(d, "COL_META_DATA_MODIFY_TIME",SWIG_From_int((int)(605)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_NAME",SWIG_From_int((int)(610)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_VALUE",SWIG_From_int((int)(611)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_UNITS",SWIG_From_int((int)(612)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_ID",SWIG_From_int((int)(613)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_CREATE_TIME",SWIG_From_int((int)(614)));
+  SWIG_Python_SetConstant(d, "COL_META_COLL_MODIFY_TIME",SWIG_From_int((int)(615)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_COLL",SWIG_From_int((int)(620)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_DATA",SWIG_From_int((int)(621)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RESC",SWIG_From_int((int)(622)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_USER",SWIG_From_int((int)(623)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RESC_GROUP",SWIG_From_int((int)(624)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RULE",SWIG_From_int((int)(625)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_MSRVC",SWIG_From_int((int)(626)));
+  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_MET2",SWIG_From_int((int)(627)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_NAME",SWIG_From_int((int)(630)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_VALUE",SWIG_From_int((int)(631)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_UNITS",SWIG_From_int((int)(632)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_ID",SWIG_From_int((int)(633)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_CREATE_TIME",SWIG_From_int((int)(634)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_MODIFY_TIME",SWIG_From_int((int)(635)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_NAME",SWIG_From_int((int)(640)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_VALUE",SWIG_From_int((int)(641)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_UNITS",SWIG_From_int((int)(642)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_ID",SWIG_From_int((int)(643)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_CREATE_TIME",SWIG_From_int((int)(644)));
+  SWIG_Python_SetConstant(d, "COL_META_USER_MODIFY_TIME",SWIG_From_int((int)(645)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_NAME",SWIG_From_int((int)(650)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_VALUE",SWIG_From_int((int)(651)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_UNITS",SWIG_From_int((int)(652)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_ID",SWIG_From_int((int)(653)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_CREATE_TIME",SWIG_From_int((int)(654)));
+  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_MODIFY_TIME",SWIG_From_int((int)(655)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_NAME",SWIG_From_int((int)(660)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_VALUE",SWIG_From_int((int)(661)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_UNITS",SWIG_From_int((int)(662)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_ID",SWIG_From_int((int)(663)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_CREATE_TIME",SWIG_From_int((int)(664)));
+  SWIG_Python_SetConstant(d, "COL_META_RULE_MODIFY_TIME",SWIG_From_int((int)(665)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_NAME",SWIG_From_int((int)(670)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_VALUE",SWIG_From_int((int)(671)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_UNITS",SWIG_From_int((int)(672)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_ID",SWIG_From_int((int)(673)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_CREATE_TIME",SWIG_From_int((int)(674)));
+  SWIG_Python_SetConstant(d, "COL_META_MSRVC_MODIFY_TIME",SWIG_From_int((int)(675)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_NAME",SWIG_From_int((int)(680)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_VALUE",SWIG_From_int((int)(681)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_UNITS",SWIG_From_int((int)(682)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_ID",SWIG_From_int((int)(683)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_CREATE_TIME",SWIG_From_int((int)(684)));
+  SWIG_Python_SetConstant(d, "COL_META_MET2_MODIFY_TIME",SWIG_From_int((int)(685)));
+  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_TYPE",SWIG_From_int((int)(700)));
+  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_NAME",SWIG_From_int((int)(701)));
+  SWIG_Python_SetConstant(d, "COL_DATA_TOKEN_NAMESPACE",SWIG_From_int((int)(702)));
+  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_USER_ID",SWIG_From_int((int)(703)));
+  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_DATA_ID",SWIG_From_int((int)(704)));
+  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_TYPE",SWIG_From_int((int)(710)));
+  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_NAME",SWIG_From_int((int)(711)));
+  SWIG_Python_SetConstant(d, "COL_COLL_TOKEN_NAMESPACE",SWIG_From_int((int)(712)));
+  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_USER_ID",SWIG_From_int((int)(713)));
+  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_COLL_ID",SWIG_From_int((int)(714)));
+  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_TYPE",SWIG_From_int((int)(720)));
+  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_NAME",SWIG_From_int((int)(721)));
+  SWIG_Python_SetConstant(d, "COL_RESC_TOKEN_NAMESPACE",SWIG_From_int((int)(722)));
+  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_USER_ID",SWIG_From_int((int)(723)));
+  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_RESC_ID",SWIG_From_int((int)(724)));
+  SWIG_Python_SetConstant(d, "COL_META_ACCESS_TYPE",SWIG_From_int((int)(730)));
+  SWIG_Python_SetConstant(d, "COL_META_ACCESS_NAME",SWIG_From_int((int)(731)));
+  SWIG_Python_SetConstant(d, "COL_META_TOKEN_NAMESPACE",SWIG_From_int((int)(732)));
+  SWIG_Python_SetConstant(d, "COL_META_ACCESS_USER_ID",SWIG_From_int((int)(733)));
+  SWIG_Python_SetConstant(d, "COL_META_ACCESS_META_ID",SWIG_From_int((int)(734)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_TYPE",SWIG_From_int((int)(740)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_NAME",SWIG_From_int((int)(741)));
+  SWIG_Python_SetConstant(d, "COL_RULE_TOKEN_NAMESPACE",SWIG_From_int((int)(742)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_USER_ID",SWIG_From_int((int)(743)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_RULE_ID",SWIG_From_int((int)(744)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_TYPE",SWIG_From_int((int)(750)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_NAME",SWIG_From_int((int)(751)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_TOKEN_NAMESPACE",SWIG_From_int((int)(752)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_USER_ID",SWIG_From_int((int)(753)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_MSRVC_ID",SWIG_From_int((int)(754)));
+  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_RESC_ID",SWIG_From_int((int)(800)));
+  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_NAME",SWIG_From_int((int)(801)));
+  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_ID",SWIG_From_int((int)(802)));
+  SWIG_Python_SetConstant(d, "COL_USER_GROUP_ID",SWIG_From_int((int)(900)));
+  SWIG_Python_SetConstant(d, "COL_USER_GROUP_NAME",SWIG_From_int((int)(901)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ID",SWIG_From_int((int)(1000)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_NAME",SWIG_From_int((int)(1001)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_REI_FILE_PATH",SWIG_From_int((int)(1002)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_USER_NAME",SWIG_From_int((int)(1003)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ADDRESS",SWIG_From_int((int)(1004)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_TIME",SWIG_From_int((int)(1005)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_FREQUENCY",SWIG_From_int((int)(1006)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_PRIORITY",SWIG_From_int((int)(1007)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ESTIMATED_EXE_TIME",SWIG_From_int((int)(1008)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_NOTIFICATION_ADDR",SWIG_From_int((int)(1009)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_LAST_EXE_TIME",SWIG_From_int((int)(1010)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_STATUS",SWIG_From_int((int)(1011)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_NAMESPACE",SWIG_From_int((int)(1100)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_ID",SWIG_From_int((int)(1101)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_NAME",SWIG_From_int((int)(1102)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE",SWIG_From_int((int)(1103)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE2",SWIG_From_int((int)(1104)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE3",SWIG_From_int((int)(1105)));
+  SWIG_Python_SetConstant(d, "COL_TOKEN_COMMENT",SWIG_From_int((int)(1106)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_OBJ_ID",SWIG_From_int((int)(1200)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_USER_ID",SWIG_From_int((int)(1201)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_ACTION_ID",SWIG_From_int((int)(1202)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_COMMENT",SWIG_From_int((int)(1203)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_CREATE_TIME",SWIG_From_int((int)(1204)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_MODIFY_TIME",SWIG_From_int((int)(1205)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_RANGE_START",SWIG_From_int((int)(1200)));
+  SWIG_Python_SetConstant(d, "COL_AUDIT_RANGE_END",SWIG_From_int((int)(1299)));
+  SWIG_Python_SetConstant(d, "COL_COLL_USER_NAME",SWIG_From_int((int)(1300)));
+  SWIG_Python_SetConstant(d, "COL_COLL_USER_ZONE",SWIG_From_int((int)(1301)));
+  SWIG_Python_SetConstant(d, "COL_DATA_USER_NAME",SWIG_From_int((int)(1310)));
+  SWIG_Python_SetConstant(d, "COL_DATA_USER_ZONE",SWIG_From_int((int)(1311)));
+  SWIG_Python_SetConstant(d, "COL_RESC_USER_NAME",SWIG_From_int((int)(1320)));
+  SWIG_Python_SetConstant(d, "COL_RESC_USER_ZONE",SWIG_From_int((int)(1321)));
+  SWIG_Python_SetConstant(d, "COL_SL_HOST_NAME",SWIG_From_int((int)(1400)));
+  SWIG_Python_SetConstant(d, "COL_SL_RESC_NAME",SWIG_From_int((int)(1401)));
+  SWIG_Python_SetConstant(d, "COL_SL_CPU_USED",SWIG_From_int((int)(1402)));
+  SWIG_Python_SetConstant(d, "COL_SL_MEM_USED",SWIG_From_int((int)(1403)));
+  SWIG_Python_SetConstant(d, "COL_SL_SWAP_USED",SWIG_From_int((int)(1404)));
+  SWIG_Python_SetConstant(d, "COL_SL_RUNQ_LOAD",SWIG_From_int((int)(1405)));
+  SWIG_Python_SetConstant(d, "COL_SL_DISK_SPACE",SWIG_From_int((int)(1406)));
+  SWIG_Python_SetConstant(d, "COL_SL_NET_INPUT",SWIG_From_int((int)(1407)));
+  SWIG_Python_SetConstant(d, "COL_SL_NET_OUTPUT",SWIG_From_int((int)(1408)));
+  SWIG_Python_SetConstant(d, "COL_SL_CREATE_TIME",SWIG_From_int((int)(1409)));
+  SWIG_Python_SetConstant(d, "COL_SLD_RESC_NAME",SWIG_From_int((int)(1500)));
+  SWIG_Python_SetConstant(d, "COL_SLD_LOAD_FACTOR",SWIG_From_int((int)(1501)));
+  SWIG_Python_SetConstant(d, "COL_SLD_CREATE_TIME",SWIG_From_int((int)(1502)));
+  SWIG_Python_SetConstant(d, "COL_USER_AUTH_ID",SWIG_From_int((int)(1600)));
+  SWIG_Python_SetConstant(d, "COL_USER_DN",SWIG_From_int((int)(1601)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ID",SWIG_From_int((int)(1700)));
+  SWIG_Python_SetConstant(d, "COL_RULE_VERSION",SWIG_From_int((int)(1701)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_NAME",SWIG_From_int((int)(1702)));
+  SWIG_Python_SetConstant(d, "COL_RULE_NAME",SWIG_From_int((int)(1703)));
+  SWIG_Python_SetConstant(d, "COL_RULE_EVENT",SWIG_From_int((int)(1704)));
+  SWIG_Python_SetConstant(d, "COL_RULE_CONDITION",SWIG_From_int((int)(1705)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BODY",SWIG_From_int((int)(1706)));
+  SWIG_Python_SetConstant(d, "COL_RULE_RECOVERY",SWIG_From_int((int)(1707)));
+  SWIG_Python_SetConstant(d, "COL_RULE_STATUS",SWIG_From_int((int)(1708)));
+  SWIG_Python_SetConstant(d, "COL_RULE_OWNER_NAME",SWIG_From_int((int)(1709)));
+  SWIG_Python_SetConstant(d, "COL_RULE_OWNER_ZONE",SWIG_From_int((int)(1710)));
+  SWIG_Python_SetConstant(d, "COL_RULE_DESCR_1",SWIG_From_int((int)(1711)));
+  SWIG_Python_SetConstant(d, "COL_RULE_DESCR_2",SWIG_From_int((int)(1712)));
+  SWIG_Python_SetConstant(d, "COL_RULE_INPUT_PARAMS",SWIG_From_int((int)(1713)));
+  SWIG_Python_SetConstant(d, "COL_RULE_OUTPUT_PARAMS",SWIG_From_int((int)(1714)));
+  SWIG_Python_SetConstant(d, "COL_RULE_DOLLAR_VARS",SWIG_From_int((int)(1715)));
+  SWIG_Python_SetConstant(d, "COL_RULE_ICAT_ELEMENTS",SWIG_From_int((int)(1716)));
+  SWIG_Python_SetConstant(d, "COL_RULE_SIDEEFFECTS",SWIG_From_int((int)(1717)));
+  SWIG_Python_SetConstant(d, "COL_RULE_COMMENT",SWIG_From_int((int)(1718)));
+  SWIG_Python_SetConstant(d, "COL_RULE_CREATE_TIME",SWIG_From_int((int)(1719)));
+  SWIG_Python_SetConstant(d, "COL_RULE_MODIFY_TIME",SWIG_From_int((int)(1720)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_VERSION",SWIG_From_int((int)(1721)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1722)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1723)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1724)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_COMMENT",SWIG_From_int((int)(1725)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1726)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1727)));
+  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_PRIORITY",SWIG_From_int((int)(1728)));
+  SWIG_Python_SetConstant(d, "COL_DVM_ID",SWIG_From_int((int)(1800)));
+  SWIG_Python_SetConstant(d, "COL_DVM_VERSION",SWIG_From_int((int)(1801)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_NAME",SWIG_From_int((int)(1802)));
+  SWIG_Python_SetConstant(d, "COL_DVM_EXT_VAR_NAME",SWIG_From_int((int)(1803)));
+  SWIG_Python_SetConstant(d, "COL_DVM_CONDITION",SWIG_From_int((int)(1804)));
+  SWIG_Python_SetConstant(d, "COL_DVM_INT_MAP_PATH",SWIG_From_int((int)(1805)));
+  SWIG_Python_SetConstant(d, "COL_DVM_STATUS",SWIG_From_int((int)(1806)));
+  SWIG_Python_SetConstant(d, "COL_DVM_OWNER_NAME",SWIG_From_int((int)(1807)));
+  SWIG_Python_SetConstant(d, "COL_DVM_OWNER_ZONE",SWIG_From_int((int)(1808)));
+  SWIG_Python_SetConstant(d, "COL_DVM_COMMENT",SWIG_From_int((int)(1809)));
+  SWIG_Python_SetConstant(d, "COL_DVM_CREATE_TIME",SWIG_From_int((int)(1810)));
+  SWIG_Python_SetConstant(d, "COL_DVM_MODIFY_TIME",SWIG_From_int((int)(1811)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_VERSION",SWIG_From_int((int)(1812)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1813)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1814)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1815)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_COMMENT",SWIG_From_int((int)(1816)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1817)));
+  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1818)));
+  SWIG_Python_SetConstant(d, "COL_FNM_ID",SWIG_From_int((int)(1900)));
+  SWIG_Python_SetConstant(d, "COL_FNM_VERSION",SWIG_From_int((int)(1901)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_NAME",SWIG_From_int((int)(1902)));
+  SWIG_Python_SetConstant(d, "COL_FNM_EXT_FUNC_NAME",SWIG_From_int((int)(1903)));
+  SWIG_Python_SetConstant(d, "COL_FNM_INT_FUNC_NAME",SWIG_From_int((int)(1904)));
+  SWIG_Python_SetConstant(d, "COL_FNM_STATUS",SWIG_From_int((int)(1905)));
+  SWIG_Python_SetConstant(d, "COL_FNM_OWNER_NAME",SWIG_From_int((int)(1906)));
+  SWIG_Python_SetConstant(d, "COL_FNM_OWNER_ZONE",SWIG_From_int((int)(1907)));
+  SWIG_Python_SetConstant(d, "COL_FNM_COMMENT",SWIG_From_int((int)(1908)));
+  SWIG_Python_SetConstant(d, "COL_FNM_CREATE_TIME",SWIG_From_int((int)(1909)));
+  SWIG_Python_SetConstant(d, "COL_FNM_MODIFY_TIME",SWIG_From_int((int)(1910)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_VERSION",SWIG_From_int((int)(1911)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1912)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1913)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1914)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_COMMENT",SWIG_From_int((int)(1915)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1916)));
+  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1917)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_ID",SWIG_From_int((int)(2000)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_RESC_ID",SWIG_From_int((int)(2001)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_LIMIT",SWIG_From_int((int)(2002)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_OVER",SWIG_From_int((int)(2003)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_MODIFY_TIME",SWIG_From_int((int)(2004)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_USER_ID",SWIG_From_int((int)(2010)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_RESC_ID",SWIG_From_int((int)(2011)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE",SWIG_From_int((int)(2012)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_MODIFY_TIME",SWIG_From_int((int)(2013)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_RESC_NAME",SWIG_From_int((int)(2020)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_NAME",SWIG_From_int((int)(2021)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_ZONE",SWIG_From_int((int)(2022)));
+  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_TYPE",SWIG_From_int((int)(2023)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_ID",SWIG_From_int((int)(2100)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_NAME",SWIG_From_int((int)(2101)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_SIGNATURE",SWIG_From_int((int)(2102)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_DOXYGEN",SWIG_From_int((int)(2103)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VARIATIONS",SWIG_From_int((int)(2104)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_STATUS",SWIG_From_int((int)(2105)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_OWNER_NAME",SWIG_From_int((int)(2106)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_OWNER_ZONE",SWIG_From_int((int)(2107)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_COMMENT",SWIG_From_int((int)(2108)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_CREATE_TIME",SWIG_From_int((int)(2109)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_MODIFY_TIME",SWIG_From_int((int)(2110)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VERSION",SWIG_From_int((int)(2111)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_HOST",SWIG_From_int((int)(2112)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_LOCATION",SWIG_From_int((int)(2113)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_LANGUAGE",SWIG_From_int((int)(2114)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_TYPE_NAME",SWIG_From_int((int)(2115)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_MODULE_NAME",SWIG_From_int((int)(2116)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_OWNER_NAME",SWIG_From_int((int)(2150)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_OWNER_ZONE",SWIG_From_int((int)(2151)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_COMMENT",SWIG_From_int((int)(2152)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_CREATE_TIME",SWIG_From_int((int)(2153)));
+  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_MODIFY_TIME",SWIG_From_int((int)(2154)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ID",SWIG_From_int((int)(2200)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_STRING",SWIG_From_int((int)(2201)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_TYPE",SWIG_From_int((int)(2202)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_USER_ID",SWIG_From_int((int)(2203)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_OBJECT_ID",SWIG_From_int((int)(2204)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_OBJECT_TYPE",SWIG_From_int((int)(2205)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_USES_LIMIT",SWIG_From_int((int)(2206)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_USES_COUNT",SWIG_From_int((int)(2207)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_EXPIRY_TS",SWIG_From_int((int)(2208)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_CREATE_TIME",SWIG_From_int((int)(2209)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_MODIFY_TIME",SWIG_From_int((int)(2210)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_FILE_COUNT",SWIG_From_int((int)(2211)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_FILE_LIMIT",SWIG_From_int((int)(2212)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_BYTE_COUNT",SWIG_From_int((int)(2213)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_BYTE_LIMIT",SWIG_From_int((int)(2214)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_HOST_TICKET_ID",SWIG_From_int((int)(2220)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_HOST",SWIG_From_int((int)(2221)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_USER_TICKET_ID",SWIG_From_int((int)(2222)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_USER_NAME",SWIG_From_int((int)(2223)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_GROUP_TICKET_ID",SWIG_From_int((int)(2224)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_GROUP_NAME",SWIG_From_int((int)(2225)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_DATA_NAME",SWIG_From_int((int)(2226)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_DATA_COLL_NAME",SWIG_From_int((int)(2227)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_COLL_NAME",SWIG_From_int((int)(2228)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_OWNER_NAME",SWIG_From_int((int)(2229)));
+  SWIG_Python_SetConstant(d, "COL_TICKET_OWNER_ZONE",SWIG_From_int((int)(2230)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_OBJ_ID",SWIG_From_int((int)(2300)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_UID",SWIG_From_int((int)(2301)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_GID",SWIG_From_int((int)(2302)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_OWNER",SWIG_From_int((int)(2303)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_GROUP",SWIG_From_int((int)(2304)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MODE",SWIG_From_int((int)(2305)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_CTIME",SWIG_From_int((int)(2306)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MTIME",SWIG_From_int((int)(2307)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_SOURCE_PATH",SWIG_From_int((int)(2308)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_CREATE_TIME",SWIG_From_int((int)(2309)));
+  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MODIFY_TIME",SWIG_From_int((int)(2310)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_OBJ_ID",SWIG_From_int((int)(2320)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_UID",SWIG_From_int((int)(2321)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_GID",SWIG_From_int((int)(2322)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_OWNER",SWIG_From_int((int)(2323)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_GROUP",SWIG_From_int((int)(2324)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MODE",SWIG_From_int((int)(2325)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_CTIME",SWIG_From_int((int)(2326)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MTIME",SWIG_From_int((int)(2327)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_SOURCE_PATH",SWIG_From_int((int)(2328)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_CREATE_TIME",SWIG_From_int((int)(2329)));
+  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MODIFY_TIME",SWIG_From_int((int)(2330)));
+  SWIG_Python_SetConstant(d, "SINGLE_MSG_TICKET",SWIG_From_int((int)(0)));
+  SWIG_Python_SetConstant(d, "MULTI_MSG_TICKET",SWIG_From_int((int)(1)));
+  SWIG_Python_SetConstant(d, "ACCESS_NULL",SWIG_FromCharPtr("null"));
+  SWIG_Python_SetConstant(d, "ACCESS_EXECUTE",SWIG_FromCharPtr("execute"));
+  SWIG_Python_SetConstant(d, "ACCESS_READ_ANNOTATION",SWIG_FromCharPtr("read annotation"));
+  SWIG_Python_SetConstant(d, "ACCESS_READ_SYSTEM_METADATA",SWIG_FromCharPtr("read system metadata"));
+  SWIG_Python_SetConstant(d, "ACCESS_READ_METADATA",SWIG_FromCharPtr("read metadata"));
+  SWIG_Python_SetConstant(d, "ACCESS_READ_OBJECT",SWIG_FromCharPtr("read object"));
+  SWIG_Python_SetConstant(d, "ACCESS_WRITE_ANNOTATION",SWIG_FromCharPtr("write annotation"));
+  SWIG_Python_SetConstant(d, "ACCESS_CREATE_METADATA",SWIG_FromCharPtr("create metadata"));
+  SWIG_Python_SetConstant(d, "ACCESS_MODIFY_METADATA",SWIG_FromCharPtr("modify metadata"));
+  SWIG_Python_SetConstant(d, "ACCESS_DELETE_METADATA",SWIG_FromCharPtr("delete metadata"));
+  SWIG_Python_SetConstant(d, "ACCESS_ADMINISTER_OBJECT",SWIG_FromCharPtr("administer object"));
+  SWIG_Python_SetConstant(d, "ACCESS_CREATE_OBJECT",SWIG_FromCharPtr("create object"));
+  SWIG_Python_SetConstant(d, "ACCESS_MODIFY_OBJECT",SWIG_FromCharPtr("modify object"));
+  SWIG_Python_SetConstant(d, "ACCESS_DELETE_OBJECT",SWIG_FromCharPtr("delete object"));
+  SWIG_Python_SetConstant(d, "ACCESS_CREATE_TOKEN",SWIG_FromCharPtr("create token"));
+  SWIG_Python_SetConstant(d, "ACCESS_DELETE_TOKEN",SWIG_FromCharPtr("delete token"));
+  SWIG_Python_SetConstant(d, "ACCESS_CURATE",SWIG_FromCharPtr("curate"));
+  SWIG_Python_SetConstant(d, "ACCESS_OWN",SWIG_FromCharPtr("own"));
+  SWIG_Python_SetConstant(d, "ACCESS_INHERIT",SWIG_FromCharPtr("inherit"));
+  SWIG_Python_SetConstant(d, "ACCESS_NO_INHERIT",SWIG_FromCharPtr("noinherit"));
+  SWIG_Python_SetConstant(d, "AU_ACCESS_GRANTED",SWIG_From_int((int)(1000)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_DATA_OBJ",SWIG_From_int((int)(2010)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_DATA_REPLICA",SWIG_From_int((int)(2011)));
+  SWIG_Python_SetConstant(d, "AU_UNREGISTER_DATA_OBJ",SWIG_From_int((int)(2012)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_DELAYED_RULE",SWIG_From_int((int)(2020)));
+  SWIG_Python_SetConstant(d, "AU_MODIFY_DELAYED_RULE",SWIG_From_int((int)(2021)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_DELAYED_RULE",SWIG_From_int((int)(2022)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_RESOURCE",SWIG_From_int((int)(2030)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_RESOURCE",SWIG_From_int((int)(2031)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_USER_RE",SWIG_From_int((int)(2040)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_COLL_BY_ADMIN",SWIG_From_int((int)(2050)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_COLL",SWIG_From_int((int)(2051)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_COLL_BY_ADMIN",SWIG_From_int((int)(2060)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_COLL",SWIG_From_int((int)(2061)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_ZONE",SWIG_From_int((int)(2062)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_ZONE",SWIG_From_int((int)(2064)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_NAME",SWIG_From_int((int)(2070)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_TYPE",SWIG_From_int((int)(2071)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_ZONE",SWIG_From_int((int)(2072)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_DN",SWIG_From_int((int)(2073)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_INFO",SWIG_From_int((int)(2074)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_COMMENT",SWIG_From_int((int)(2075)));
+  SWIG_Python_SetConstant(d, "AU_MOD_USER_PASSWORD",SWIG_From_int((int)(2076)));
+  SWIG_Python_SetConstant(d, "AU_ADD_USER_AUTH_NAME",SWIG_From_int((int)(2077)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_USER_AUTH_NAME",SWIG_From_int((int)(2078)));
+  SWIG_Python_SetConstant(d, "AU_MOD_GROUP",SWIG_From_int((int)(2080)));
+  SWIG_Python_SetConstant(d, "AU_MOD_RESC",SWIG_From_int((int)(2090)));
+  SWIG_Python_SetConstant(d, "AU_MOD_RESC_FREE_SPACE",SWIG_From_int((int)(2091)));
+  SWIG_Python_SetConstant(d, "AU_MOD_RESC_GROUP",SWIG_From_int((int)(2092)));
+  SWIG_Python_SetConstant(d, "AU_MOD_ZONE",SWIG_From_int((int)(2093)));
+  SWIG_Python_SetConstant(d, "AU_REGISTER_USER_RE",SWIG_From_int((int)(2100)));
+  SWIG_Python_SetConstant(d, "AU_ADD_AVU_METADATA",SWIG_From_int((int)(2110)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_AVU_METADATA",SWIG_From_int((int)(2111)));
+  SWIG_Python_SetConstant(d, "AU_COPY_AVU_METADATA",SWIG_From_int((int)(2112)));
+  SWIG_Python_SetConstant(d, "AU_ADD_AVU_WILD_METADATA",SWIG_From_int((int)(2113)));
+  SWIG_Python_SetConstant(d, "AU_MOD_ACCESS_CONTROL_OBJ",SWIG_From_int((int)(2120)));
+  SWIG_Python_SetConstant(d, "AU_MOD_ACCESS_CONTROL_COLL",SWIG_From_int((int)(2121)));
+  SWIG_Python_SetConstant(d, "AU_MOD_ACCESS_CONTROL_COLL_RECURSIVE",SWIG_From_int((int)(2122)));
+  SWIG_Python_SetConstant(d, "AU_MOD_ACCESS_CONTROL_RESOURCE",SWIG_From_int((int)(2123)));
+  SWIG_Python_SetConstant(d, "AU_RENAME_DATA_OBJ",SWIG_From_int((int)(2130)));
+  SWIG_Python_SetConstant(d, "AU_RENAME_COLLECTION",SWIG_From_int((int)(2131)));
+  SWIG_Python_SetConstant(d, "AU_MOVE_DATA_OBJ",SWIG_From_int((int)(2140)));
+  SWIG_Python_SetConstant(d, "AU_MOVE_COLL",SWIG_From_int((int)(2141)));
+  SWIG_Python_SetConstant(d, "AU_REG_TOKEN",SWIG_From_int((int)(2150)));
+  SWIG_Python_SetConstant(d, "AU_DEL_TOKEN",SWIG_From_int((int)(2151)));
+  SWIG_Python_SetConstant(d, "AU_CREATE_TICKET",SWIG_From_int((int)(2160)));
+  SWIG_Python_SetConstant(d, "AU_MOD_TICKET",SWIG_From_int((int)(2161)));
+  SWIG_Python_SetConstant(d, "AU_DELETE_TICKET",SWIG_From_int((int)(2162)));
+  SWIG_Python_SetConstant(d, "AU_USE_TICKET",SWIG_From_int((int)(2163)));
+  SWIG_Python_SetConstant(d, "COLL_CLOSED",SWIG_From_int((int)(COLL_CLOSED)));
+  SWIG_Python_SetConstant(d, "COLL_OPENED",SWIG_From_int((int)(COLL_OPENED)));
+  SWIG_Python_SetConstant(d, "COLL_DATA_OBJ_QUERIED",SWIG_From_int((int)(COLL_DATA_OBJ_QUERIED)));
+  SWIG_Python_SetConstant(d, "COLL_COLL_OBJ_QUERIED",SWIG_From_int((int)(COLL_COLL_OBJ_QUERIED)));
   SWIG_Python_SetConstant(d, "UNKNOWN_ST",SWIG_From_int((int)(UNKNOWN_ST)));
   SWIG_Python_SetConstant(d, "NOT_EXIST_ST",SWIG_From_int((int)(NOT_EXIST_ST)));
   SWIG_Python_SetConstant(d, "EXIST_ST",SWIG_From_int((int)(EXIST_ST)));
@@ -54933,25 +55387,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SYS_HANDLER_DONE_WITH_ERROR",SWIG_From_int((int)(-99999997)));
   SWIG_Python_SetConstant(d, "SYS_HANDLER_DONE_NO_ERROR",SWIG_From_int((int)(-99999998)));
   SWIG_Python_SetConstant(d, "SYS_NO_HANDLER_REPLY_MSG",SWIG_From_int((int)(-99999999)));
-  SWIG_Python_SetConstant(d, "NO_CHK_PERM_FLAG",SWIG_From_int((int)(0x1)));
-  SWIG_Python_SetConstant(d, "UNIQUE_REM_COMM_FLAG",SWIG_From_int((int)(0x2)));
-  SWIG_Python_SetConstant(d, "FORCE_FLAG",SWIG_From_int((int)(0x4)));
-  SWIG_Python_SetConstant(d, "RMDIR_RECUR",SWIG_From_int((int)(0x1)));
-  SWIG_Python_SetConstant(d, "PURGE_STRUCT_FILE_CACHE",SWIG_From_int((int)(0x1)));
-  SWIG_Python_SetConstant(d, "DELETE_STRUCT_FILE",SWIG_From_int((int)(0x2)));
-  SWIG_Python_SetConstant(d, "NO_REG_COLL_INFO",SWIG_From_int((int)(0x4)));
-  SWIG_Python_SetConstant(d, "LOGICAL_BUNDLE",SWIG_From_int((int)(0x8)));
-  SWIG_Python_SetConstant(d, "CREATE_TAR_OPR",SWIG_From_int((int)(0x0)));
-  SWIG_Python_SetConstant(d, "ADD_TO_TAR_OPR",SWIG_From_int((int)(0x10)));
-  SWIG_Python_SetConstant(d, "PRESERVE_COLL_PATH",SWIG_From_int((int)(0x20)));
-  SWIG_Python_SetConstant(d, "PRESERVE_DIR_CONT",SWIG_From_int((int)(0x40)));
-  SWIG_Python_SetConstant(d, "O_RDONLY",SWIG_From_int((int)(0)));
-  SWIG_Python_SetConstant(d, "O_WRONLY",SWIG_From_int((int)(1)));
-  SWIG_Python_SetConstant(d, "O_RDWR",SWIG_From_int((int)(2)));
-  SWIG_Python_SetConstant(d, "O_CREAT",SWIG_From_int((int)(64)));
-  SWIG_Python_SetConstant(d, "SEEK_SET",SWIG_From_int((int)(0)));
-  SWIG_Python_SetConstant(d, "SEEK_CUR",SWIG_From_int((int)(1)));
-  SWIG_Python_SetConstant(d, "SEEK_END",SWIG_From_int((int)(2)));
   SWIG_Python_SetConstant(d, "ALL_KW",SWIG_FromCharPtr("all"));
   SWIG_Python_SetConstant(d, "COPIES_KW",SWIG_FromCharPtr("copies"));
   SWIG_Python_SetConstant(d, "EXEC_LOCALLY_KW",SWIG_FromCharPtr("execLocally"));
@@ -55127,385 +55562,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "RULE_NOTIFICATION_ADDR_KW",SWIG_FromCharPtr("notificationAddr"));
   SWIG_Python_SetConstant(d, "RULE_LAST_EXE_TIME_KW",SWIG_FromCharPtr("lastExeTime"));
   SWIG_Python_SetConstant(d, "RULE_EXE_STATUS_KW",SWIG_FromCharPtr("exeStatus"));
-  SWIG_Python_SetConstant(d, "LOG_SQL",SWIG_From_int((int)(11)));
-  SWIG_Python_SetConstant(d, "LOG_DEBUG1",SWIG_From_int((int)(10)));
-  SWIG_Python_SetConstant(d, "LOG_DEBUG2",SWIG_From_int((int)(9)));
-  SWIG_Python_SetConstant(d, "LOG_DEBUG3",SWIG_From_int((int)(8)));
-  SWIG_Python_SetConstant(d, "LOG_DEBUG",SWIG_From_int((int)(7)));
-  SWIG_Python_SetConstant(d, "LOG_NOTICE",SWIG_From_int((int)(5)));
-  SWIG_Python_SetConstant(d, "LOG_ERROR",SWIG_From_int((int)(3)));
-  SWIG_Python_SetConstant(d, "LOG_SYS_WARNING",SWIG_From_int((int)(2)));
-  SWIG_Python_SetConstant(d, "LOG_SYS_FATAL",SWIG_From_int((int)(1)));
-  SWIG_Python_SetConstant(d, "ALLOW_NO_SRC_FLAG",SWIG_From_int((int)(0x1)));
-  SWIG_Python_SetConstant(d, "MAX_SQL_ATTR",SWIG_From_int((int)(50)));
-  SWIG_Python_SetConstant(d, "MAX_SQL_ROWS",SWIG_From_int((int)(256)));
-  SWIG_Python_SetConstant(d, "ORDER_BY",SWIG_From_int((int)(0x400)));
-  SWIG_Python_SetConstant(d, "ORDER_BY_DESC",SWIG_From_int((int)(0x800)));
-  SWIG_Python_SetConstant(d, "RETURN_TOTAL_ROW_COUNT",SWIG_From_int((int)(0x20)));
-  SWIG_Python_SetConstant(d, "NO_DISTINCT",SWIG_From_int((int)(0x40)));
-  SWIG_Python_SetConstant(d, "QUOTA_QUERY",SWIG_From_int((int)(0x80)));
-  SWIG_Python_SetConstant(d, "AUTO_CLOSE",SWIG_From_int((int)(0x100)));
-  SWIG_Python_SetConstant(d, "UPPER_CASE_WHERE",SWIG_From_int((int)(0x200)));
-  SWIG_Python_SetConstant(d, "SELECT_MIN",SWIG_From_int((int)(2)));
-  SWIG_Python_SetConstant(d, "SELECT_MAX",SWIG_From_int((int)(3)));
-  SWIG_Python_SetConstant(d, "SELECT_SUM",SWIG_From_int((int)(4)));
-  SWIG_Python_SetConstant(d, "SELECT_AVG",SWIG_From_int((int)(5)));
-  SWIG_Python_SetConstant(d, "SELECT_COUNT",SWIG_From_int((int)(6)));
-  SWIG_Python_SetConstant(d, "MAX_CORE_TABLE_VALUE",SWIG_From_int((int)(10000)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_ID",SWIG_From_int((int)(101)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_NAME",SWIG_From_int((int)(102)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_TYPE",SWIG_From_int((int)(103)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_CONNECTION",SWIG_From_int((int)(104)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_COMMENT",SWIG_From_int((int)(105)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_CREATE_TIME",SWIG_From_int((int)(106)));
-  SWIG_Python_SetConstant(d, "COL_ZONE_MODIFY_TIME",SWIG_From_int((int)(107)));
-  SWIG_Python_SetConstant(d, "COL_USER_ID",SWIG_From_int((int)(201)));
-  SWIG_Python_SetConstant(d, "COL_USER_NAME",SWIG_From_int((int)(202)));
-  SWIG_Python_SetConstant(d, "COL_USER_TYPE",SWIG_From_int((int)(203)));
-  SWIG_Python_SetConstant(d, "COL_USER_ZONE",SWIG_From_int((int)(204)));
-  SWIG_Python_SetConstant(d, "COL_USER_INFO",SWIG_From_int((int)(206)));
-  SWIG_Python_SetConstant(d, "COL_USER_COMMENT",SWIG_From_int((int)(207)));
-  SWIG_Python_SetConstant(d, "COL_USER_CREATE_TIME",SWIG_From_int((int)(208)));
-  SWIG_Python_SetConstant(d, "COL_USER_MODIFY_TIME",SWIG_From_int((int)(209)));
-  SWIG_Python_SetConstant(d, "COL_USER_DN_INVALID",SWIG_From_int((int)(205)));
-  SWIG_Python_SetConstant(d, "COL_R_RESC_ID",SWIG_From_int((int)(301)));
-  SWIG_Python_SetConstant(d, "COL_R_RESC_NAME",SWIG_From_int((int)(302)));
-  SWIG_Python_SetConstant(d, "COL_R_ZONE_NAME",SWIG_From_int((int)(303)));
-  SWIG_Python_SetConstant(d, "COL_R_TYPE_NAME",SWIG_From_int((int)(304)));
-  SWIG_Python_SetConstant(d, "COL_R_CLASS_NAME",SWIG_From_int((int)(305)));
-  SWIG_Python_SetConstant(d, "COL_R_LOC",SWIG_From_int((int)(306)));
-  SWIG_Python_SetConstant(d, "COL_R_VAULT_PATH",SWIG_From_int((int)(307)));
-  SWIG_Python_SetConstant(d, "COL_R_FREE_SPACE",SWIG_From_int((int)(308)));
-  SWIG_Python_SetConstant(d, "COL_R_RESC_INFO",SWIG_From_int((int)(309)));
-  SWIG_Python_SetConstant(d, "COL_R_RESC_COMMENT",SWIG_From_int((int)(310)));
-  SWIG_Python_SetConstant(d, "COL_R_CREATE_TIME",SWIG_From_int((int)(311)));
-  SWIG_Python_SetConstant(d, "COL_R_MODIFY_TIME",SWIG_From_int((int)(312)));
-  SWIG_Python_SetConstant(d, "COL_R_RESC_STATUS",SWIG_From_int((int)(313)));
-  SWIG_Python_SetConstant(d, "COL_R_FREE_SPACE_TIME",SWIG_From_int((int)(314)));
-  SWIG_Python_SetConstant(d, "COL_D_DATA_ID",SWIG_From_int((int)(401)));
-  SWIG_Python_SetConstant(d, "COL_D_COLL_ID",SWIG_From_int((int)(402)));
-  SWIG_Python_SetConstant(d, "COL_DATA_NAME",SWIG_From_int((int)(403)));
-  SWIG_Python_SetConstant(d, "COL_DATA_REPL_NUM",SWIG_From_int((int)(404)));
-  SWIG_Python_SetConstant(d, "COL_DATA_VERSION",SWIG_From_int((int)(405)));
-  SWIG_Python_SetConstant(d, "COL_DATA_TYPE_NAME",SWIG_From_int((int)(406)));
-  SWIG_Python_SetConstant(d, "COL_DATA_SIZE",SWIG_From_int((int)(407)));
-  SWIG_Python_SetConstant(d, "COL_D_RESC_GROUP_NAME",SWIG_From_int((int)(408)));
-  SWIG_Python_SetConstant(d, "COL_D_RESC_NAME",SWIG_From_int((int)(409)));
-  SWIG_Python_SetConstant(d, "COL_D_DATA_PATH",SWIG_From_int((int)(410)));
-  SWIG_Python_SetConstant(d, "COL_D_OWNER_NAME",SWIG_From_int((int)(411)));
-  SWIG_Python_SetConstant(d, "COL_D_OWNER_ZONE",SWIG_From_int((int)(412)));
-  SWIG_Python_SetConstant(d, "COL_D_REPL_STATUS",SWIG_From_int((int)(413)));
-  SWIG_Python_SetConstant(d, "COL_D_DATA_STATUS",SWIG_From_int((int)(414)));
-  SWIG_Python_SetConstant(d, "COL_D_DATA_CHECKSUM",SWIG_From_int((int)(415)));
-  SWIG_Python_SetConstant(d, "COL_D_EXPIRY",SWIG_From_int((int)(416)));
-  SWIG_Python_SetConstant(d, "COL_D_MAP_ID",SWIG_From_int((int)(417)));
-  SWIG_Python_SetConstant(d, "COL_D_COMMENTS",SWIG_From_int((int)(418)));
-  SWIG_Python_SetConstant(d, "COL_D_CREATE_TIME",SWIG_From_int((int)(419)));
-  SWIG_Python_SetConstant(d, "COL_D_MODIFY_TIME",SWIG_From_int((int)(420)));
-  SWIG_Python_SetConstant(d, "COL_DATA_MODE",SWIG_From_int((int)(421)));
-  SWIG_Python_SetConstant(d, "COL_COLL_ID",SWIG_From_int((int)(500)));
-  SWIG_Python_SetConstant(d, "COL_COLL_NAME",SWIG_From_int((int)(501)));
-  SWIG_Python_SetConstant(d, "COL_COLL_PARENT_NAME",SWIG_From_int((int)(502)));
-  SWIG_Python_SetConstant(d, "COL_COLL_OWNER_NAME",SWIG_From_int((int)(503)));
-  SWIG_Python_SetConstant(d, "COL_COLL_OWNER_ZONE",SWIG_From_int((int)(504)));
-  SWIG_Python_SetConstant(d, "COL_COLL_MAP_ID",SWIG_From_int((int)(505)));
-  SWIG_Python_SetConstant(d, "COL_COLL_INHERITANCE",SWIG_From_int((int)(506)));
-  SWIG_Python_SetConstant(d, "COL_COLL_COMMENTS",SWIG_From_int((int)(507)));
-  SWIG_Python_SetConstant(d, "COL_COLL_CREATE_TIME",SWIG_From_int((int)(508)));
-  SWIG_Python_SetConstant(d, "COL_COLL_MODIFY_TIME",SWIG_From_int((int)(509)));
-  SWIG_Python_SetConstant(d, "COL_COLL_TYPE",SWIG_From_int((int)(510)));
-  SWIG_Python_SetConstant(d, "COL_COLL_INFO1",SWIG_From_int((int)(511)));
-  SWIG_Python_SetConstant(d, "COL_COLL_INFO2",SWIG_From_int((int)(512)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_NAME",SWIG_From_int((int)(600)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_VALUE",SWIG_From_int((int)(601)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_UNITS",SWIG_From_int((int)(602)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_ATTR_ID",SWIG_From_int((int)(603)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_CREATE_TIME",SWIG_From_int((int)(604)));
-  SWIG_Python_SetConstant(d, "COL_META_DATA_MODIFY_TIME",SWIG_From_int((int)(605)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_NAME",SWIG_From_int((int)(610)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_VALUE",SWIG_From_int((int)(611)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_UNITS",SWIG_From_int((int)(612)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_ATTR_ID",SWIG_From_int((int)(613)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_CREATE_TIME",SWIG_From_int((int)(614)));
-  SWIG_Python_SetConstant(d, "COL_META_COLL_MODIFY_TIME",SWIG_From_int((int)(615)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_COLL",SWIG_From_int((int)(620)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_DATA",SWIG_From_int((int)(621)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RESC",SWIG_From_int((int)(622)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_USER",SWIG_From_int((int)(623)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RESC_GROUP",SWIG_From_int((int)(624)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_RULE",SWIG_From_int((int)(625)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_MSRVC",SWIG_From_int((int)(626)));
-  SWIG_Python_SetConstant(d, "COL_META_NAMESPACE_MET2",SWIG_From_int((int)(627)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_NAME",SWIG_From_int((int)(630)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_VALUE",SWIG_From_int((int)(631)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_UNITS",SWIG_From_int((int)(632)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_ATTR_ID",SWIG_From_int((int)(633)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_CREATE_TIME",SWIG_From_int((int)(634)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_MODIFY_TIME",SWIG_From_int((int)(635)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_NAME",SWIG_From_int((int)(640)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_VALUE",SWIG_From_int((int)(641)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_UNITS",SWIG_From_int((int)(642)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_ATTR_ID",SWIG_From_int((int)(643)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_CREATE_TIME",SWIG_From_int((int)(644)));
-  SWIG_Python_SetConstant(d, "COL_META_USER_MODIFY_TIME",SWIG_From_int((int)(645)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_NAME",SWIG_From_int((int)(650)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_VALUE",SWIG_From_int((int)(651)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_UNITS",SWIG_From_int((int)(652)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_ATTR_ID",SWIG_From_int((int)(653)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_CREATE_TIME",SWIG_From_int((int)(654)));
-  SWIG_Python_SetConstant(d, "COL_META_RESC_GROUP_MODIFY_TIME",SWIG_From_int((int)(655)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_NAME",SWIG_From_int((int)(660)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_VALUE",SWIG_From_int((int)(661)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_UNITS",SWIG_From_int((int)(662)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_ATTR_ID",SWIG_From_int((int)(663)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_CREATE_TIME",SWIG_From_int((int)(664)));
-  SWIG_Python_SetConstant(d, "COL_META_RULE_MODIFY_TIME",SWIG_From_int((int)(665)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_NAME",SWIG_From_int((int)(670)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_VALUE",SWIG_From_int((int)(671)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_UNITS",SWIG_From_int((int)(672)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_ATTR_ID",SWIG_From_int((int)(673)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_CREATE_TIME",SWIG_From_int((int)(674)));
-  SWIG_Python_SetConstant(d, "COL_META_MSRVC_MODIFY_TIME",SWIG_From_int((int)(675)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_NAME",SWIG_From_int((int)(680)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_VALUE",SWIG_From_int((int)(681)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_UNITS",SWIG_From_int((int)(682)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_ATTR_ID",SWIG_From_int((int)(683)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_CREATE_TIME",SWIG_From_int((int)(684)));
-  SWIG_Python_SetConstant(d, "COL_META_MET2_MODIFY_TIME",SWIG_From_int((int)(685)));
-  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_TYPE",SWIG_From_int((int)(700)));
-  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_NAME",SWIG_From_int((int)(701)));
-  SWIG_Python_SetConstant(d, "COL_DATA_TOKEN_NAMESPACE",SWIG_From_int((int)(702)));
-  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_USER_ID",SWIG_From_int((int)(703)));
-  SWIG_Python_SetConstant(d, "COL_DATA_ACCESS_DATA_ID",SWIG_From_int((int)(704)));
-  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_TYPE",SWIG_From_int((int)(710)));
-  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_NAME",SWIG_From_int((int)(711)));
-  SWIG_Python_SetConstant(d, "COL_COLL_TOKEN_NAMESPACE",SWIG_From_int((int)(712)));
-  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_USER_ID",SWIG_From_int((int)(713)));
-  SWIG_Python_SetConstant(d, "COL_COLL_ACCESS_COLL_ID",SWIG_From_int((int)(714)));
-  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_TYPE",SWIG_From_int((int)(720)));
-  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_NAME",SWIG_From_int((int)(721)));
-  SWIG_Python_SetConstant(d, "COL_RESC_TOKEN_NAMESPACE",SWIG_From_int((int)(722)));
-  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_USER_ID",SWIG_From_int((int)(723)));
-  SWIG_Python_SetConstant(d, "COL_RESC_ACCESS_RESC_ID",SWIG_From_int((int)(724)));
-  SWIG_Python_SetConstant(d, "COL_META_ACCESS_TYPE",SWIG_From_int((int)(730)));
-  SWIG_Python_SetConstant(d, "COL_META_ACCESS_NAME",SWIG_From_int((int)(731)));
-  SWIG_Python_SetConstant(d, "COL_META_TOKEN_NAMESPACE",SWIG_From_int((int)(732)));
-  SWIG_Python_SetConstant(d, "COL_META_ACCESS_USER_ID",SWIG_From_int((int)(733)));
-  SWIG_Python_SetConstant(d, "COL_META_ACCESS_META_ID",SWIG_From_int((int)(734)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_TYPE",SWIG_From_int((int)(740)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_NAME",SWIG_From_int((int)(741)));
-  SWIG_Python_SetConstant(d, "COL_RULE_TOKEN_NAMESPACE",SWIG_From_int((int)(742)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_USER_ID",SWIG_From_int((int)(743)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ACCESS_RULE_ID",SWIG_From_int((int)(744)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_TYPE",SWIG_From_int((int)(750)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_NAME",SWIG_From_int((int)(751)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_TOKEN_NAMESPACE",SWIG_From_int((int)(752)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_USER_ID",SWIG_From_int((int)(753)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_ACCESS_MSRVC_ID",SWIG_From_int((int)(754)));
-  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_RESC_ID",SWIG_From_int((int)(800)));
-  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_NAME",SWIG_From_int((int)(801)));
-  SWIG_Python_SetConstant(d, "COL_RESC_GROUP_ID",SWIG_From_int((int)(802)));
-  SWIG_Python_SetConstant(d, "COL_USER_GROUP_ID",SWIG_From_int((int)(900)));
-  SWIG_Python_SetConstant(d, "COL_USER_GROUP_NAME",SWIG_From_int((int)(901)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ID",SWIG_From_int((int)(1000)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_NAME",SWIG_From_int((int)(1001)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_REI_FILE_PATH",SWIG_From_int((int)(1002)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_USER_NAME",SWIG_From_int((int)(1003)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ADDRESS",SWIG_From_int((int)(1004)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_TIME",SWIG_From_int((int)(1005)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_FREQUENCY",SWIG_From_int((int)(1006)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_PRIORITY",SWIG_From_int((int)(1007)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_ESTIMATED_EXE_TIME",SWIG_From_int((int)(1008)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_NOTIFICATION_ADDR",SWIG_From_int((int)(1009)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_LAST_EXE_TIME",SWIG_From_int((int)(1010)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EXEC_STATUS",SWIG_From_int((int)(1011)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_NAMESPACE",SWIG_From_int((int)(1100)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_ID",SWIG_From_int((int)(1101)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_NAME",SWIG_From_int((int)(1102)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE",SWIG_From_int((int)(1103)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE2",SWIG_From_int((int)(1104)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_VALUE3",SWIG_From_int((int)(1105)));
-  SWIG_Python_SetConstant(d, "COL_TOKEN_COMMENT",SWIG_From_int((int)(1106)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_OBJ_ID",SWIG_From_int((int)(1200)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_USER_ID",SWIG_From_int((int)(1201)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_ACTION_ID",SWIG_From_int((int)(1202)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_COMMENT",SWIG_From_int((int)(1203)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_CREATE_TIME",SWIG_From_int((int)(1204)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_MODIFY_TIME",SWIG_From_int((int)(1205)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_RANGE_START",SWIG_From_int((int)(1200)));
-  SWIG_Python_SetConstant(d, "COL_AUDIT_RANGE_END",SWIG_From_int((int)(1299)));
-  SWIG_Python_SetConstant(d, "COL_COLL_USER_NAME",SWIG_From_int((int)(1300)));
-  SWIG_Python_SetConstant(d, "COL_COLL_USER_ZONE",SWIG_From_int((int)(1301)));
-  SWIG_Python_SetConstant(d, "COL_DATA_USER_NAME",SWIG_From_int((int)(1310)));
-  SWIG_Python_SetConstant(d, "COL_DATA_USER_ZONE",SWIG_From_int((int)(1311)));
-  SWIG_Python_SetConstant(d, "COL_RESC_USER_NAME",SWIG_From_int((int)(1320)));
-  SWIG_Python_SetConstant(d, "COL_RESC_USER_ZONE",SWIG_From_int((int)(1321)));
-  SWIG_Python_SetConstant(d, "COL_SL_HOST_NAME",SWIG_From_int((int)(1400)));
-  SWIG_Python_SetConstant(d, "COL_SL_RESC_NAME",SWIG_From_int((int)(1401)));
-  SWIG_Python_SetConstant(d, "COL_SL_CPU_USED",SWIG_From_int((int)(1402)));
-  SWIG_Python_SetConstant(d, "COL_SL_MEM_USED",SWIG_From_int((int)(1403)));
-  SWIG_Python_SetConstant(d, "COL_SL_SWAP_USED",SWIG_From_int((int)(1404)));
-  SWIG_Python_SetConstant(d, "COL_SL_RUNQ_LOAD",SWIG_From_int((int)(1405)));
-  SWIG_Python_SetConstant(d, "COL_SL_DISK_SPACE",SWIG_From_int((int)(1406)));
-  SWIG_Python_SetConstant(d, "COL_SL_NET_INPUT",SWIG_From_int((int)(1407)));
-  SWIG_Python_SetConstant(d, "COL_SL_NET_OUTPUT",SWIG_From_int((int)(1408)));
-  SWIG_Python_SetConstant(d, "COL_SL_CREATE_TIME",SWIG_From_int((int)(1409)));
-  SWIG_Python_SetConstant(d, "COL_SLD_RESC_NAME",SWIG_From_int((int)(1500)));
-  SWIG_Python_SetConstant(d, "COL_SLD_LOAD_FACTOR",SWIG_From_int((int)(1501)));
-  SWIG_Python_SetConstant(d, "COL_SLD_CREATE_TIME",SWIG_From_int((int)(1502)));
-  SWIG_Python_SetConstant(d, "COL_USER_AUTH_ID",SWIG_From_int((int)(1600)));
-  SWIG_Python_SetConstant(d, "COL_USER_DN",SWIG_From_int((int)(1601)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ID",SWIG_From_int((int)(1700)));
-  SWIG_Python_SetConstant(d, "COL_RULE_VERSION",SWIG_From_int((int)(1701)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_NAME",SWIG_From_int((int)(1702)));
-  SWIG_Python_SetConstant(d, "COL_RULE_NAME",SWIG_From_int((int)(1703)));
-  SWIG_Python_SetConstant(d, "COL_RULE_EVENT",SWIG_From_int((int)(1704)));
-  SWIG_Python_SetConstant(d, "COL_RULE_CONDITION",SWIG_From_int((int)(1705)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BODY",SWIG_From_int((int)(1706)));
-  SWIG_Python_SetConstant(d, "COL_RULE_RECOVERY",SWIG_From_int((int)(1707)));
-  SWIG_Python_SetConstant(d, "COL_RULE_STATUS",SWIG_From_int((int)(1708)));
-  SWIG_Python_SetConstant(d, "COL_RULE_OWNER_NAME",SWIG_From_int((int)(1709)));
-  SWIG_Python_SetConstant(d, "COL_RULE_OWNER_ZONE",SWIG_From_int((int)(1710)));
-  SWIG_Python_SetConstant(d, "COL_RULE_DESCR_1",SWIG_From_int((int)(1711)));
-  SWIG_Python_SetConstant(d, "COL_RULE_DESCR_2",SWIG_From_int((int)(1712)));
-  SWIG_Python_SetConstant(d, "COL_RULE_INPUT_PARAMS",SWIG_From_int((int)(1713)));
-  SWIG_Python_SetConstant(d, "COL_RULE_OUTPUT_PARAMS",SWIG_From_int((int)(1714)));
-  SWIG_Python_SetConstant(d, "COL_RULE_DOLLAR_VARS",SWIG_From_int((int)(1715)));
-  SWIG_Python_SetConstant(d, "COL_RULE_ICAT_ELEMENTS",SWIG_From_int((int)(1716)));
-  SWIG_Python_SetConstant(d, "COL_RULE_SIDEEFFECTS",SWIG_From_int((int)(1717)));
-  SWIG_Python_SetConstant(d, "COL_RULE_COMMENT",SWIG_From_int((int)(1718)));
-  SWIG_Python_SetConstant(d, "COL_RULE_CREATE_TIME",SWIG_From_int((int)(1719)));
-  SWIG_Python_SetConstant(d, "COL_RULE_MODIFY_TIME",SWIG_From_int((int)(1720)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_VERSION",SWIG_From_int((int)(1721)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1722)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1723)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1724)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_COMMENT",SWIG_From_int((int)(1725)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1726)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1727)));
-  SWIG_Python_SetConstant(d, "COL_RULE_BASE_MAP_PRIORITY",SWIG_From_int((int)(1728)));
-  SWIG_Python_SetConstant(d, "COL_DVM_ID",SWIG_From_int((int)(1800)));
-  SWIG_Python_SetConstant(d, "COL_DVM_VERSION",SWIG_From_int((int)(1801)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_NAME",SWIG_From_int((int)(1802)));
-  SWIG_Python_SetConstant(d, "COL_DVM_EXT_VAR_NAME",SWIG_From_int((int)(1803)));
-  SWIG_Python_SetConstant(d, "COL_DVM_CONDITION",SWIG_From_int((int)(1804)));
-  SWIG_Python_SetConstant(d, "COL_DVM_INT_MAP_PATH",SWIG_From_int((int)(1805)));
-  SWIG_Python_SetConstant(d, "COL_DVM_STATUS",SWIG_From_int((int)(1806)));
-  SWIG_Python_SetConstant(d, "COL_DVM_OWNER_NAME",SWIG_From_int((int)(1807)));
-  SWIG_Python_SetConstant(d, "COL_DVM_OWNER_ZONE",SWIG_From_int((int)(1808)));
-  SWIG_Python_SetConstant(d, "COL_DVM_COMMENT",SWIG_From_int((int)(1809)));
-  SWIG_Python_SetConstant(d, "COL_DVM_CREATE_TIME",SWIG_From_int((int)(1810)));
-  SWIG_Python_SetConstant(d, "COL_DVM_MODIFY_TIME",SWIG_From_int((int)(1811)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_VERSION",SWIG_From_int((int)(1812)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1813)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1814)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1815)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_COMMENT",SWIG_From_int((int)(1816)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1817)));
-  SWIG_Python_SetConstant(d, "COL_DVM_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1818)));
-  SWIG_Python_SetConstant(d, "COL_FNM_ID",SWIG_From_int((int)(1900)));
-  SWIG_Python_SetConstant(d, "COL_FNM_VERSION",SWIG_From_int((int)(1901)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_NAME",SWIG_From_int((int)(1902)));
-  SWIG_Python_SetConstant(d, "COL_FNM_EXT_FUNC_NAME",SWIG_From_int((int)(1903)));
-  SWIG_Python_SetConstant(d, "COL_FNM_INT_FUNC_NAME",SWIG_From_int((int)(1904)));
-  SWIG_Python_SetConstant(d, "COL_FNM_STATUS",SWIG_From_int((int)(1905)));
-  SWIG_Python_SetConstant(d, "COL_FNM_OWNER_NAME",SWIG_From_int((int)(1906)));
-  SWIG_Python_SetConstant(d, "COL_FNM_OWNER_ZONE",SWIG_From_int((int)(1907)));
-  SWIG_Python_SetConstant(d, "COL_FNM_COMMENT",SWIG_From_int((int)(1908)));
-  SWIG_Python_SetConstant(d, "COL_FNM_CREATE_TIME",SWIG_From_int((int)(1909)));
-  SWIG_Python_SetConstant(d, "COL_FNM_MODIFY_TIME",SWIG_From_int((int)(1910)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_VERSION",SWIG_From_int((int)(1911)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_BASE_NAME",SWIG_From_int((int)(1912)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_OWNER_NAME",SWIG_From_int((int)(1913)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_OWNER_ZONE",SWIG_From_int((int)(1914)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_COMMENT",SWIG_From_int((int)(1915)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_CREATE_TIME",SWIG_From_int((int)(1916)));
-  SWIG_Python_SetConstant(d, "COL_FNM_BASE_MAP_MODIFY_TIME",SWIG_From_int((int)(1917)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_ID",SWIG_From_int((int)(2000)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_RESC_ID",SWIG_From_int((int)(2001)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_LIMIT",SWIG_From_int((int)(2002)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_OVER",SWIG_From_int((int)(2003)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_MODIFY_TIME",SWIG_From_int((int)(2004)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_USER_ID",SWIG_From_int((int)(2010)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_RESC_ID",SWIG_From_int((int)(2011)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE",SWIG_From_int((int)(2012)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USAGE_MODIFY_TIME",SWIG_From_int((int)(2013)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_RESC_NAME",SWIG_From_int((int)(2020)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_NAME",SWIG_From_int((int)(2021)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_ZONE",SWIG_From_int((int)(2022)));
-  SWIG_Python_SetConstant(d, "COL_QUOTA_USER_TYPE",SWIG_From_int((int)(2023)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_ID",SWIG_From_int((int)(2100)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_NAME",SWIG_From_int((int)(2101)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_SIGNATURE",SWIG_From_int((int)(2102)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_DOXYGEN",SWIG_From_int((int)(2103)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VARIATIONS",SWIG_From_int((int)(2104)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_STATUS",SWIG_From_int((int)(2105)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_OWNER_NAME",SWIG_From_int((int)(2106)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_OWNER_ZONE",SWIG_From_int((int)(2107)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_COMMENT",SWIG_From_int((int)(2108)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_CREATE_TIME",SWIG_From_int((int)(2109)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_MODIFY_TIME",SWIG_From_int((int)(2110)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VERSION",SWIG_From_int((int)(2111)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_HOST",SWIG_From_int((int)(2112)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_LOCATION",SWIG_From_int((int)(2113)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_LANGUAGE",SWIG_From_int((int)(2114)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_TYPE_NAME",SWIG_From_int((int)(2115)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_MODULE_NAME",SWIG_From_int((int)(2116)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_OWNER_NAME",SWIG_From_int((int)(2150)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_OWNER_ZONE",SWIG_From_int((int)(2151)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_COMMENT",SWIG_From_int((int)(2152)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_CREATE_TIME",SWIG_From_int((int)(2153)));
-  SWIG_Python_SetConstant(d, "COL_MSRVC_VER_MODIFY_TIME",SWIG_From_int((int)(2154)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ID",SWIG_From_int((int)(2200)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_STRING",SWIG_From_int((int)(2201)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_TYPE",SWIG_From_int((int)(2202)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_USER_ID",SWIG_From_int((int)(2203)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_OBJECT_ID",SWIG_From_int((int)(2204)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_OBJECT_TYPE",SWIG_From_int((int)(2205)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_USES_LIMIT",SWIG_From_int((int)(2206)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_USES_COUNT",SWIG_From_int((int)(2207)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_EXPIRY_TS",SWIG_From_int((int)(2208)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_CREATE_TIME",SWIG_From_int((int)(2209)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_MODIFY_TIME",SWIG_From_int((int)(2210)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_FILE_COUNT",SWIG_From_int((int)(2211)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_FILE_LIMIT",SWIG_From_int((int)(2212)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_BYTE_COUNT",SWIG_From_int((int)(2213)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_WRITE_BYTE_LIMIT",SWIG_From_int((int)(2214)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_HOST_TICKET_ID",SWIG_From_int((int)(2220)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_HOST",SWIG_From_int((int)(2221)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_USER_TICKET_ID",SWIG_From_int((int)(2222)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_USER_NAME",SWIG_From_int((int)(2223)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_GROUP_TICKET_ID",SWIG_From_int((int)(2224)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_ALLOWED_GROUP_NAME",SWIG_From_int((int)(2225)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_DATA_NAME",SWIG_From_int((int)(2226)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_DATA_COLL_NAME",SWIG_From_int((int)(2227)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_COLL_NAME",SWIG_From_int((int)(2228)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_OWNER_NAME",SWIG_From_int((int)(2229)));
-  SWIG_Python_SetConstant(d, "COL_TICKET_OWNER_ZONE",SWIG_From_int((int)(2230)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_OBJ_ID",SWIG_From_int((int)(2300)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_UID",SWIG_From_int((int)(2301)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_GID",SWIG_From_int((int)(2302)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_OWNER",SWIG_From_int((int)(2303)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_GROUP",SWIG_From_int((int)(2304)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MODE",SWIG_From_int((int)(2305)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_CTIME",SWIG_From_int((int)(2306)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MTIME",SWIG_From_int((int)(2307)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_SOURCE_PATH",SWIG_From_int((int)(2308)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_CREATE_TIME",SWIG_From_int((int)(2309)));
-  SWIG_Python_SetConstant(d, "COL_COLL_FILEMETA_MODIFY_TIME",SWIG_From_int((int)(2310)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_OBJ_ID",SWIG_From_int((int)(2320)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_UID",SWIG_From_int((int)(2321)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_GID",SWIG_From_int((int)(2322)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_OWNER",SWIG_From_int((int)(2323)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_GROUP",SWIG_From_int((int)(2324)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MODE",SWIG_From_int((int)(2325)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_CTIME",SWIG_From_int((int)(2326)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MTIME",SWIG_From_int((int)(2327)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_SOURCE_PATH",SWIG_From_int((int)(2328)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_CREATE_TIME",SWIG_From_int((int)(2329)));
-  SWIG_Python_SetConstant(d, "COL_DATA_FILEMETA_MODIFY_TIME",SWIG_From_int((int)(2330)));
-  SWIG_Python_SetConstant(d, "SINGLE_MSG_TICKET",SWIG_From_int((int)(0)));
-  SWIG_Python_SetConstant(d, "MULTI_MSG_TICKET",SWIG_From_int((int)(1)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

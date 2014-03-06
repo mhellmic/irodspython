@@ -86,8 +86,34 @@ except AttributeError:
 # Author       : Jerome Fuselier
 #
 
-CHALLENGE_LEN = _irods.CHALLENGE_LEN
-RESPONSE_LEN = _irods.RESPONSE_LEN
+PYRODS_VERSION = _irods.PYRODS_VERSION
+# Keep the status of the last called API function
+lastStatus = 0
+
+def getStatus():
+    return lastStatus
+
+def getStatusStr():
+    errName, _ = rodsErrorName(lastStatus)
+    return errName
+
+class IrodsException(Exception):
+
+    def __init__(self, errCode):
+        self.errCode = errCode
+        self.errName, self.errSubName = rodsErrorName(errCode)
+
+    def __str__(self):
+        if self.errSubName:
+            msg = "iRODS failed with error %d %s %s" % (self.errCode,
+                                                        self.errName,
+                                                        self.errSubName)
+            return msg
+        else:
+            msg = "iRODS failed with error %d %s" % (self.errCode,
+                                                     self.errName)
+            return msg
+
 class authCheckInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, authCheckInp_t, name, value)
@@ -243,47 +269,6 @@ chkObjPermAndStat_t_swigregister(chkObjPermAndStat_t)
 def rcChkObjPermAndStat(*args):
   return _irods.rcChkObjPermAndStat(*args)
 rcChkObjPermAndStat = _irods.rcChkObjPermAndStat
-DONE_OPR = _irods.DONE_OPR
-PUT_OPR = _irods.PUT_OPR
-GET_OPR = _irods.GET_OPR
-SAME_HOST_COPY_OPR = _irods.SAME_HOST_COPY_OPR
-COPY_TO_LOCAL_OPR = _irods.COPY_TO_LOCAL_OPR
-COPY_TO_REM_OPR = _irods.COPY_TO_REM_OPR
-REPLICATE_OPR = _irods.REPLICATE_OPR
-REPLICATE_DEST = _irods.REPLICATE_DEST
-REPLICATE_SRC = _irods.REPLICATE_SRC
-COPY_DEST = _irods.COPY_DEST
-COPY_SRC = _irods.COPY_SRC
-RENAME_DATA_OBJ = _irods.RENAME_DATA_OBJ
-RENAME_COLL = _irods.RENAME_COLL
-MOVE_OPR = _irods.MOVE_OPR
-RSYNC_OPR = _irods.RSYNC_OPR
-PHYMV_OPR = _irods.PHYMV_OPR
-PHYMV_SRC = _irods.PHYMV_SRC
-PHYMV_DEST = _irods.PHYMV_DEST
-QUERY_DATA_OBJ = _irods.QUERY_DATA_OBJ
-QUERY_DATA_OBJ_RECUR = _irods.QUERY_DATA_OBJ_RECUR
-QUERY_COLL_OBJ = _irods.QUERY_COLL_OBJ
-QUERY_COLL_OBJ_RECUR = _irods.QUERY_COLL_OBJ_RECUR
-RENAME_UNKNOWN_TYPE = _irods.RENAME_UNKNOWN_TYPE
-REMOTE_ZONE_OPR = _irods.REMOTE_ZONE_OPR
-UNREG_OPR = _irods.UNREG_OPR
-NC_OPR = _irods.NC_OPR
-NC_OPEN_FOR_WRITE = _irods.NC_OPEN_FOR_WRITE
-NC_OPEN_FOR_READ = _irods.NC_OPEN_FOR_READ
-NC_CREATE = _irods.NC_CREATE
-NC_OPEN_GROUP = _irods.NC_OPEN_GROUP
-CREATE_TYPE = _irods.CREATE_TYPE
-OPEN_FOR_READ_TYPE = _irods.OPEN_FOR_READ_TYPE
-OPEN_FOR_WRITE_TYPE = _irods.OPEN_FOR_WRITE_TYPE
-STREAMING_FLAG = _irods.STREAMING_FLAG
-NO_CHK_COPY_LEN_FLAG = _irods.NO_CHK_COPY_LEN_FLAG
-READ_LOCK_TYPE = _irods.READ_LOCK_TYPE
-WRITE_LOCK_TYPE = _irods.WRITE_LOCK_TYPE
-UNLOCK_TYPE = _irods.UNLOCK_TYPE
-SET_LOCK_CMD = _irods.SET_LOCK_CMD
-SET_LOCK_WAIT_CMD = _irods.SET_LOCK_WAIT_CMD
-GET_LOCK_CMD = _irods.GET_LOCK_CMD
 class collInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, collInp_t, name, value)
@@ -669,6 +654,1600 @@ rcDataObjUnlink = _irods.rcDataObjUnlink
 def rcDataObjWrite(*args):
   return _irods.rcDataObjWrite(*args)
 rcDataObjWrite = _irods.rcDataObjWrite
+CHALLENGE_LEN = _irods.CHALLENGE_LEN
+RESPONSE_LEN = _irods.RESPONSE_LEN
+DONE_OPR = _irods.DONE_OPR
+PUT_OPR = _irods.PUT_OPR
+GET_OPR = _irods.GET_OPR
+SAME_HOST_COPY_OPR = _irods.SAME_HOST_COPY_OPR
+COPY_TO_LOCAL_OPR = _irods.COPY_TO_LOCAL_OPR
+COPY_TO_REM_OPR = _irods.COPY_TO_REM_OPR
+REPLICATE_OPR = _irods.REPLICATE_OPR
+REPLICATE_DEST = _irods.REPLICATE_DEST
+REPLICATE_SRC = _irods.REPLICATE_SRC
+COPY_DEST = _irods.COPY_DEST
+COPY_SRC = _irods.COPY_SRC
+RENAME_DATA_OBJ = _irods.RENAME_DATA_OBJ
+RENAME_COLL = _irods.RENAME_COLL
+MOVE_OPR = _irods.MOVE_OPR
+RSYNC_OPR = _irods.RSYNC_OPR
+PHYMV_OPR = _irods.PHYMV_OPR
+PHYMV_SRC = _irods.PHYMV_SRC
+PHYMV_DEST = _irods.PHYMV_DEST
+QUERY_DATA_OBJ = _irods.QUERY_DATA_OBJ
+QUERY_DATA_OBJ_RECUR = _irods.QUERY_DATA_OBJ_RECUR
+QUERY_COLL_OBJ = _irods.QUERY_COLL_OBJ
+QUERY_COLL_OBJ_RECUR = _irods.QUERY_COLL_OBJ_RECUR
+RENAME_UNKNOWN_TYPE = _irods.RENAME_UNKNOWN_TYPE
+REMOTE_ZONE_OPR = _irods.REMOTE_ZONE_OPR
+UNREG_OPR = _irods.UNREG_OPR
+NC_OPR = _irods.NC_OPR
+NC_OPEN_FOR_WRITE = _irods.NC_OPEN_FOR_WRITE
+NC_OPEN_FOR_READ = _irods.NC_OPEN_FOR_READ
+NC_CREATE = _irods.NC_CREATE
+NC_OPEN_GROUP = _irods.NC_OPEN_GROUP
+CREATE_TYPE = _irods.CREATE_TYPE
+OPEN_FOR_READ_TYPE = _irods.OPEN_FOR_READ_TYPE
+OPEN_FOR_WRITE_TYPE = _irods.OPEN_FOR_WRITE_TYPE
+STREAMING_FLAG = _irods.STREAMING_FLAG
+NO_CHK_COPY_LEN_FLAG = _irods.NO_CHK_COPY_LEN_FLAG
+READ_LOCK_TYPE = _irods.READ_LOCK_TYPE
+WRITE_LOCK_TYPE = _irods.WRITE_LOCK_TYPE
+UNLOCK_TYPE = _irods.UNLOCK_TYPE
+SET_LOCK_CMD = _irods.SET_LOCK_CMD
+SET_LOCK_WAIT_CMD = _irods.SET_LOCK_WAIT_CMD
+GET_LOCK_CMD = _irods.GET_LOCK_CMD
+LONG_METADATA_FG = _irods.LONG_METADATA_FG
+VERY_LONG_METADATA_FG = _irods.VERY_LONG_METADATA_FG
+RECUR_QUERY_FG = _irods.RECUR_QUERY_FG
+DATA_QUERY_FIRST_FG = _irods.DATA_QUERY_FIRST_FG
+NO_TRIM_REPL_FG = _irods.NO_TRIM_REPL_FG
+INCLUDE_CONDINPUT_IN_QUERY = _irods.INCLUDE_CONDINPUT_IN_QUERY
+STR_MS_T = _irods.STR_MS_T
+INT_MS_T = _irods.INT_MS_T
+INT16_MS_T = _irods.INT16_MS_T
+CHAR_MS_T = _irods.CHAR_MS_T
+BUF_LEN_MS_T = _irods.BUF_LEN_MS_T
+STREAM_MS_T = _irods.STREAM_MS_T
+DOUBLE_MS_T = _irods.DOUBLE_MS_T
+FLOAT_MS_T = _irods.FLOAT_MS_T
+BOOL_MS_T = _irods.BOOL_MS_T
+DataObjInp_MS_T = _irods.DataObjInp_MS_T
+DataObjCloseInp_MS_T = _irods.DataObjCloseInp_MS_T
+DataObjCopyInp_MS_T = _irods.DataObjCopyInp_MS_T
+DataObjReadInp_MS_T = _irods.DataObjReadInp_MS_T
+DataObjWriteInp_MS_T = _irods.DataObjWriteInp_MS_T
+DataObjLseekInp_MS_T = _irods.DataObjLseekInp_MS_T
+DataObjLseekOut_MS_T = _irods.DataObjLseekOut_MS_T
+KeyValPair_MS_T = _irods.KeyValPair_MS_T
+TagStruct_MS_T = _irods.TagStruct_MS_T
+CollInp_MS_T = _irods.CollInp_MS_T
+ExecCmd_MS_T = _irods.ExecCmd_MS_T
+ExecCmdOut_MS_T = _irods.ExecCmdOut_MS_T
+RodsObjStat_MS_T = _irods.RodsObjStat_MS_T
+VaultPathPolicy_MS_T = _irods.VaultPathPolicy_MS_T
+StrArray_MS_T = _irods.StrArray_MS_T
+IntArray_MS_T = _irods.IntArray_MS_T
+GenQueryInp_MS_T = _irods.GenQueryInp_MS_T
+GenQueryOut_MS_T = _irods.GenQueryOut_MS_T
+XmsgTicketInfo_MS_T = _irods.XmsgTicketInfo_MS_T
+SendXmsgInfo_MS_T = _irods.SendXmsgInfo_MS_T
+GetXmsgTicketInp_MS_T = _irods.GetXmsgTicketInp_MS_T
+SendXmsgInp_MS_T = _irods.SendXmsgInp_MS_T
+RcvXmsgInp_MS_T = _irods.RcvXmsgInp_MS_T
+RcvXmsgOut_MS_T = _irods.RcvXmsgOut_MS_T
+StructFileExtAndRegInp_MS_T = _irods.StructFileExtAndRegInp_MS_T
+RuleSet_MS_T = _irods.RuleSet_MS_T
+RuleStruct_MS_T = _irods.RuleStruct_MS_T
+DVMapStruct_MS_T = _irods.DVMapStruct_MS_T
+FNMapStruct_MS_T = _irods.FNMapStruct_MS_T
+MsrvcStruct_MS_T = _irods.MsrvcStruct_MS_T
+NcOpenInp_MS_T = _irods.NcOpenInp_MS_T
+NcInqIdInp_MS_T = _irods.NcInqIdInp_MS_T
+NcInqWithIdOut_MS_T = _irods.NcInqWithIdOut_MS_T
+NcInqInp_MS_T = _irods.NcInqInp_MS_T
+NcInqOut_MS_T = _irods.NcInqOut_MS_T
+NcCloseInp_MS_T = _irods.NcCloseInp_MS_T
+NcGetVarInp_MS_T = _irods.NcGetVarInp_MS_T
+NcGetVarOut_MS_T = _irods.NcGetVarOut_MS_T
+NccfGetVarInp_MS_T = _irods.NccfGetVarInp_MS_T
+NccfGetVarOut_MS_T = _irods.NccfGetVarOut_MS_T
+NcInqGrpsOut_MS_T = _irods.NcInqGrpsOut_MS_T
+Dictionary_MS_T = _irods.Dictionary_MS_T
+DictArray_MS_T = _irods.DictArray_MS_T
+GenArray_MS_T = _irods.GenArray_MS_T
+RESC_NAME_FLAG = _irods.RESC_NAME_FLAG
+DEST_RESC_NAME_FLAG = _irods.DEST_RESC_NAME_FLAG
+BACKUP_RESC_NAME_FLAG = _irods.BACKUP_RESC_NAME_FLAG
+FORCE_FLAG_FLAG = _irods.FORCE_FLAG_FLAG
+ALL_FLAG = _irods.ALL_FLAG
+LOCAL_PATH_FLAG = _irods.LOCAL_PATH_FLAG
+VERIFY_CHKSUM_FLAG = _irods.VERIFY_CHKSUM_FLAG
+IRODS_ADMIN_FLAG = _irods.IRODS_ADMIN_FLAG
+UPDATE_REPL_FLAG = _irods.UPDATE_REPL_FLAG
+REPL_NUM_FLAG = _irods.REPL_NUM_FLAG
+DATA_TYPE_FLAG = _irods.DATA_TYPE_FLAG
+CHKSUM_ALL_FLAG = _irods.CHKSUM_ALL_FLAG
+FORCE_CHKSUM_FLAG = _irods.FORCE_CHKSUM_FLAG
+FILE_PATH_FLAG = _irods.FILE_PATH_FLAG
+CREATE_MODE_FLAG = _irods.CREATE_MODE_FLAG
+OPEN_FLAGS_FLAG = _irods.OPEN_FLAGS_FLAG
+COLL_FLAGS_FLAG = _irods.COLL_FLAGS_FLAG
+DATA_SIZE_FLAGS = _irods.DATA_SIZE_FLAGS
+NUM_THREADS_FLAG = _irods.NUM_THREADS_FLAG
+OPR_TYPE_FLAG = _irods.OPR_TYPE_FLAG
+OBJ_PATH_FLAG = _irods.OBJ_PATH_FLAG
+COLL_NAME_FLAG = _irods.COLL_NAME_FLAG
+IRODS_RMTRASH_FLAG = _irods.IRODS_RMTRASH_FLAG
+IRODS_ADMIN_RMTRASH_FLAG = _irods.IRODS_ADMIN_RMTRASH_FLAG
+DEF_RESC_NAME_FLAG = _irods.DEF_RESC_NAME_FLAG
+RBUDP_TRANSFER_FLAG = _irods.RBUDP_TRANSFER_FLAG
+RBUDP_SEND_RATE_FLAG = _irods.RBUDP_SEND_RATE_FLAG
+RBUDP_PACK_SIZE_FLAG = _irods.RBUDP_PACK_SIZE_FLAG
+BULK_OPR_FLAG = _irods.BULK_OPR_FLAG
+UNREG_FLAG = _irods.UNREG_FLAG
+MAX_PASSWORD_LEN = _irods.MAX_PASSWORD_LEN
+MAX_PATH_ALLOWED = _irods.MAX_PATH_ALLOWED
+MAX_NAME_LEN = _irods.MAX_NAME_LEN
+TRANS_BUF_SZ = _irods.TRANS_BUF_SZ
+PUBLIC_USER_NAME = _irods.PUBLIC_USER_NAME
+NO_CHK_PERM_FLAG = _irods.NO_CHK_PERM_FLAG
+UNIQUE_REM_COMM_FLAG = _irods.UNIQUE_REM_COMM_FLAG
+FORCE_FLAG = _irods.FORCE_FLAG
+RMDIR_RECUR = _irods.RMDIR_RECUR
+PURGE_STRUCT_FILE_CACHE = _irods.PURGE_STRUCT_FILE_CACHE
+DELETE_STRUCT_FILE = _irods.DELETE_STRUCT_FILE
+NO_REG_COLL_INFO = _irods.NO_REG_COLL_INFO
+LOGICAL_BUNDLE = _irods.LOGICAL_BUNDLE
+CREATE_TAR_OPR = _irods.CREATE_TAR_OPR
+ADD_TO_TAR_OPR = _irods.ADD_TO_TAR_OPR
+PRESERVE_COLL_PATH = _irods.PRESERVE_COLL_PATH
+PRESERVE_DIR_CONT = _irods.PRESERVE_DIR_CONT
+O_RDONLY = _irods.O_RDONLY
+O_WRONLY = _irods.O_WRONLY
+O_RDWR = _irods.O_RDWR
+O_CREAT = _irods.O_CREAT
+SEEK_SET = _irods.SEEK_SET
+SEEK_CUR = _irods.SEEK_CUR
+SEEK_END = _irods.SEEK_END
+LOG_SQL = _irods.LOG_SQL
+LOG_DEBUG1 = _irods.LOG_DEBUG1
+LOG_DEBUG2 = _irods.LOG_DEBUG2
+LOG_DEBUG3 = _irods.LOG_DEBUG3
+LOG_DEBUG = _irods.LOG_DEBUG
+LOG_NOTICE = _irods.LOG_NOTICE
+LOG_ERROR = _irods.LOG_ERROR
+LOG_SYS_WARNING = _irods.LOG_SYS_WARNING
+LOG_SYS_FATAL = _irods.LOG_SYS_FATAL
+ALLOW_NO_SRC_FLAG = _irods.ALLOW_NO_SRC_FLAG
+MAX_SQL_ATTR = _irods.MAX_SQL_ATTR
+MAX_SQL_ROWS = _irods.MAX_SQL_ROWS
+ORDER_BY = _irods.ORDER_BY
+ORDER_BY_DESC = _irods.ORDER_BY_DESC
+RETURN_TOTAL_ROW_COUNT = _irods.RETURN_TOTAL_ROW_COUNT
+NO_DISTINCT = _irods.NO_DISTINCT
+QUOTA_QUERY = _irods.QUOTA_QUERY
+AUTO_CLOSE = _irods.AUTO_CLOSE
+UPPER_CASE_WHERE = _irods.UPPER_CASE_WHERE
+SELECT_MIN = _irods.SELECT_MIN
+SELECT_MAX = _irods.SELECT_MAX
+SELECT_SUM = _irods.SELECT_SUM
+SELECT_AVG = _irods.SELECT_AVG
+SELECT_COUNT = _irods.SELECT_COUNT
+MAX_CORE_TABLE_VALUE = _irods.MAX_CORE_TABLE_VALUE
+COL_ZONE_ID = _irods.COL_ZONE_ID
+COL_ZONE_NAME = _irods.COL_ZONE_NAME
+COL_ZONE_TYPE = _irods.COL_ZONE_TYPE
+COL_ZONE_CONNECTION = _irods.COL_ZONE_CONNECTION
+COL_ZONE_COMMENT = _irods.COL_ZONE_COMMENT
+COL_ZONE_CREATE_TIME = _irods.COL_ZONE_CREATE_TIME
+COL_ZONE_MODIFY_TIME = _irods.COL_ZONE_MODIFY_TIME
+COL_USER_ID = _irods.COL_USER_ID
+COL_USER_NAME = _irods.COL_USER_NAME
+COL_USER_TYPE = _irods.COL_USER_TYPE
+COL_USER_ZONE = _irods.COL_USER_ZONE
+COL_USER_INFO = _irods.COL_USER_INFO
+COL_USER_COMMENT = _irods.COL_USER_COMMENT
+COL_USER_CREATE_TIME = _irods.COL_USER_CREATE_TIME
+COL_USER_MODIFY_TIME = _irods.COL_USER_MODIFY_TIME
+COL_USER_DN_INVALID = _irods.COL_USER_DN_INVALID
+COL_R_RESC_ID = _irods.COL_R_RESC_ID
+COL_R_RESC_NAME = _irods.COL_R_RESC_NAME
+COL_R_ZONE_NAME = _irods.COL_R_ZONE_NAME
+COL_R_TYPE_NAME = _irods.COL_R_TYPE_NAME
+COL_R_CLASS_NAME = _irods.COL_R_CLASS_NAME
+COL_R_LOC = _irods.COL_R_LOC
+COL_R_VAULT_PATH = _irods.COL_R_VAULT_PATH
+COL_R_FREE_SPACE = _irods.COL_R_FREE_SPACE
+COL_R_RESC_INFO = _irods.COL_R_RESC_INFO
+COL_R_RESC_COMMENT = _irods.COL_R_RESC_COMMENT
+COL_R_CREATE_TIME = _irods.COL_R_CREATE_TIME
+COL_R_MODIFY_TIME = _irods.COL_R_MODIFY_TIME
+COL_R_RESC_STATUS = _irods.COL_R_RESC_STATUS
+COL_R_FREE_SPACE_TIME = _irods.COL_R_FREE_SPACE_TIME
+COL_D_DATA_ID = _irods.COL_D_DATA_ID
+COL_D_COLL_ID = _irods.COL_D_COLL_ID
+COL_DATA_NAME = _irods.COL_DATA_NAME
+COL_DATA_REPL_NUM = _irods.COL_DATA_REPL_NUM
+COL_DATA_VERSION = _irods.COL_DATA_VERSION
+COL_DATA_TYPE_NAME = _irods.COL_DATA_TYPE_NAME
+COL_DATA_SIZE = _irods.COL_DATA_SIZE
+COL_D_RESC_GROUP_NAME = _irods.COL_D_RESC_GROUP_NAME
+COL_D_RESC_NAME = _irods.COL_D_RESC_NAME
+COL_D_DATA_PATH = _irods.COL_D_DATA_PATH
+COL_D_OWNER_NAME = _irods.COL_D_OWNER_NAME
+COL_D_OWNER_ZONE = _irods.COL_D_OWNER_ZONE
+COL_D_REPL_STATUS = _irods.COL_D_REPL_STATUS
+COL_D_DATA_STATUS = _irods.COL_D_DATA_STATUS
+COL_D_DATA_CHECKSUM = _irods.COL_D_DATA_CHECKSUM
+COL_D_EXPIRY = _irods.COL_D_EXPIRY
+COL_D_MAP_ID = _irods.COL_D_MAP_ID
+COL_D_COMMENTS = _irods.COL_D_COMMENTS
+COL_D_CREATE_TIME = _irods.COL_D_CREATE_TIME
+COL_D_MODIFY_TIME = _irods.COL_D_MODIFY_TIME
+COL_DATA_MODE = _irods.COL_DATA_MODE
+COL_COLL_ID = _irods.COL_COLL_ID
+COL_COLL_NAME = _irods.COL_COLL_NAME
+COL_COLL_PARENT_NAME = _irods.COL_COLL_PARENT_NAME
+COL_COLL_OWNER_NAME = _irods.COL_COLL_OWNER_NAME
+COL_COLL_OWNER_ZONE = _irods.COL_COLL_OWNER_ZONE
+COL_COLL_MAP_ID = _irods.COL_COLL_MAP_ID
+COL_COLL_INHERITANCE = _irods.COL_COLL_INHERITANCE
+COL_COLL_COMMENTS = _irods.COL_COLL_COMMENTS
+COL_COLL_CREATE_TIME = _irods.COL_COLL_CREATE_TIME
+COL_COLL_MODIFY_TIME = _irods.COL_COLL_MODIFY_TIME
+COL_COLL_TYPE = _irods.COL_COLL_TYPE
+COL_COLL_INFO1 = _irods.COL_COLL_INFO1
+COL_COLL_INFO2 = _irods.COL_COLL_INFO2
+COL_META_DATA_ATTR_NAME = _irods.COL_META_DATA_ATTR_NAME
+COL_META_DATA_ATTR_VALUE = _irods.COL_META_DATA_ATTR_VALUE
+COL_META_DATA_ATTR_UNITS = _irods.COL_META_DATA_ATTR_UNITS
+COL_META_DATA_ATTR_ID = _irods.COL_META_DATA_ATTR_ID
+COL_META_DATA_CREATE_TIME = _irods.COL_META_DATA_CREATE_TIME
+COL_META_DATA_MODIFY_TIME = _irods.COL_META_DATA_MODIFY_TIME
+COL_META_COLL_ATTR_NAME = _irods.COL_META_COLL_ATTR_NAME
+COL_META_COLL_ATTR_VALUE = _irods.COL_META_COLL_ATTR_VALUE
+COL_META_COLL_ATTR_UNITS = _irods.COL_META_COLL_ATTR_UNITS
+COL_META_COLL_ATTR_ID = _irods.COL_META_COLL_ATTR_ID
+COL_META_COLL_CREATE_TIME = _irods.COL_META_COLL_CREATE_TIME
+COL_META_COLL_MODIFY_TIME = _irods.COL_META_COLL_MODIFY_TIME
+COL_META_NAMESPACE_COLL = _irods.COL_META_NAMESPACE_COLL
+COL_META_NAMESPACE_DATA = _irods.COL_META_NAMESPACE_DATA
+COL_META_NAMESPACE_RESC = _irods.COL_META_NAMESPACE_RESC
+COL_META_NAMESPACE_USER = _irods.COL_META_NAMESPACE_USER
+COL_META_NAMESPACE_RESC_GROUP = _irods.COL_META_NAMESPACE_RESC_GROUP
+COL_META_NAMESPACE_RULE = _irods.COL_META_NAMESPACE_RULE
+COL_META_NAMESPACE_MSRVC = _irods.COL_META_NAMESPACE_MSRVC
+COL_META_NAMESPACE_MET2 = _irods.COL_META_NAMESPACE_MET2
+COL_META_RESC_ATTR_NAME = _irods.COL_META_RESC_ATTR_NAME
+COL_META_RESC_ATTR_VALUE = _irods.COL_META_RESC_ATTR_VALUE
+COL_META_RESC_ATTR_UNITS = _irods.COL_META_RESC_ATTR_UNITS
+COL_META_RESC_ATTR_ID = _irods.COL_META_RESC_ATTR_ID
+COL_META_RESC_CREATE_TIME = _irods.COL_META_RESC_CREATE_TIME
+COL_META_RESC_MODIFY_TIME = _irods.COL_META_RESC_MODIFY_TIME
+COL_META_USER_ATTR_NAME = _irods.COL_META_USER_ATTR_NAME
+COL_META_USER_ATTR_VALUE = _irods.COL_META_USER_ATTR_VALUE
+COL_META_USER_ATTR_UNITS = _irods.COL_META_USER_ATTR_UNITS
+COL_META_USER_ATTR_ID = _irods.COL_META_USER_ATTR_ID
+COL_META_USER_CREATE_TIME = _irods.COL_META_USER_CREATE_TIME
+COL_META_USER_MODIFY_TIME = _irods.COL_META_USER_MODIFY_TIME
+COL_META_RESC_GROUP_ATTR_NAME = _irods.COL_META_RESC_GROUP_ATTR_NAME
+COL_META_RESC_GROUP_ATTR_VALUE = _irods.COL_META_RESC_GROUP_ATTR_VALUE
+COL_META_RESC_GROUP_ATTR_UNITS = _irods.COL_META_RESC_GROUP_ATTR_UNITS
+COL_META_RESC_GROUP_ATTR_ID = _irods.COL_META_RESC_GROUP_ATTR_ID
+COL_META_RESC_GROUP_CREATE_TIME = _irods.COL_META_RESC_GROUP_CREATE_TIME
+COL_META_RESC_GROUP_MODIFY_TIME = _irods.COL_META_RESC_GROUP_MODIFY_TIME
+COL_META_RULE_ATTR_NAME = _irods.COL_META_RULE_ATTR_NAME
+COL_META_RULE_ATTR_VALUE = _irods.COL_META_RULE_ATTR_VALUE
+COL_META_RULE_ATTR_UNITS = _irods.COL_META_RULE_ATTR_UNITS
+COL_META_RULE_ATTR_ID = _irods.COL_META_RULE_ATTR_ID
+COL_META_RULE_CREATE_TIME = _irods.COL_META_RULE_CREATE_TIME
+COL_META_RULE_MODIFY_TIME = _irods.COL_META_RULE_MODIFY_TIME
+COL_META_MSRVC_ATTR_NAME = _irods.COL_META_MSRVC_ATTR_NAME
+COL_META_MSRVC_ATTR_VALUE = _irods.COL_META_MSRVC_ATTR_VALUE
+COL_META_MSRVC_ATTR_UNITS = _irods.COL_META_MSRVC_ATTR_UNITS
+COL_META_MSRVC_ATTR_ID = _irods.COL_META_MSRVC_ATTR_ID
+COL_META_MSRVC_CREATE_TIME = _irods.COL_META_MSRVC_CREATE_TIME
+COL_META_MSRVC_MODIFY_TIME = _irods.COL_META_MSRVC_MODIFY_TIME
+COL_META_MET2_ATTR_NAME = _irods.COL_META_MET2_ATTR_NAME
+COL_META_MET2_ATTR_VALUE = _irods.COL_META_MET2_ATTR_VALUE
+COL_META_MET2_ATTR_UNITS = _irods.COL_META_MET2_ATTR_UNITS
+COL_META_MET2_ATTR_ID = _irods.COL_META_MET2_ATTR_ID
+COL_META_MET2_CREATE_TIME = _irods.COL_META_MET2_CREATE_TIME
+COL_META_MET2_MODIFY_TIME = _irods.COL_META_MET2_MODIFY_TIME
+COL_DATA_ACCESS_TYPE = _irods.COL_DATA_ACCESS_TYPE
+COL_DATA_ACCESS_NAME = _irods.COL_DATA_ACCESS_NAME
+COL_DATA_TOKEN_NAMESPACE = _irods.COL_DATA_TOKEN_NAMESPACE
+COL_DATA_ACCESS_USER_ID = _irods.COL_DATA_ACCESS_USER_ID
+COL_DATA_ACCESS_DATA_ID = _irods.COL_DATA_ACCESS_DATA_ID
+COL_COLL_ACCESS_TYPE = _irods.COL_COLL_ACCESS_TYPE
+COL_COLL_ACCESS_NAME = _irods.COL_COLL_ACCESS_NAME
+COL_COLL_TOKEN_NAMESPACE = _irods.COL_COLL_TOKEN_NAMESPACE
+COL_COLL_ACCESS_USER_ID = _irods.COL_COLL_ACCESS_USER_ID
+COL_COLL_ACCESS_COLL_ID = _irods.COL_COLL_ACCESS_COLL_ID
+COL_RESC_ACCESS_TYPE = _irods.COL_RESC_ACCESS_TYPE
+COL_RESC_ACCESS_NAME = _irods.COL_RESC_ACCESS_NAME
+COL_RESC_TOKEN_NAMESPACE = _irods.COL_RESC_TOKEN_NAMESPACE
+COL_RESC_ACCESS_USER_ID = _irods.COL_RESC_ACCESS_USER_ID
+COL_RESC_ACCESS_RESC_ID = _irods.COL_RESC_ACCESS_RESC_ID
+COL_META_ACCESS_TYPE = _irods.COL_META_ACCESS_TYPE
+COL_META_ACCESS_NAME = _irods.COL_META_ACCESS_NAME
+COL_META_TOKEN_NAMESPACE = _irods.COL_META_TOKEN_NAMESPACE
+COL_META_ACCESS_USER_ID = _irods.COL_META_ACCESS_USER_ID
+COL_META_ACCESS_META_ID = _irods.COL_META_ACCESS_META_ID
+COL_RULE_ACCESS_TYPE = _irods.COL_RULE_ACCESS_TYPE
+COL_RULE_ACCESS_NAME = _irods.COL_RULE_ACCESS_NAME
+COL_RULE_TOKEN_NAMESPACE = _irods.COL_RULE_TOKEN_NAMESPACE
+COL_RULE_ACCESS_USER_ID = _irods.COL_RULE_ACCESS_USER_ID
+COL_RULE_ACCESS_RULE_ID = _irods.COL_RULE_ACCESS_RULE_ID
+COL_MSRVC_ACCESS_TYPE = _irods.COL_MSRVC_ACCESS_TYPE
+COL_MSRVC_ACCESS_NAME = _irods.COL_MSRVC_ACCESS_NAME
+COL_MSRVC_TOKEN_NAMESPACE = _irods.COL_MSRVC_TOKEN_NAMESPACE
+COL_MSRVC_ACCESS_USER_ID = _irods.COL_MSRVC_ACCESS_USER_ID
+COL_MSRVC_ACCESS_MSRVC_ID = _irods.COL_MSRVC_ACCESS_MSRVC_ID
+COL_RESC_GROUP_RESC_ID = _irods.COL_RESC_GROUP_RESC_ID
+COL_RESC_GROUP_NAME = _irods.COL_RESC_GROUP_NAME
+COL_RESC_GROUP_ID = _irods.COL_RESC_GROUP_ID
+COL_USER_GROUP_ID = _irods.COL_USER_GROUP_ID
+COL_USER_GROUP_NAME = _irods.COL_USER_GROUP_NAME
+COL_RULE_EXEC_ID = _irods.COL_RULE_EXEC_ID
+COL_RULE_EXEC_NAME = _irods.COL_RULE_EXEC_NAME
+COL_RULE_EXEC_REI_FILE_PATH = _irods.COL_RULE_EXEC_REI_FILE_PATH
+COL_RULE_EXEC_USER_NAME = _irods.COL_RULE_EXEC_USER_NAME
+COL_RULE_EXEC_ADDRESS = _irods.COL_RULE_EXEC_ADDRESS
+COL_RULE_EXEC_TIME = _irods.COL_RULE_EXEC_TIME
+COL_RULE_EXEC_FREQUENCY = _irods.COL_RULE_EXEC_FREQUENCY
+COL_RULE_EXEC_PRIORITY = _irods.COL_RULE_EXEC_PRIORITY
+COL_RULE_EXEC_ESTIMATED_EXE_TIME = _irods.COL_RULE_EXEC_ESTIMATED_EXE_TIME
+COL_RULE_EXEC_NOTIFICATION_ADDR = _irods.COL_RULE_EXEC_NOTIFICATION_ADDR
+COL_RULE_EXEC_LAST_EXE_TIME = _irods.COL_RULE_EXEC_LAST_EXE_TIME
+COL_RULE_EXEC_STATUS = _irods.COL_RULE_EXEC_STATUS
+COL_TOKEN_NAMESPACE = _irods.COL_TOKEN_NAMESPACE
+COL_TOKEN_ID = _irods.COL_TOKEN_ID
+COL_TOKEN_NAME = _irods.COL_TOKEN_NAME
+COL_TOKEN_VALUE = _irods.COL_TOKEN_VALUE
+COL_TOKEN_VALUE2 = _irods.COL_TOKEN_VALUE2
+COL_TOKEN_VALUE3 = _irods.COL_TOKEN_VALUE3
+COL_TOKEN_COMMENT = _irods.COL_TOKEN_COMMENT
+COL_AUDIT_OBJ_ID = _irods.COL_AUDIT_OBJ_ID
+COL_AUDIT_USER_ID = _irods.COL_AUDIT_USER_ID
+COL_AUDIT_ACTION_ID = _irods.COL_AUDIT_ACTION_ID
+COL_AUDIT_COMMENT = _irods.COL_AUDIT_COMMENT
+COL_AUDIT_CREATE_TIME = _irods.COL_AUDIT_CREATE_TIME
+COL_AUDIT_MODIFY_TIME = _irods.COL_AUDIT_MODIFY_TIME
+COL_AUDIT_RANGE_START = _irods.COL_AUDIT_RANGE_START
+COL_AUDIT_RANGE_END = _irods.COL_AUDIT_RANGE_END
+COL_COLL_USER_NAME = _irods.COL_COLL_USER_NAME
+COL_COLL_USER_ZONE = _irods.COL_COLL_USER_ZONE
+COL_DATA_USER_NAME = _irods.COL_DATA_USER_NAME
+COL_DATA_USER_ZONE = _irods.COL_DATA_USER_ZONE
+COL_RESC_USER_NAME = _irods.COL_RESC_USER_NAME
+COL_RESC_USER_ZONE = _irods.COL_RESC_USER_ZONE
+COL_SL_HOST_NAME = _irods.COL_SL_HOST_NAME
+COL_SL_RESC_NAME = _irods.COL_SL_RESC_NAME
+COL_SL_CPU_USED = _irods.COL_SL_CPU_USED
+COL_SL_MEM_USED = _irods.COL_SL_MEM_USED
+COL_SL_SWAP_USED = _irods.COL_SL_SWAP_USED
+COL_SL_RUNQ_LOAD = _irods.COL_SL_RUNQ_LOAD
+COL_SL_DISK_SPACE = _irods.COL_SL_DISK_SPACE
+COL_SL_NET_INPUT = _irods.COL_SL_NET_INPUT
+COL_SL_NET_OUTPUT = _irods.COL_SL_NET_OUTPUT
+COL_SL_CREATE_TIME = _irods.COL_SL_CREATE_TIME
+COL_SLD_RESC_NAME = _irods.COL_SLD_RESC_NAME
+COL_SLD_LOAD_FACTOR = _irods.COL_SLD_LOAD_FACTOR
+COL_SLD_CREATE_TIME = _irods.COL_SLD_CREATE_TIME
+COL_USER_AUTH_ID = _irods.COL_USER_AUTH_ID
+COL_USER_DN = _irods.COL_USER_DN
+COL_RULE_ID = _irods.COL_RULE_ID
+COL_RULE_VERSION = _irods.COL_RULE_VERSION
+COL_RULE_BASE_NAME = _irods.COL_RULE_BASE_NAME
+COL_RULE_NAME = _irods.COL_RULE_NAME
+COL_RULE_EVENT = _irods.COL_RULE_EVENT
+COL_RULE_CONDITION = _irods.COL_RULE_CONDITION
+COL_RULE_BODY = _irods.COL_RULE_BODY
+COL_RULE_RECOVERY = _irods.COL_RULE_RECOVERY
+COL_RULE_STATUS = _irods.COL_RULE_STATUS
+COL_RULE_OWNER_NAME = _irods.COL_RULE_OWNER_NAME
+COL_RULE_OWNER_ZONE = _irods.COL_RULE_OWNER_ZONE
+COL_RULE_DESCR_1 = _irods.COL_RULE_DESCR_1
+COL_RULE_DESCR_2 = _irods.COL_RULE_DESCR_2
+COL_RULE_INPUT_PARAMS = _irods.COL_RULE_INPUT_PARAMS
+COL_RULE_OUTPUT_PARAMS = _irods.COL_RULE_OUTPUT_PARAMS
+COL_RULE_DOLLAR_VARS = _irods.COL_RULE_DOLLAR_VARS
+COL_RULE_ICAT_ELEMENTS = _irods.COL_RULE_ICAT_ELEMENTS
+COL_RULE_SIDEEFFECTS = _irods.COL_RULE_SIDEEFFECTS
+COL_RULE_COMMENT = _irods.COL_RULE_COMMENT
+COL_RULE_CREATE_TIME = _irods.COL_RULE_CREATE_TIME
+COL_RULE_MODIFY_TIME = _irods.COL_RULE_MODIFY_TIME
+COL_RULE_BASE_MAP_VERSION = _irods.COL_RULE_BASE_MAP_VERSION
+COL_RULE_BASE_MAP_BASE_NAME = _irods.COL_RULE_BASE_MAP_BASE_NAME
+COL_RULE_BASE_MAP_OWNER_NAME = _irods.COL_RULE_BASE_MAP_OWNER_NAME
+COL_RULE_BASE_MAP_OWNER_ZONE = _irods.COL_RULE_BASE_MAP_OWNER_ZONE
+COL_RULE_BASE_MAP_COMMENT = _irods.COL_RULE_BASE_MAP_COMMENT
+COL_RULE_BASE_MAP_CREATE_TIME = _irods.COL_RULE_BASE_MAP_CREATE_TIME
+COL_RULE_BASE_MAP_MODIFY_TIME = _irods.COL_RULE_BASE_MAP_MODIFY_TIME
+COL_RULE_BASE_MAP_PRIORITY = _irods.COL_RULE_BASE_MAP_PRIORITY
+COL_DVM_ID = _irods.COL_DVM_ID
+COL_DVM_VERSION = _irods.COL_DVM_VERSION
+COL_DVM_BASE_NAME = _irods.COL_DVM_BASE_NAME
+COL_DVM_EXT_VAR_NAME = _irods.COL_DVM_EXT_VAR_NAME
+COL_DVM_CONDITION = _irods.COL_DVM_CONDITION
+COL_DVM_INT_MAP_PATH = _irods.COL_DVM_INT_MAP_PATH
+COL_DVM_STATUS = _irods.COL_DVM_STATUS
+COL_DVM_OWNER_NAME = _irods.COL_DVM_OWNER_NAME
+COL_DVM_OWNER_ZONE = _irods.COL_DVM_OWNER_ZONE
+COL_DVM_COMMENT = _irods.COL_DVM_COMMENT
+COL_DVM_CREATE_TIME = _irods.COL_DVM_CREATE_TIME
+COL_DVM_MODIFY_TIME = _irods.COL_DVM_MODIFY_TIME
+COL_DVM_BASE_MAP_VERSION = _irods.COL_DVM_BASE_MAP_VERSION
+COL_DVM_BASE_MAP_BASE_NAME = _irods.COL_DVM_BASE_MAP_BASE_NAME
+COL_DVM_BASE_MAP_OWNER_NAME = _irods.COL_DVM_BASE_MAP_OWNER_NAME
+COL_DVM_BASE_MAP_OWNER_ZONE = _irods.COL_DVM_BASE_MAP_OWNER_ZONE
+COL_DVM_BASE_MAP_COMMENT = _irods.COL_DVM_BASE_MAP_COMMENT
+COL_DVM_BASE_MAP_CREATE_TIME = _irods.COL_DVM_BASE_MAP_CREATE_TIME
+COL_DVM_BASE_MAP_MODIFY_TIME = _irods.COL_DVM_BASE_MAP_MODIFY_TIME
+COL_FNM_ID = _irods.COL_FNM_ID
+COL_FNM_VERSION = _irods.COL_FNM_VERSION
+COL_FNM_BASE_NAME = _irods.COL_FNM_BASE_NAME
+COL_FNM_EXT_FUNC_NAME = _irods.COL_FNM_EXT_FUNC_NAME
+COL_FNM_INT_FUNC_NAME = _irods.COL_FNM_INT_FUNC_NAME
+COL_FNM_STATUS = _irods.COL_FNM_STATUS
+COL_FNM_OWNER_NAME = _irods.COL_FNM_OWNER_NAME
+COL_FNM_OWNER_ZONE = _irods.COL_FNM_OWNER_ZONE
+COL_FNM_COMMENT = _irods.COL_FNM_COMMENT
+COL_FNM_CREATE_TIME = _irods.COL_FNM_CREATE_TIME
+COL_FNM_MODIFY_TIME = _irods.COL_FNM_MODIFY_TIME
+COL_FNM_BASE_MAP_VERSION = _irods.COL_FNM_BASE_MAP_VERSION
+COL_FNM_BASE_MAP_BASE_NAME = _irods.COL_FNM_BASE_MAP_BASE_NAME
+COL_FNM_BASE_MAP_OWNER_NAME = _irods.COL_FNM_BASE_MAP_OWNER_NAME
+COL_FNM_BASE_MAP_OWNER_ZONE = _irods.COL_FNM_BASE_MAP_OWNER_ZONE
+COL_FNM_BASE_MAP_COMMENT = _irods.COL_FNM_BASE_MAP_COMMENT
+COL_FNM_BASE_MAP_CREATE_TIME = _irods.COL_FNM_BASE_MAP_CREATE_TIME
+COL_FNM_BASE_MAP_MODIFY_TIME = _irods.COL_FNM_BASE_MAP_MODIFY_TIME
+COL_QUOTA_USER_ID = _irods.COL_QUOTA_USER_ID
+COL_QUOTA_RESC_ID = _irods.COL_QUOTA_RESC_ID
+COL_QUOTA_LIMIT = _irods.COL_QUOTA_LIMIT
+COL_QUOTA_OVER = _irods.COL_QUOTA_OVER
+COL_QUOTA_MODIFY_TIME = _irods.COL_QUOTA_MODIFY_TIME
+COL_QUOTA_USAGE_USER_ID = _irods.COL_QUOTA_USAGE_USER_ID
+COL_QUOTA_USAGE_RESC_ID = _irods.COL_QUOTA_USAGE_RESC_ID
+COL_QUOTA_USAGE = _irods.COL_QUOTA_USAGE
+COL_QUOTA_USAGE_MODIFY_TIME = _irods.COL_QUOTA_USAGE_MODIFY_TIME
+COL_QUOTA_RESC_NAME = _irods.COL_QUOTA_RESC_NAME
+COL_QUOTA_USER_NAME = _irods.COL_QUOTA_USER_NAME
+COL_QUOTA_USER_ZONE = _irods.COL_QUOTA_USER_ZONE
+COL_QUOTA_USER_TYPE = _irods.COL_QUOTA_USER_TYPE
+COL_MSRVC_ID = _irods.COL_MSRVC_ID
+COL_MSRVC_NAME = _irods.COL_MSRVC_NAME
+COL_MSRVC_SIGNATURE = _irods.COL_MSRVC_SIGNATURE
+COL_MSRVC_DOXYGEN = _irods.COL_MSRVC_DOXYGEN
+COL_MSRVC_VARIATIONS = _irods.COL_MSRVC_VARIATIONS
+COL_MSRVC_STATUS = _irods.COL_MSRVC_STATUS
+COL_MSRVC_OWNER_NAME = _irods.COL_MSRVC_OWNER_NAME
+COL_MSRVC_OWNER_ZONE = _irods.COL_MSRVC_OWNER_ZONE
+COL_MSRVC_COMMENT = _irods.COL_MSRVC_COMMENT
+COL_MSRVC_CREATE_TIME = _irods.COL_MSRVC_CREATE_TIME
+COL_MSRVC_MODIFY_TIME = _irods.COL_MSRVC_MODIFY_TIME
+COL_MSRVC_VERSION = _irods.COL_MSRVC_VERSION
+COL_MSRVC_HOST = _irods.COL_MSRVC_HOST
+COL_MSRVC_LOCATION = _irods.COL_MSRVC_LOCATION
+COL_MSRVC_LANGUAGE = _irods.COL_MSRVC_LANGUAGE
+COL_MSRVC_TYPE_NAME = _irods.COL_MSRVC_TYPE_NAME
+COL_MSRVC_MODULE_NAME = _irods.COL_MSRVC_MODULE_NAME
+COL_MSRVC_VER_OWNER_NAME = _irods.COL_MSRVC_VER_OWNER_NAME
+COL_MSRVC_VER_OWNER_ZONE = _irods.COL_MSRVC_VER_OWNER_ZONE
+COL_MSRVC_VER_COMMENT = _irods.COL_MSRVC_VER_COMMENT
+COL_MSRVC_VER_CREATE_TIME = _irods.COL_MSRVC_VER_CREATE_TIME
+COL_MSRVC_VER_MODIFY_TIME = _irods.COL_MSRVC_VER_MODIFY_TIME
+COL_TICKET_ID = _irods.COL_TICKET_ID
+COL_TICKET_STRING = _irods.COL_TICKET_STRING
+COL_TICKET_TYPE = _irods.COL_TICKET_TYPE
+COL_TICKET_USER_ID = _irods.COL_TICKET_USER_ID
+COL_TICKET_OBJECT_ID = _irods.COL_TICKET_OBJECT_ID
+COL_TICKET_OBJECT_TYPE = _irods.COL_TICKET_OBJECT_TYPE
+COL_TICKET_USES_LIMIT = _irods.COL_TICKET_USES_LIMIT
+COL_TICKET_USES_COUNT = _irods.COL_TICKET_USES_COUNT
+COL_TICKET_EXPIRY_TS = _irods.COL_TICKET_EXPIRY_TS
+COL_TICKET_CREATE_TIME = _irods.COL_TICKET_CREATE_TIME
+COL_TICKET_MODIFY_TIME = _irods.COL_TICKET_MODIFY_TIME
+COL_TICKET_WRITE_FILE_COUNT = _irods.COL_TICKET_WRITE_FILE_COUNT
+COL_TICKET_WRITE_FILE_LIMIT = _irods.COL_TICKET_WRITE_FILE_LIMIT
+COL_TICKET_WRITE_BYTE_COUNT = _irods.COL_TICKET_WRITE_BYTE_COUNT
+COL_TICKET_WRITE_BYTE_LIMIT = _irods.COL_TICKET_WRITE_BYTE_LIMIT
+COL_TICKET_ALLOWED_HOST_TICKET_ID = _irods.COL_TICKET_ALLOWED_HOST_TICKET_ID
+COL_TICKET_ALLOWED_HOST = _irods.COL_TICKET_ALLOWED_HOST
+COL_TICKET_ALLOWED_USER_TICKET_ID = _irods.COL_TICKET_ALLOWED_USER_TICKET_ID
+COL_TICKET_ALLOWED_USER_NAME = _irods.COL_TICKET_ALLOWED_USER_NAME
+COL_TICKET_ALLOWED_GROUP_TICKET_ID = _irods.COL_TICKET_ALLOWED_GROUP_TICKET_ID
+COL_TICKET_ALLOWED_GROUP_NAME = _irods.COL_TICKET_ALLOWED_GROUP_NAME
+COL_TICKET_DATA_NAME = _irods.COL_TICKET_DATA_NAME
+COL_TICKET_DATA_COLL_NAME = _irods.COL_TICKET_DATA_COLL_NAME
+COL_TICKET_COLL_NAME = _irods.COL_TICKET_COLL_NAME
+COL_TICKET_OWNER_NAME = _irods.COL_TICKET_OWNER_NAME
+COL_TICKET_OWNER_ZONE = _irods.COL_TICKET_OWNER_ZONE
+COL_COLL_FILEMETA_OBJ_ID = _irods.COL_COLL_FILEMETA_OBJ_ID
+COL_COLL_FILEMETA_UID = _irods.COL_COLL_FILEMETA_UID
+COL_COLL_FILEMETA_GID = _irods.COL_COLL_FILEMETA_GID
+COL_COLL_FILEMETA_OWNER = _irods.COL_COLL_FILEMETA_OWNER
+COL_COLL_FILEMETA_GROUP = _irods.COL_COLL_FILEMETA_GROUP
+COL_COLL_FILEMETA_MODE = _irods.COL_COLL_FILEMETA_MODE
+COL_COLL_FILEMETA_CTIME = _irods.COL_COLL_FILEMETA_CTIME
+COL_COLL_FILEMETA_MTIME = _irods.COL_COLL_FILEMETA_MTIME
+COL_COLL_FILEMETA_SOURCE_PATH = _irods.COL_COLL_FILEMETA_SOURCE_PATH
+COL_COLL_FILEMETA_CREATE_TIME = _irods.COL_COLL_FILEMETA_CREATE_TIME
+COL_COLL_FILEMETA_MODIFY_TIME = _irods.COL_COLL_FILEMETA_MODIFY_TIME
+COL_DATA_FILEMETA_OBJ_ID = _irods.COL_DATA_FILEMETA_OBJ_ID
+COL_DATA_FILEMETA_UID = _irods.COL_DATA_FILEMETA_UID
+COL_DATA_FILEMETA_GID = _irods.COL_DATA_FILEMETA_GID
+COL_DATA_FILEMETA_OWNER = _irods.COL_DATA_FILEMETA_OWNER
+COL_DATA_FILEMETA_GROUP = _irods.COL_DATA_FILEMETA_GROUP
+COL_DATA_FILEMETA_MODE = _irods.COL_DATA_FILEMETA_MODE
+COL_DATA_FILEMETA_CTIME = _irods.COL_DATA_FILEMETA_CTIME
+COL_DATA_FILEMETA_MTIME = _irods.COL_DATA_FILEMETA_MTIME
+COL_DATA_FILEMETA_SOURCE_PATH = _irods.COL_DATA_FILEMETA_SOURCE_PATH
+COL_DATA_FILEMETA_CREATE_TIME = _irods.COL_DATA_FILEMETA_CREATE_TIME
+COL_DATA_FILEMETA_MODIFY_TIME = _irods.COL_DATA_FILEMETA_MODIFY_TIME
+SINGLE_MSG_TICKET = _irods.SINGLE_MSG_TICKET
+MULTI_MSG_TICKET = _irods.MULTI_MSG_TICKET
+ACCESS_NULL = _irods.ACCESS_NULL
+ACCESS_EXECUTE = _irods.ACCESS_EXECUTE
+ACCESS_READ_ANNOTATION = _irods.ACCESS_READ_ANNOTATION
+ACCESS_READ_SYSTEM_METADATA = _irods.ACCESS_READ_SYSTEM_METADATA
+ACCESS_READ_METADATA = _irods.ACCESS_READ_METADATA
+ACCESS_READ_OBJECT = _irods.ACCESS_READ_OBJECT
+ACCESS_WRITE_ANNOTATION = _irods.ACCESS_WRITE_ANNOTATION
+ACCESS_CREATE_METADATA = _irods.ACCESS_CREATE_METADATA
+ACCESS_MODIFY_METADATA = _irods.ACCESS_MODIFY_METADATA
+ACCESS_DELETE_METADATA = _irods.ACCESS_DELETE_METADATA
+ACCESS_ADMINISTER_OBJECT = _irods.ACCESS_ADMINISTER_OBJECT
+ACCESS_CREATE_OBJECT = _irods.ACCESS_CREATE_OBJECT
+ACCESS_MODIFY_OBJECT = _irods.ACCESS_MODIFY_OBJECT
+ACCESS_DELETE_OBJECT = _irods.ACCESS_DELETE_OBJECT
+ACCESS_CREATE_TOKEN = _irods.ACCESS_CREATE_TOKEN
+ACCESS_DELETE_TOKEN = _irods.ACCESS_DELETE_TOKEN
+ACCESS_CURATE = _irods.ACCESS_CURATE
+ACCESS_OWN = _irods.ACCESS_OWN
+ACCESS_INHERIT = _irods.ACCESS_INHERIT
+ACCESS_NO_INHERIT = _irods.ACCESS_NO_INHERIT
+AU_ACCESS_GRANTED = _irods.AU_ACCESS_GRANTED
+AU_REGISTER_DATA_OBJ = _irods.AU_REGISTER_DATA_OBJ
+AU_REGISTER_DATA_REPLICA = _irods.AU_REGISTER_DATA_REPLICA
+AU_UNREGISTER_DATA_OBJ = _irods.AU_UNREGISTER_DATA_OBJ
+AU_REGISTER_DELAYED_RULE = _irods.AU_REGISTER_DELAYED_RULE
+AU_MODIFY_DELAYED_RULE = _irods.AU_MODIFY_DELAYED_RULE
+AU_DELETE_DELAYED_RULE = _irods.AU_DELETE_DELAYED_RULE
+AU_REGISTER_RESOURCE = _irods.AU_REGISTER_RESOURCE
+AU_DELETE_RESOURCE = _irods.AU_DELETE_RESOURCE
+AU_DELETE_USER_RE = _irods.AU_DELETE_USER_RE
+AU_REGISTER_COLL_BY_ADMIN = _irods.AU_REGISTER_COLL_BY_ADMIN
+AU_REGISTER_COLL = _irods.AU_REGISTER_COLL
+AU_DELETE_COLL_BY_ADMIN = _irods.AU_DELETE_COLL_BY_ADMIN
+AU_DELETE_COLL = _irods.AU_DELETE_COLL
+AU_DELETE_ZONE = _irods.AU_DELETE_ZONE
+AU_REGISTER_ZONE = _irods.AU_REGISTER_ZONE
+AU_MOD_USER_NAME = _irods.AU_MOD_USER_NAME
+AU_MOD_USER_TYPE = _irods.AU_MOD_USER_TYPE
+AU_MOD_USER_ZONE = _irods.AU_MOD_USER_ZONE
+AU_MOD_USER_DN = _irods.AU_MOD_USER_DN
+AU_MOD_USER_INFO = _irods.AU_MOD_USER_INFO
+AU_MOD_USER_COMMENT = _irods.AU_MOD_USER_COMMENT
+AU_MOD_USER_PASSWORD = _irods.AU_MOD_USER_PASSWORD
+AU_ADD_USER_AUTH_NAME = _irods.AU_ADD_USER_AUTH_NAME
+AU_DELETE_USER_AUTH_NAME = _irods.AU_DELETE_USER_AUTH_NAME
+AU_MOD_GROUP = _irods.AU_MOD_GROUP
+AU_MOD_RESC = _irods.AU_MOD_RESC
+AU_MOD_RESC_FREE_SPACE = _irods.AU_MOD_RESC_FREE_SPACE
+AU_MOD_RESC_GROUP = _irods.AU_MOD_RESC_GROUP
+AU_MOD_ZONE = _irods.AU_MOD_ZONE
+AU_REGISTER_USER_RE = _irods.AU_REGISTER_USER_RE
+AU_ADD_AVU_METADATA = _irods.AU_ADD_AVU_METADATA
+AU_DELETE_AVU_METADATA = _irods.AU_DELETE_AVU_METADATA
+AU_COPY_AVU_METADATA = _irods.AU_COPY_AVU_METADATA
+AU_ADD_AVU_WILD_METADATA = _irods.AU_ADD_AVU_WILD_METADATA
+AU_MOD_ACCESS_CONTROL_OBJ = _irods.AU_MOD_ACCESS_CONTROL_OBJ
+AU_MOD_ACCESS_CONTROL_COLL = _irods.AU_MOD_ACCESS_CONTROL_COLL
+AU_MOD_ACCESS_CONTROL_COLL_RECURSIVE = _irods.AU_MOD_ACCESS_CONTROL_COLL_RECURSIVE
+AU_MOD_ACCESS_CONTROL_RESOURCE = _irods.AU_MOD_ACCESS_CONTROL_RESOURCE
+AU_RENAME_DATA_OBJ = _irods.AU_RENAME_DATA_OBJ
+AU_RENAME_COLLECTION = _irods.AU_RENAME_COLLECTION
+AU_MOVE_DATA_OBJ = _irods.AU_MOVE_DATA_OBJ
+AU_MOVE_COLL = _irods.AU_MOVE_COLL
+AU_REG_TOKEN = _irods.AU_REG_TOKEN
+AU_DEL_TOKEN = _irods.AU_DEL_TOKEN
+AU_CREATE_TICKET = _irods.AU_CREATE_TICKET
+AU_MOD_TICKET = _irods.AU_MOD_TICKET
+AU_DELETE_TICKET = _irods.AU_DELETE_TICKET
+AU_USE_TICKET = _irods.AU_USE_TICKET
+def _irodsOpen(conn, collName, dataName, mode, resc_name):
+    global lastStatus
+    ir_file = irodsFile(conn)
+    dataObjInp = dataObjInp_t()
+    
+    ir_file.dataName = dataName
+    ir_file.collName = collName
+    ir_file.openFlag = O_RDONLY
+    
+    dataObjInp.objPath = ir_file.fullPath()
+    
+    # Set the resource
+    if resc_name:
+        ir_file.resourceName = resc_name
+        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, resc_name)
+        
+        # Set the replica number (get the info from the icat)
+        # returns null if the file does not exist
+        replNum = getDataObjReplicaNumber(conn, collName, dataName, resc_name)
+    
+        if replNum:
+            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
+    
+    if mode == "w":
+        dataObjInp.openFlags = O_WRONLY | O_CREAT
+        ir_file.openFlag = O_WRONLY | O_CREAT
+        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
+        lastStatus = rcDataObjCreate(conn, dataObjInp)
+        
+    elif mode == "r":
+        dataObjInp.openFlags = O_RDONLY
+        ir_file.openFlag = O_RDONLY
+        lastStatus = rcDataObjOpen(conn, dataObjInp) 
+        
+    elif mode == "a":  
+        dataObjInp.openFlags = O_WRONLY
+        ir_file.openFlag = O_WRONLY
+        lastStatus = rcDataObjOpen(conn, dataObjInp)
+        
+        if lastStatus != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
+            dataObjLseekInp = openedDataObjInp_t()
+            dataObjLseekInp.l1descInx = lastStatus
+            dataObjLseekInp.offset = 0
+            dataObjLseekInp.whence = SEEK_END
+
+            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
+            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
+        else:
+            lastStatus = rcDataObjCreate(conn, dataObjInp)
+            
+    elif mode == "w+":
+        dataObjInp.openFlags = O_RDWR
+        ir_file.openFlag = O_RDWR
+        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
+        lastStatus = rcDataObjCreate(conn, dataObjInp)
+        
+    elif mode == "r+":
+        dataObjInp.openFlags = O_RDWR
+        ir_file.openFlag = O_RDWR
+        lastStatus = rcDataObjOpen(conn, dataObjInp) 
+        
+    elif mode == "a+":
+        dataObjInp.openFlags = O_RDWR
+        ir_file.openFlag = O_RDWR
+        lastStatus = rcDataObjOpen(conn, dataObjInp)
+        
+        if lastStatus != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
+            dataObjLseekInp = openedDataObjInp_t()
+            dataObjLseekInp.l1descInx = lastStatus
+            dataObjLseekInp.offset = 0
+            dataObjLseekInp.whence = SEEK_END
+
+            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
+            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
+        else:
+            lastStatus = rcDataObjCreate(conn, dataObjInp)
+    
+    else:
+        lastStatus = 0
+    
+    if not resc_name: # If the resc parameter was NULL then we need to find the
+                      # resource iRODS used and set the ir_file variable
+        ir_resc_name = getDataObjRescNames(conn, collName, dataName)
+        if ir_resc_name:
+            resc_name = ir_resc_name[0]
+        else:
+            status, myEnv = getRodsEnv()
+            resc_name = myEnv.rodsDefResource
+        ir_file.resourceName = resc_name
+
+    if lastStatus > 0:
+        ir_file.descInx = lastStatus
+        ir_file.set_size()
+        return ir_file
+    #else:
+     #   raise IrodsException(l1descInx)
+
+def addCollUserMetadata(conn, path, name, value, units=""):
+    global lastStatus
+    lastStatus = addUserMetadata(conn, "-c", path, name, value, units)
+    return lastStatus
+
+def addFileUserMetadata(conn, path, name, value, units=""):
+    global lastStatus
+    lastStatus = addUserMetadata(conn, "-d", path, name, value, units)
+    return lastStatus
+
+def addObject(conn, objType, objName, arg3, arg4, arg5, arg6):
+    global lastStatus
+    generalAdminInp = generalAdminInp_t ()
+    generalAdminInp.arg0 = "add"
+    generalAdminInp.arg1 = objType
+    generalAdminInp.arg2 = objName
+    generalAdminInp.arg3 = arg3
+    generalAdminInp.arg4 = arg4
+    generalAdminInp.arg5 = arg5
+    generalAdminInp.arg6 = arg6
+    generalAdminInp.arg7 = ""
+    generalAdminInp.arg8 = ""
+    generalAdminInp.arg9 = ""
+    lastStatus = rcGeneralAdmin(conn, generalAdminInp)
+    return lastStatus
+
+# Parse a genQueryOut result parameter which comes from a genQuery call.
+# Add the output to the python list passed in parameter. Each row becomes an
+# element of the list and each element is a dictionary created with the keys
+# passed in parameter. The order should be compliant with the order in genQueryInp
+# if len(formatStr) < len(genQueryOut->sqlResult[a].attriInx) => segfault, that's
+# why this function is not accessible from anywhere else
+def addResultToFormatDictList(genQueryOut, formatStr, l):
+    if not genQueryOut:
+        return 0
+    for r in xrange(genQueryOut.rowCnt):
+        t = genQueryOut.getSqlResultIdx(r)
+        d = {}
+        for idx in xrange(len(formatStr)):
+            name = formatStr[idx]
+            tResult = t[idx]
+            if name.endswith("_ts"):    # Pretty print of time values
+                localTime = getLocalTimeFromRodsTime(tResult)
+                d[name] = localTime
+            else:
+                d[name] = tResult
+        l.append(d)
+    return 0
+
+## Parse a genQueryOut result parameter which comes from a genQuery call.
+## Add the output to the python list passed in parameter. Each row becomes an
+## element of the list and each element is a tuple created by selected attributes
+## in the genQueryInp parameter.
+## If attriCnt = 1 we do not create a list of tuple of str but a list of str
+def addResultToTupleList(genQueryOut, l):
+    if not genQueryOut:
+        return 0
+    for r in xrange(genQueryOut.rowCnt):
+        l.append(genQueryOut.getSqlResultIdx(r))
+    return 0
+
+def addUserMetadata(conn, obj_type, name, attName, attValue, attUnits):
+    global lastStatus
+    lastStatus = procUserMetadata(conn, "add", obj_type, name, attName, 
+                                  attValue, attUnits)
+    return lastStatus
+    
+def createCollection(conn, coll_path):
+    global lastStatus
+    collCreateInp = collInp_t()
+    collCreateInp.collName = coll_path
+    lastStatus = rcCollCreate(conn, collCreateInp)
+    return lastStatus
+
+def createGroup(conn, groupName):
+    global lastStatus
+    if groupName == "":
+        return None
+    lastStatus, myEnv = getRodsEnv()
+    if lastStatus != 0:
+        return None
+    lastStatus = addObject(conn, "user", groupName, "rodsgroup", myEnv.rodsZone, "", "")
+    if lastStatus == 0:
+        return irodsGroup(conn, groupName)
+    else:
+        return None
+
+def createResource(conn, name, type, cls, host, path):
+    global lastStatus
+    if name == "":
+        return None
+    lastStatus = addObject(conn, "resource", name, type, cls,
+                        host, path)
+    if lastStatus == 0:
+        return irodsResource(conn, name)
+    else:
+        return None
+
+def createUser(conn, userName, type):
+    global lastStatus
+    if userName == "":
+        return None
+    lastStatus, myEnv = getRodsEnv()
+    if lastStatus != 0:
+        return None
+    lastStatus = addObject(conn, "user", userName, type, myEnv.rodsZone, "", "")
+    if lastStatus == 0:
+        return irodsUser(conn, userName, myEnv.rodsZone)
+    else:
+        return None
+
+def createZone(conn, zone_name, type, connstr="", comment=""):
+    global lastStatus
+    if zone_name == "":
+        return None
+    lastStatus, myEnv = getRodsEnv()
+    if lastStatus != 0:
+        return None
+    lastStatus = addObject(conn, "zone", zone_name, type, connstr, comment, "")
+    if lastStatus == 0:
+        return irodsZone(conn, zone_name)
+    else:
+        return None
+
+def deleteCollection(conn, coll_path, force=True):
+    global lastStatus
+    collInp = collInp_t()
+    collInp.collName = coll_path
+    if force:
+        addKeyVal(collInp.condInput, FORCE_FLAG_KW, "")
+    addKeyVal(collInp.condInput, RECURSIVE_OPR__KW, "")
+    lastStatus = rcRmColl(conn, collInp, 0)
+    return lastStatus
+
+def deleteFile(conn, obj_path):
+    global lastStatus
+    dataObjInp = dataObjInp_t()
+    dataObjInp.objPath = obj_path
+    lastStatus = rcDataObjUnlink(conn, dataObjInp)
+    return lastStatus
+
+def deleteGroup(conn, userName):
+    global lastStatus
+    status, myEnv = getRodsEnv()
+    if lastStatus != 0:
+        return lastStatus
+    lastStatus = rmObject(conn, "user", userName, myEnv.rodsZone)
+    return lastStatus
+
+def deleteResource(conn, name):
+    global lastStatus
+    lastStatus = rmObject(conn, "resource", name, "")
+    return lastStatus
+
+def deleteUser(conn, userName):
+    global lastStatus
+    lastStatus = rmObject(conn, "user", userName, "")
+    return lastStatus
+
+def deleteZone(conn, zone_name):
+    global lastStatus
+    lastStatus = rmObject(conn, "zone", zone_name, "")
+    return lastStatus
+
+def getCollAcl(conn, path):
+    global lastStatus
+    if path.endswith('/'):
+        path = path[:-1]
+    zoneHint = path
+    lastStatus, genQueryOut = queryCollAcl(conn, path, zoneHint)
+    
+    res = []
+    if genQueryOut and genQueryOut.rowCnt >= 0:
+        for i in xrange(genQueryOut.rowCnt):
+            res.append((
+                         genQueryOut.getSqlResultByInxIdx(COL_COLL_USER_NAME, i),
+                         genQueryOut.getSqlResultByInxIdx(COL_COLL_USER_ZONE, i),
+                         genQueryOut.getSqlResultByInxIdx(COL_COLL_ACCESS_NAME, i)
+                       ))
+    return res
+
+def getCollId(conn, path):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_COLL_ID], [0], 1)
+    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
+    l = queryToTupleList(conn, selectInp, sqlCondInp)
+    if l:
+        return l[0]
+    else:
+        return -1
+
+def getCollInheritance(conn, path):
+    global lastStatus
+    if path.endswith('/'):
+        path = path[:-1]
+    lastStatus, genQueryOut = queryCollInheritance(conn, path)
+    inheritStr = genQueryOut.getSqlResultByInxIdx(COL_COLL_INHERITANCE, 0)
+    if inheritStr == "1":
+        return True
+    else:
+        return False
+
+def getCollUserMetadata(conn, path):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
+                    COL_META_COLL_ATTR_UNITS],
+                   [0, 0, 0], 3)
+    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
+    return queryToTupleList(conn, selectInp, sqlCondInp)
+
+def getDataObjACL(conn, irods_path):
+    global lastStatus
+    lastStatus, collName, dataName = splitPathByKey(irods_path, "/")
+    if lastStatus < 0:
+        return []
+    zoneHint = collName
+    dataId = getDataObjId(conn, collName, dataName)
+    if not dataId:
+        return CAT_UNKNOWN_FILE
+    lastStatus, genQueryOut = queryDataObjAcl(conn, dataId, zoneHint)
+    res = []
+    if genQueryOut and genQueryOut.rowCnt >= 0:
+        for i in xrange(genQueryOut.rowCnt):
+            res.append((
+                         genQueryOut.getSqlResultByInxIdx(COL_USER_NAME, i),
+                         genQueryOut.getSqlResultByInxIdx(COL_USER_ZONE, i),
+                         genQueryOut.getSqlResultByInxIdx(COL_DATA_ACCESS_NAME, i)
+                       ))
+    return res
+
+def getDataObjId(conn, coll_name, data_name):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_D_DATA_ID], [0], 1)
+    sqlCondInp.init([COL_DATA_NAME, COL_COLL_NAME], 
+                    ["='%s'" % data_name,
+                     "='%s'" % coll_name], 
+                    2)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    if len(l) > 0:
+        return l[0]
+
+## Returns the number of a replica for a specific file when you only know the
+## resource name. This is used by REPL_NUM_KW when you want to open a file for
+## instance
+def getDataObjReplicaNumber(conn, coll_name, data_name, resc_name):
+    genQueryInp = genQueryInp_t()
+    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
+    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)
+    addInxVal(genQueryInp.sqlCondInp, COL_D_RESC_NAME, "='%s'" % resc_name)
+    addInxIval(genQueryInp.selectInp, COL_DATA_REPL_NUM, 1)
+    genQueryInp.maxRows = MAX_SQL_ROWS
+    genQueryOut = rcGenQuery(conn, genQueryInp)
+    rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
+    if genQueryOut and genQueryOut.rowCnt >= 0:
+        # Should only have one row as output
+        rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
+        res = rescNum.value[0]
+    else:
+        return ""
+    
+    return res
+
+# Returns a PyList of the resource names of an irods data object given its
+# collection and its name. The order is given by resource ids.
+# It will fail if there are more than MAX_SQL_ROWS as I did not loop if
+# continueInx > 0 after genQuery call
+def getDataObjRescNames(conn, coll_name, data_name):
+    genQueryInp = genQueryInp_t()
+    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
+    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)
+    addInxIval(genQueryInp.selectInp, COL_D_RESC_NAME, 1)
+    addInxIval(genQueryInp.selectInp, COL_R_RESC_ID, ORDER_BY)
+    genQueryInp.maxRows = MAX_SQL_ROWS
+    genQueryOut = rcGenQuery(conn, genQueryInp)
+    rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
+    res = []
+    if genQueryOut and genQueryOut.rowCnt >= 0:
+        for i in xrange(genQueryOut.rowCnt):
+            res.append(genQueryOut.getSqlResultByInxIdx(COL_D_RESC_NAME, i))
+    else:
+        return ""
+    
+    return res
+
+# Returns the size of a data object
+def getDataObjSize(conn, coll_name, data_name, resc_name):
+    genQueryInp = genQueryInp_t()
+    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
+    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)  
+    addInxVal(genQueryInp.sqlCondInp, COL_D_RESC_NAME, "='%s'" % resc_name)
+    addInxIval(genQueryInp.selectInp, COL_DATA_SIZE, 1)
+    genQueryInp.maxRows = MAX_SQL_ROWS
+    genQueryOut = rcGenQuery(conn, genQueryInp)
+    if genQueryOut and genQueryOut.rowCnt >= 0:
+        sizeNum = getSqlResultByInx(genQueryOut, COL_DATA_SIZE)
+        return int(sizeNum.value)
+    else:
+        return 0
+
+# Get the file Info with the name and resource, query the ICAT database and
+# create a dictionary with the returned information. Need the connection to
+# iRODS
+def getFileInfo(conn, coll_name, data_name, resc_name):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    
+    selectInp.init([COL_D_DATA_ID, COL_D_COLL_ID, COL_DATA_NAME, 
+                    COL_DATA_REPL_NUM, COL_DATA_VERSION, COL_DATA_TYPE_NAME, 
+                    COL_DATA_SIZE, COL_D_RESC_GROUP_NAME, COL_D_RESC_NAME, 
+                    COL_D_DATA_PATH, COL_D_OWNER_NAME, COL_D_OWNER_ZONE, 
+                    COL_D_REPL_STATUS, COL_D_DATA_STATUS, COL_D_DATA_CHECKSUM, 
+                    COL_D_EXPIRY, COL_D_MAP_ID, COL_D_COMMENTS, 
+                    COL_D_CREATE_TIME, COL_D_MODIFY_TIME, COL_DATA_MODE],
+                   [0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0,
+                    0], 
+                   21)
+    
+    sqlCondInp.init([COL_DATA_NAME, COL_COLL_NAME, COL_D_RESC_NAME], 
+                    ["='%s'" % data_name,
+                     "='%s'" % coll_name,
+                     "='%s'" % resc_name], 
+                    3)
+    
+    columnNames = ["data_id", "coll_id", "data_name", "data_repl_num",
+                   "data_version", "data_type_name", "data_size",
+                   "resc_group_name", "resc_name", "data_path",
+                   "data_owner_name", "data_owner_zone", "data_is_dirty",
+                   "data_status", "data_checksum", "data_expiry_ts",
+                   "data_map_id", "r_comment", "create_ts", "modify_ts",
+                   "data_mode"]
+    
+    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
+    
+    if len(l) > 0:
+        return l[0]
+    else:
+        return {columnNames[0] : "mountP",          # "data_id"
+                columnNames[1] : "",                # "coll_id"
+                columnNames[2] : data_name,         # "data_name"
+                columnNames[3] : "1",               # "data_repl_num"
+                columnNames[4] : "",                # "data_version"
+                columnNames[5] :  "mountP",         # "data_type_name"
+                columnNames[6] : "       ",         # "data_size"
+                columnNames[7] : "",                # "resc_group_name"
+                columnNames[8] : resc_name,         # "resc_name"
+                columnNames[9] : coll_name,         # "data_path"
+                columnNames[10] : "        ",       # "data_owner_name"
+                columnNames[11] : "            ",   # "data_owner_zone"
+                columnNames[12] : "",               # "data_is_dirty" 
+                columnNames[13] : "",               # "data_status"
+                columnNames[14] : "",               # "data_checksum"
+                columnNames[15] : "              ", # "data_expiry_ts"
+                columnNames[16] : "",               # "data_map_id"
+                columnNames[17] : "",               # "r_comment"
+                columnNames[18] : "              ", # "create_ts"
+                columnNames[19] : "              ", # "modify_ts"
+                columnNames[20] : ""}               # "data_mode"
+
+def getFileUserMetadata(conn, path):
+    global lastStatus
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    lastStatus, collName, dataName = splitPathByKey(path, "/")
+    if lastStatus != 0:
+        return []
+    selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
+                    COL_META_DATA_ATTR_UNITS],
+                   [0, 0, 0], 3)
+    sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
+                    ["='%s'" % collName,
+                     "='%s'" % dataName], 2)
+    return queryToTupleList(conn, selectInp, sqlCondInp)
+
+def getGroup(conn, groupName):
+    global lastStatus
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_NAME], [0], 1)
+    sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE], 
+                    ["='%s'" % groupName,
+                     "='rodsgroup'"], 2)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    if len(l) > 0:
+        return irodsGroup(conn, l[0])
+    else:
+        lastStatus = CAT_NO_ROWS_FOUND
+        return None
+
+# Get a python list of names of members of a group 
+def getGroupMembers(conn, group_name):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_NAME, COL_USER_ZONE,], [0, 0], 2)
+    sqlCondInp.init([COL_USER_GROUP_NAME], ["='%s'" % group_name], 1)
+    return queryToTupleList(conn, selectInp, sqlCondInp)
+
+def getGroups(conn):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_NAME], [0], 1)
+    sqlCondInp.init([COL_USER_TYPE], ["='rodsgroup'"], 1)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    if len(l) > 0:
+        return [ irodsGroup(conn, name) for name in l ]
+    else:
+        return []
+
+def getGroupsQuotaGlobal(conn):
+    return getQuota(conn, "", False, True)
+
+def getGroupsQuotaResources(conn):
+    return getQuota(conn, "", False, False)
+
+## userQ = boolean (true means user, false means group)
+## GlobalQ = boolean (true means global, false means resource)
+## return a list of dictionaries:
+##   keys: 
+##     resource: Resource name
+##     user/group: User or Group name
+##     zone: zone name
+##     quota: set quota (in bits)
+##     over: nb bits over quota (<0 means under quota)
+##     time: time set
+def getQuota(conn, userName, userQ, globalQ):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    
+    printCount = 0
+    i = 0
+    
+    colName = []
+    inputInx = []
+    inputVal = []
+    
+    if not globalQ:
+        colName.append("resource")
+        inputInx.append(COL_QUOTA_RESC_NAME)
+        inputVal.append(0)
+    else:
+        colName.append("resource")
+        inputInx.append(COL_QUOTA_RESC_ID)
+        inputVal.append(0)
+    
+    if userQ:
+        colName.append("user")
+    else:
+        colName.append("group")
+    inputInx.append(COL_QUOTA_USER_NAME)
+    inputVal.append(0)
+    
+    colName.append("zone")
+    inputInx.append(COL_QUOTA_USER_ZONE)
+    inputVal.append(0)
+    
+    colName.append("quota")
+    inputInx.append(COL_QUOTA_LIMIT)
+    inputVal.append(0)
+    
+    colName.append("over")
+    inputInx.append(COL_QUOTA_OVER)
+    inputVal.append(0)
+    
+    colName.append("time")
+    inputInx.append(COL_QUOTA_MODIFY_TIME)
+    inputVal.append(0)
+    
+    selectInp.init(inputInx, inputVal, len(inputInx))
+    
+    inputCond = []
+    condVal = []
+    
+    if userName:
+        userName2 = ""
+        userZone = ""
+        status, userName2, userZone = parseUserName(userName)
+        
+        if not userZone:
+            inputCond.append(COL_QUOTA_USER_NAME)
+            condVal.append("='%s'" % userName)
+        else:
+            inputCond.append(COL_QUOTA_USER_NAME)
+            condVal.append("='%s'" % userName2)
+            inputCond.append(COL_QUOTA_USER_ZONE)
+            condVal.append("='%s'" % userZone)
+    
+    inputCond.append(COL_QUOTA_USER_TYPE)
+    if userQ:
+        condVal.append("!='rodsgroup'")
+    else:
+        condVal.append("='rodsgroup'")
+    
+    if globalQ:
+        inputCond.append(COL_QUOTA_RESC_ID)
+        condVal.append("='0'")
+    
+    sqlCondInp.init(inputCond, condVal, len(inputCond))
+    
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    
+    res = []
+    
+    for el in l:
+        d = dict(zip(colName, el))
+        if globalQ:
+            d['resource'] = "All"
+        d['time'] = getLocalTimeFromRodsTime(d['time'])
+        d['over'] = int(d['over'])
+        d['quota'] = int(d['quota'])
+        res.append(d)
+    
+    return res
+
+def getRescInfoToDict(conn, resc_name):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_R_RESC_ID, COL_R_RESC_NAME, COL_R_ZONE_NAME, 
+                    COL_R_TYPE_NAME, COL_R_CLASS_NAME, COL_R_LOC, 
+                    COL_R_VAULT_PATH, COL_R_FREE_SPACE, COL_R_FREE_SPACE_TIME, 
+                    COL_R_RESC_INFO, COL_R_RESC_COMMENT, COL_R_CREATE_TIME, 
+                    COL_R_MODIFY_TIME],
+                   [0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0,
+                    0, 0, 0], 
+                   13)
+    sqlCondInp.init([COL_R_RESC_NAME], ["='%s'" % resc_name], 1)
+    columnNames = ["resc_id", "resc_name", "zone_name", "resc_type_name",
+                   "resc_class_name", "resc_net", "resc_def_path",
+                   "free_space", "free_space_ts", "resc_info",
+                   "r_comment", "create_ts", "modify_ts"]
+    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
+    if len(l) > 0:
+        return l[0]
+    else:
+        return {}
+
+def getResource(conn, resc_name):
+    global lastStatus
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_R_RESC_NAME], [0], 1)
+    sqlCondInp.init([COL_R_RESC_NAME], ["='%s'" % resc_name], 1)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    # Check the existence of the resource
+    if len(l) > 0:
+        return irodsResource(conn, l[0])
+    else:
+        lastStatus = CAT_NO_ROWS_FOUND
+        return None
+
+def getResources(conn):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_R_RESC_NAME], [0], 1)
+    sqlCondInp.init([], [], 0)
+    return [ irodsResource(conn, name) for name in queryToTupleList(conn, selectInp, sqlCondInp) ]
+
+def getUser(conn, userName, zone_name=""):
+    global lastStatus
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_NAME, COL_USER_ZONE], [0, 0], 2)
+    if zone_name:
+        sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE, COL_USER_ZONE], 
+                        ["='%s'" % userName,
+                         "<>'rodsgroup'",
+                         "='%s'" % zone_name], 3)
+    else:
+        sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE], 
+                        ["='%s'" % userName,
+                         "<>'rodsgroup'"], 2)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    
+    if len(l) > 0:
+        return irodsUser(conn, l[0][0], l[0][1])
+    else:
+        lastStatus = CAT_NO_ROWS_FOUND
+        return None
+
+## return the list of groups for the user
+def getUserGroupMembership(conn, userName, zoneName):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_GROUP_NAME], [0], 1)
+    sqlCondInp.init([COL_USER_NAME, COL_USER_ZONE],
+                    ["='%s'" % userName, "='%s'" % zoneName],
+                    2)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    return l
+
+def getUserInfo(conn, userName, zone_name=""):
+    return getUserInfoToDict(conn, userName, zone_name)
+
+def getUserInfoToDict(conn, user_name, zone=""):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_USER_NAME, COL_USER_ID, COL_USER_TYPE, COL_USER_ZONE,
+                    COL_USER_INFO, COL_USER_COMMENT, COL_USER_CREATE_TIME,
+                    COL_USER_MODIFY_TIME],
+                   [0, 0, 0, 0, 0, 
+                    0, 0, 0], 
+                   8)
+    if zone:
+        sqlCondInp.init([COL_USER_NAME, COL_USER_ZONE], 
+                        ["='%s'" % user_name,
+                         "='%s'" % zone], 
+                        2)
+    else:
+        sqlCondInp.init([COL_USER_NAME], 
+                        ["='%s'" % user_name], 
+                        1)
+    columnNames = ["user_name", "user_id", "user_type_name", "zone_name",
+                   "user_info", "r_comment", "create_ts",
+                   "modify_ts"]
+    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
+    if len(l) > 0:
+        return l[0]
+    else:
+        return {}
+
+def getUserQuotaGlobal(conn, userName):
+    return getQuota(conn, userName, True, True)
+
+def getUserQuotaResources(conn, userName):
+    return getQuota(conn, userName, True, False)
+
+def getUsers(conn):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+                
+    selectInp.init([COL_USER_NAME, COL_USER_ZONE], [0, 0], 2)
+    
+    sqlCondInp.init([COL_USER_TYPE], 
+                    ["<>'rodsgroup'"], 1)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    
+    if len(l) > 0:
+        return [  irodsUser(conn, name, zone) for (name, zone) in l ]
+    else:
+        return []
+
+def getUsersQuotaGlobal(conn):
+    return getQuota(conn, "", True, True)
+
+def getUsersQuotaResources(conn):
+    return getQuota(conn, "", True, False)
+
+## return a list of dictionaries:
+##   keys: 
+##     resource: Resource name
+##     user: User name
+##     zone: zone name
+##     usage: nb bits used
+##     time: time set
+def getUserUsage(userName, usersZone):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_QUOTA_USAGE_MODIFY_TIME,
+                    COL_QUOTA_RESC_NAME,
+                    COL_QUOTA_USER_NAME,
+                    COL_QUOTA_USER_ZONE,
+                    COL_QUOTA_USAGE],
+                   [0,0,0,0,0],
+                   5)
+    colName = ["time", "resource", "user", "zone", "usage"]
+    if userName:
+        sqlCondInp.init([COL_QUOTA_USER_NAME],
+                        ["='%s'" % userName],
+                        1)
+    else:
+        sqlCondInp.init([], [], 0)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    res = []
+    for el in l:
+        d = dict(zip(colName, el))
+        d['time'] = getLocalTimeFromRodsTime(d['time'])
+        d['usage'] = int(d['usage'])
+        res.append(d)
+    return res
+
+def getZone(conn, zone_name):
+    global lastStatus
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_ZONE_NAME], [0], 1)
+    sqlCondInp.init([COL_ZONE_NAME], ["='%s'" % zone_name], 1)
+    l =  queryToTupleList(conn, selectInp, sqlCondInp)
+    if len(l) > 0:
+        return irodsZone(conn, l[0])
+    else:
+        lastStatus = irods.CAT_NO_ROWS_FOUND
+        return None
+
+def getZoneInfoToDict(conn, zone_name, zone=""):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_ZONE_ID, COL_ZONE_NAME, COL_ZONE_TYPE, 
+                    COL_ZONE_CONNECTION, COL_ZONE_COMMENT, COL_ZONE_CREATE_TIME,
+                    COL_ZONE_MODIFY_TIME],
+                   [0, 0, 0, 0, 0, 0, 0], 
+                   7)
+    sqlCondInp.init([COL_ZONE_NAME], ["='%s'" % zone_name], 1)
+    columnNames = ["zone_id", "zone_name", "zone_type_name", 
+                   "zone_conn_string", "r_comment", "create_ts", "modify_ts"]
+    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
+    if len(l) > 0:
+        return l[0]
+    else:
+        return {}
+
+def getZones(conn):
+    sqlCondInp = inxValPair_t()
+    selectInp = inxIvalPair_t()
+    selectInp.init([COL_ZONE_NAME], [0], 1)
+    sqlCondInp.init([], [], 0)
+    return [ irodsZone(conn, el) for el in queryToTupleList(conn, selectInp, sqlCondInp)]
+
+def irodsCopy(conn, path, new_path, force=False, resc=None):
+    global lastStatus
+    lastStatus, myEnv = getRodsEnv()
+    if lastStatus != 0:
+        return lastStatus
+    dataObjCopyInp = dataObjCopyInp_t()
+    if force:
+        addKeyVal(dataObjCopyInp.destDataObjInp.condInput, FORCE_FLAG_KW, "")
+    if resc:
+        addKeyVal(dataObjCopyInp.destDataObjInp.condInput, DEST_RESC_NAME_KW, resc)
+    else:
+        addKeyVal(dataObjCopyInp.destDataObjInp.condInput, DEST_RESC_NAME_KW, myEnv.rodsDefResource)
+    dataObjCopyInp.srcDataObjInp.objPath = path
+    dataObjCopyInp.destDataObjInp.objPath = new_path
+    dataObjCopyInp.srcDataObjInp.dataSize = -1
+    lastStatus = rcDataObjCopy(conn, dataObjCopyInp)
+    return lastStatus
+
+def irodsMove(conn, old_path, new_path):
+    global lastStatus
+    dataObjRenameInp = dataObjCopyInp_t()
+    dataObjRenameInp.srcDataObjInp.oprType = RENAME_DATA_OBJ
+    dataObjRenameInp.srcDataObjInp.objPath = old_path
+    dataObjRenameInp.destDataObjInp.oprType = RENAME_DATA_OBJ
+    dataObjRenameInp.destDataObjInp.objPath = new_path
+    lastStatus = rcDataObjRename(conn, dataObjRenameInp)
+    return lastStatus
+
+def irodsOpen(conn, path, mode="r", resc_name=""):
+    status, collName, dataName = splitPathByKey(path, "/")
+#    if not resc_name:
+#        status, myEnv = getRodsEnv()
+#        resc_name = myEnv.rodsDefResource
+    return  _irodsOpen(conn, collName, dataName, mode, resc_name)
+
+def modifyObject(conn, objType, objName, fieldName, fieldValue):
+    generalAdminInp = generalAdminInp_t()
+    generalAdminInp.arg0 = "modify"
+    generalAdminInp.arg1 = objType
+    generalAdminInp.arg2 = objName
+    generalAdminInp.arg3 = fieldName
+    generalAdminInp.arg4 = fieldValue
+    generalAdminInp.arg5 = ""
+    generalAdminInp.arg6 = ""
+    generalAdminInp.arg7 = ""
+    generalAdminInp.arg8 = ""
+    generalAdminInp.arg9 = ""
+    return rcGeneralAdmin(conn, generalAdminInp)
+
+## Factorize the call to modAVUMetadata
+## objType = -d -C, -R, -u,...
+## action = add, rm
+def procUserMetadata(conn, action, objType, name, attName, attValue, attUnits):
+    global lastStatus
+    modAVUMetadataInp = modAVUMetadataInp_t()
+    modAVUMetadataInp.arg0 = action
+    modAVUMetadataInp.arg1 = objType
+    modAVUMetadataInp.arg2 = name
+    modAVUMetadataInp.arg3 = attName
+    modAVUMetadataInp.arg4 = attValue
+    modAVUMetadataInp.arg5 = attUnits
+    modAVUMetadataInp.arg6 = ""
+    modAVUMetadataInp.arg7 = ""
+    modAVUMetadataInp.arg8 = ""
+    modAVUMetadataInp.arg9 = ""
+    lastStatus = rcModAVUMetadata(conn, modAVUMetadataInp)
+    return lastStatus
+
+def queryToFormatDictList(conn, selectInp, sqlCondInp, formatStr):
+    genQueryInp = genQueryInp_t()
+    l = []
+    genQueryInp.maxRows = MAX_SQL_ROWS
+    genQueryInp.continueInx = 0
+    genQueryInp.condInput.len = 0
+    genQueryInp.selectInp = selectInp
+    genQueryInp.sqlCondInp = sqlCondInp
+    genQueryOut = rcGenQuery(conn, genQueryInp)
+    if not genQueryOut:
+        return l
+    addResultToFormatDictList(genQueryOut, formatStr, l)
+    while genQueryOut and genQueryOut.continueInx > 0:
+        genQueryInp.continueInx = genQueryOut.continueInx
+        genQueryOut = rcGenQuery(conn, genQueryInp)
+        if genQueryOut:
+            addResultToFormatDictList(genQueryOut, l)
+    return l
+
+def queryToTupleList(conn, selectInp, sqlCondInp):
+    genQueryInp = genQueryInp_t()
+    l = []
+    genQueryInp.maxRows = MAX_SQL_ROWS
+    genQueryInp.continueInx = 0
+    genQueryInp.condInput.len = 0
+    genQueryInp.selectInp = selectInp
+    genQueryInp.sqlCondInp = sqlCondInp
+    genQueryOut = rcGenQuery(conn, genQueryInp)
+    if not genQueryOut:
+        return l
+    addResultToTupleList(genQueryOut, l)
+    while genQueryOut and genQueryOut.continueInx > 0:
+        genQueryInp.continueInx = genQueryOut.continueInx
+        genQueryOut = rcGenQuery(conn, genQueryInp)
+        if genQueryOut:
+            addResultToTupleList(genQueryOut, l)
+    return l
+
+def rmCollUserMetadata(conn, path, name, value, units=""):
+    return rmUserMetadata(conn, "-c", path, name, value, units)
+    
+def rmFileUserMetadata(conn, path, name, value, units=""):
+    return rmUserMetadata(conn, "-d", path, name, value, units)
+
+def rmObject(conn, objType, objName, arg3):
+    global lastStatus
+    generalAdminInp = generalAdminInp_t()
+    generalAdminInp.arg0 = "rm"
+    generalAdminInp.arg1 = objType
+    generalAdminInp.arg2 = objName
+    generalAdminInp.arg3 = arg3
+    generalAdminInp.arg4 = ""
+    generalAdminInp.arg5 = ""
+    generalAdminInp.arg6 = ""
+    generalAdminInp.arg7 = ""
+    generalAdminInp.arg8 = ""
+    generalAdminInp.arg9 = ""
+    lastStatus = rcGeneralAdmin(conn, generalAdminInp)
+    return lastStatus
+
+def rmUserMetadata(conn, obj_type, name, attName, attValue, attUnits):
+    return procUserMetadata(conn, "rm", obj_type, name, attName, attValue, 
+                            attUnits)
+
+def setACL(conn, accessLevel, userName, zoneName, path, recursive=False):
+    global lastStatus
+    modAccessControl = modAccessControlInp_t()
+    if recursive:
+        modAccessControl.recursiveFlag = 1
+    else:
+        modAccessControl.recursiveFlag = 0
+    modAccessControl.accessLevel = accessLevel
+    modAccessControl.userName = userName
+    modAccessControl.zone = zoneName
+    modAccessControl.path = path
+    lastStatus = rcModAccessControl(conn, modAccessControl)
+    return lastStatus
+
+def setCollACL(conn, accessLevel, userName, zoneName, path, recursive=False):
+    if path.endswith('/'):
+        path = path[:-1]
+    return setACL(conn, accessLevel, userName, zoneName, path, recursive)
+
+def setDataObjACL(conn, accessLevel, userName, zoneName, path, recursive=False):
+    return setACL(conn, accessLevel, userName, zoneName, path, recursive)
+
+def setInheritACL(conn, path, inherit, recursive=False):
+    if inherit:
+        return setACL(conn, "inherit", "", "", path, recursive)
+    else:
+        return setACL(conn, "noinherit", "", "", path, recursive)
+
+def setPassword(conn, userName, new_pw):
+    rand = "1gCBizHWbwIYyWLoysGzTe6SyzqFKMniZX05faZHWAwQKXf6Fs"
+    lcopy = MAX_PASSWORD_LEN - 10 - len(new_pw)
+    if lcopy > 15:
+        new_pw += rand[:lcopy]
+    i, pw = obfGetPw()
+    key2 = getSessionSignitureClientside()
+    obf_pw = obfEncodeByKeyV2(new_pw, pw, key2)
+    return modifyObject(conn, "user", userName, "password", obf_pw)
+
+
 class rodsEnv(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, rodsEnv, name, value)
@@ -787,12 +2366,6 @@ md5ToStr = _irods.md5ToStr
 def rcChksumLocFile(*args):
   return _irods.rcChksumLocFile(*args)
 rcChksumLocFile = _irods.rcChksumLocFile
-LONG_METADATA_FG = _irods.LONG_METADATA_FG
-VERY_LONG_METADATA_FG = _irods.VERY_LONG_METADATA_FG
-RECUR_QUERY_FG = _irods.RECUR_QUERY_FG
-DATA_QUERY_FIRST_FG = _irods.DATA_QUERY_FIRST_FG
-NO_TRIM_REPL_FG = _irods.NO_TRIM_REPL_FG
-INCLUDE_CONDINPUT_IN_QUERY = _irods.INCLUDE_CONDINPUT_IN_QUERY
 class collEnt_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, collEnt_t, name, value)
@@ -1165,89 +2738,6 @@ modAccessControlInp_t_swigregister(modAccessControlInp_t)
 def rcModAccessControl(*args):
   return _irods.rcModAccessControl(*args)
 rcModAccessControl = _irods.rcModAccessControl
-STR_MS_T = _irods.STR_MS_T
-INT_MS_T = _irods.INT_MS_T
-INT16_MS_T = _irods.INT16_MS_T
-CHAR_MS_T = _irods.CHAR_MS_T
-BUF_LEN_MS_T = _irods.BUF_LEN_MS_T
-STREAM_MS_T = _irods.STREAM_MS_T
-DOUBLE_MS_T = _irods.DOUBLE_MS_T
-FLOAT_MS_T = _irods.FLOAT_MS_T
-BOOL_MS_T = _irods.BOOL_MS_T
-DataObjInp_MS_T = _irods.DataObjInp_MS_T
-DataObjCloseInp_MS_T = _irods.DataObjCloseInp_MS_T
-DataObjCopyInp_MS_T = _irods.DataObjCopyInp_MS_T
-DataObjReadInp_MS_T = _irods.DataObjReadInp_MS_T
-DataObjWriteInp_MS_T = _irods.DataObjWriteInp_MS_T
-DataObjLseekInp_MS_T = _irods.DataObjLseekInp_MS_T
-DataObjLseekOut_MS_T = _irods.DataObjLseekOut_MS_T
-KeyValPair_MS_T = _irods.KeyValPair_MS_T
-TagStruct_MS_T = _irods.TagStruct_MS_T
-CollInp_MS_T = _irods.CollInp_MS_T
-ExecCmd_MS_T = _irods.ExecCmd_MS_T
-ExecCmdOut_MS_T = _irods.ExecCmdOut_MS_T
-RodsObjStat_MS_T = _irods.RodsObjStat_MS_T
-VaultPathPolicy_MS_T = _irods.VaultPathPolicy_MS_T
-StrArray_MS_T = _irods.StrArray_MS_T
-IntArray_MS_T = _irods.IntArray_MS_T
-GenQueryInp_MS_T = _irods.GenQueryInp_MS_T
-GenQueryOut_MS_T = _irods.GenQueryOut_MS_T
-XmsgTicketInfo_MS_T = _irods.XmsgTicketInfo_MS_T
-SendXmsgInfo_MS_T = _irods.SendXmsgInfo_MS_T
-GetXmsgTicketInp_MS_T = _irods.GetXmsgTicketInp_MS_T
-SendXmsgInp_MS_T = _irods.SendXmsgInp_MS_T
-RcvXmsgInp_MS_T = _irods.RcvXmsgInp_MS_T
-RcvXmsgOut_MS_T = _irods.RcvXmsgOut_MS_T
-StructFileExtAndRegInp_MS_T = _irods.StructFileExtAndRegInp_MS_T
-RuleSet_MS_T = _irods.RuleSet_MS_T
-RuleStruct_MS_T = _irods.RuleStruct_MS_T
-DVMapStruct_MS_T = _irods.DVMapStruct_MS_T
-FNMapStruct_MS_T = _irods.FNMapStruct_MS_T
-MsrvcStruct_MS_T = _irods.MsrvcStruct_MS_T
-NcOpenInp_MS_T = _irods.NcOpenInp_MS_T
-NcInqIdInp_MS_T = _irods.NcInqIdInp_MS_T
-NcInqWithIdOut_MS_T = _irods.NcInqWithIdOut_MS_T
-NcInqInp_MS_T = _irods.NcInqInp_MS_T
-NcInqOut_MS_T = _irods.NcInqOut_MS_T
-NcCloseInp_MS_T = _irods.NcCloseInp_MS_T
-NcGetVarInp_MS_T = _irods.NcGetVarInp_MS_T
-NcGetVarOut_MS_T = _irods.NcGetVarOut_MS_T
-NccfGetVarInp_MS_T = _irods.NccfGetVarInp_MS_T
-NccfGetVarOut_MS_T = _irods.NccfGetVarOut_MS_T
-NcInqGrpsOut_MS_T = _irods.NcInqGrpsOut_MS_T
-Dictionary_MS_T = _irods.Dictionary_MS_T
-DictArray_MS_T = _irods.DictArray_MS_T
-GenArray_MS_T = _irods.GenArray_MS_T
-RESC_NAME_FLAG = _irods.RESC_NAME_FLAG
-DEST_RESC_NAME_FLAG = _irods.DEST_RESC_NAME_FLAG
-BACKUP_RESC_NAME_FLAG = _irods.BACKUP_RESC_NAME_FLAG
-FORCE_FLAG_FLAG = _irods.FORCE_FLAG_FLAG
-ALL_FLAG = _irods.ALL_FLAG
-LOCAL_PATH_FLAG = _irods.LOCAL_PATH_FLAG
-VERIFY_CHKSUM_FLAG = _irods.VERIFY_CHKSUM_FLAG
-IRODS_ADMIN_FLAG = _irods.IRODS_ADMIN_FLAG
-UPDATE_REPL_FLAG = _irods.UPDATE_REPL_FLAG
-REPL_NUM_FLAG = _irods.REPL_NUM_FLAG
-DATA_TYPE_FLAG = _irods.DATA_TYPE_FLAG
-CHKSUM_ALL_FLAG = _irods.CHKSUM_ALL_FLAG
-FORCE_CHKSUM_FLAG = _irods.FORCE_CHKSUM_FLAG
-FILE_PATH_FLAG = _irods.FILE_PATH_FLAG
-CREATE_MODE_FLAG = _irods.CREATE_MODE_FLAG
-OPEN_FLAGS_FLAG = _irods.OPEN_FLAGS_FLAG
-COLL_FLAGS_FLAG = _irods.COLL_FLAGS_FLAG
-DATA_SIZE_FLAGS = _irods.DATA_SIZE_FLAGS
-NUM_THREADS_FLAG = _irods.NUM_THREADS_FLAG
-OPR_TYPE_FLAG = _irods.OPR_TYPE_FLAG
-OBJ_PATH_FLAG = _irods.OBJ_PATH_FLAG
-COLL_NAME_FLAG = _irods.COLL_NAME_FLAG
-IRODS_RMTRASH_FLAG = _irods.IRODS_RMTRASH_FLAG
-IRODS_ADMIN_RMTRASH_FLAG = _irods.IRODS_ADMIN_RMTRASH_FLAG
-DEF_RESC_NAME_FLAG = _irods.DEF_RESC_NAME_FLAG
-RBUDP_TRANSFER_FLAG = _irods.RBUDP_TRANSFER_FLAG
-RBUDP_SEND_RATE_FLAG = _irods.RBUDP_SEND_RATE_FLAG
-RBUDP_PACK_SIZE_FLAG = _irods.RBUDP_PACK_SIZE_FLAG
-BULK_OPR_FLAG = _irods.BULK_OPR_FLAG
-UNREG_FLAG = _irods.UNREG_FLAG
 class msParam_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, msParam_t, name, value)
@@ -1374,7 +2864,6 @@ parseMspForPosInt = _irods.parseMspForPosInt
 def parseMspForStr(*args):
   return _irods.parseMspForStr(*args)
 parseMspForStr = _irods.parseMspForStr
-MAX_PASSWORD_LEN = _irods.MAX_PASSWORD_LEN
 
 def obfDecodeByKey(*args):
   return _irods.obfDecodeByKey(*args)
@@ -2070,10 +3559,6 @@ rcGeneralAdmin = _irods.rcGeneralAdmin
 def rcUserAdmin(*args):
   return _irods.rcUserAdmin(*args)
 rcUserAdmin = _irods.rcUserAdmin
-MAX_PATH_ALLOWED = _irods.MAX_PATH_ALLOWED
-MAX_NAME_LEN = _irods.MAX_NAME_LEN
-TRANS_BUF_SZ = _irods.TRANS_BUF_SZ
-PUBLIC_USER_NAME = _irods.PUBLIC_USER_NAME
 class bytesBuf_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, bytesBuf_t, name, value)
@@ -3132,10 +4617,6 @@ rcRuleExecMod = _irods.rcRuleExecMod
 def rcRuleExecSubmit(*args):
   return _irods.rcRuleExecSubmit(*args)
 rcRuleExecSubmit = _irods.rcRuleExecSubmit
-NO_CHK_PERM_FLAG = _irods.NO_CHK_PERM_FLAG
-UNIQUE_REM_COMM_FLAG = _irods.UNIQUE_REM_COMM_FLAG
-FORCE_FLAG = _irods.FORCE_FLAG
-RMDIR_RECUR = _irods.RMDIR_RECUR
 class fileChmodInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, fileChmodInp_t, name, value)
@@ -4078,173 +5559,178 @@ rcGetMiscSvrInfo = _irods.rcGetMiscSvrInfo
 def rcObjStat(*args):
   return _irods.rcObjStat(*args)
 rcObjStat = _irods.rcObjStat
-PURGE_STRUCT_FILE_CACHE = _irods.PURGE_STRUCT_FILE_CACHE
-DELETE_STRUCT_FILE = _irods.DELETE_STRUCT_FILE
-NO_REG_COLL_INFO = _irods.NO_REG_COLL_INFO
-LOGICAL_BUNDLE = _irods.LOGICAL_BUNDLE
-CREATE_TAR_OPR = _irods.CREATE_TAR_OPR
-ADD_TO_TAR_OPR = _irods.ADD_TO_TAR_OPR
-PRESERVE_COLL_PATH = _irods.PRESERVE_COLL_PATH
-PRESERVE_DIR_CONT = _irods.PRESERVE_DIR_CONT
-O_RDONLY = _irods.O_RDONLY
-O_WRONLY = _irods.O_WRONLY
-O_RDWR = _irods.O_RDWR
-O_CREAT = _irods.O_CREAT
-SEEK_SET = _irods.SEEK_SET
-SEEK_CUR = _irods.SEEK_CUR
-SEEK_END = _irods.SEEK_END
-def _irodsOpen(conn, collName, dataName, mode, resc_name):
-    ir_file = irodsFile(conn)
-    dataObjInp = dataObjInp_t()
-    
-    ir_file.dataName = dataName
-    ir_file.collName = collName
-    ir_file.openFlag = O_RDONLY
-    
-    dataObjInp.objPath = ir_file.fullPath()
-    
-    # Set the resource
-    if resc_name:
-        ir_file.resourceName = resc_name
-        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, resc_name)
+class irodsCollection:
+
+    def __init__(self, conn, collName=None):
+        status, myEnv = getRodsEnv()
+        self._conn = conn
         
-        # Set the replica number (get the info from the icat)
-        # returns null if the file does not exist
-        replNum = getDataObjReplicaNumber(conn, collName, dataName, resc_name)
-    
+        if collName:
+            # Remove the last '/', if len = 1 the user wants the root colection
+            if len(collName) > 1 and collName[-1] == '/':
+                collName = collName[:-1]
+                
+            if collName.startswith('/'):
+                # If the path starts with '/' we assume a global path
+                self.collName = collName
+            else:
+                # else we assume that it is local to the current working dir
+                self.collName = myEnv.rodsCwd + '/' + collName
+            
+        else:
+             ## If no collName, we use the current working directory
+            self.collName = myEnv.rodsCwd
+
+    def addUserMetadata(self, name, value, units=""):
+        return addUserMetadata(self._conn, "-c", self.collName,
+                               name, value, units)
+
+    def create(self, dataName, resc_name=""):
+        if not resc_name:
+            status, myEnv = getRodsEnv()
+            resc_name = myEnv.rodsDefResource
+            
+        return _irodsOpen(self._conn, self.collName, dataName, "w", resc_name)
+
+    def createCollection(self, child_collName):
+        global lastStatus
+        collCreateInp = collInp_t()
+        collCreateInp.collName = "%s/%s" % (self.collName, child_collName)
+        lastStatus = rcCollCreate(self._conn, collCreateInp)
+        return lastStatus
+
+    def delete(self, dataName, resc_name=""):
+        global lastStatus
+        dataObjInp = dataObjInp_t()
+        if resc_name:
+            replNum = getDataObjReplicaNumber(self._conn, self.collName,
+                                              dataName, resc_name);
+        else:
+            replNum = "0"
         if replNum:
             addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-    
-    if mode == "w":
-        dataObjInp.openFlags = O_WRONLY | O_CREAT
-        ir_file.openFlag = O_WRONLY | O_CREAT
-        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        l1descInx = rcDataObjCreate(conn, dataObjInp)
-        
-    elif mode == "r":
         dataObjInp.openFlags = O_RDONLY
-        ir_file.openFlag = O_RDONLY
-        l1descInx = rcDataObjOpen(conn, dataObjInp) 
-        
-    elif mode == "a":  
-        dataObjInp.openFlags = O_WRONLY
-        ir_file.openFlag = O_WRONLY
-        l1descInx = rcDataObjOpen(conn, dataObjInp)
-        
-        if l1descInx != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
-            dataObjLseekInp = openedDataObjInp_t()
-            dataObjLseekInp.l1descInx = l1descInx
-            dataObjLseekInp.offset = 0
-            dataObjLseekInp.whence = SEEK_END
+        dataObjInp.objPath = "%s/%s" % (self.collName, dataName)
+        lastStatus = rcDataObjUnlink(self._conn, dataObjInp)
+        return lastStatus
 
-            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
-            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
+    def deleteCollection(self, child_collName):
+        global lastStatus
+        collInp = collInp_t()
+        collInp.collName = "%s/%s" % (self.collName, child_collName)
+        addKeyVal(collInp.condInput, FORCE_FLAG_KW, "")
+        addKeyVal(collInp.condInput, RECURSIVE_OPR__KW, "")
+        lastStatus = rcRmColl(self._conn, collInp, 0)
+        return lastStatus
+
+    def getCollName(self):
+        return self.collName
+
+    def getId(self):
+        return getCollId(self._conn, self.getCollName())
+
+    def getLenObjects(self):
+        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
+        nb_el = 0
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == DATA_OBJ_T:
+                nb_el += 1
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return nb_el
+
+    def getLenSubCollections(self):
+        queryFlags = DATA_QUERY_FIRST_FG
+        nb_el = 0
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == COLL_OBJ_T:
+                nb_el += 1 
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return nb_el
+
+    def getObjects(self):
+        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
+        l = []
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == DATA_OBJ_T:
+                status, srcElement = getLastPathElement(collEnt.dataName)
+                if srcElement:
+                    l.append((srcElement, collEnt.resource))
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return l
+
+    def getSubCollections(self):
+        queryFlags = DATA_QUERY_FIRST_FG
+        l = []
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == COLL_OBJ_T:
+                status, myColl, myData = splitPathByKey(collEnt.collName, '/')
+                if myData:
+                    l.append(myData)
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return l
+
+    def getUserMetadata(self):
+        sqlCondInp = inxValPair_t()
+        selectInp = inxIvalPair_t()
+        selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
+                        COL_META_COLL_ATTR_UNITS],
+                       [0, 0, 0], 3)
+        sqlCondInp.init([COL_COLL_NAME], ["='%s'" % self.collName], 1)
+        return queryToTupleList(self._conn, selectInp, sqlCondInp)
+
+    def open(self, dataName, mode="r", resc_name=""):
+        if not resc_name:
+            status, myEnv = getRodsEnv()
+            resc_name = myEnv.rodsDefResource
+        return _irodsOpen(self._conn, self.collName, dataName, mode, resc_name)
+
+    def openCollection(self, collName):
+        global lastStatus
+        lastStatus = CAT_UNKNOWN_COLLECTION
+        if collName != '/':   
+            collName = collName.rstrip('/')
+        # If the path starts with '/' we assume a global path
+        if (collName.startswith('/')):
+           self.collName = collName
+           lastStatus = 0
         else:
-            l1descInx = rcDataObjCreate(conn, dataObjInp)
-            
-    elif mode == "w+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        l1descInx = rcDataObjCreate(conn, dataObjInp)
-        
-    elif mode == "r+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        l1descInx = rcDataObjOpen(conn, dataObjInp) 
-        
-    elif mode == "a+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        l1descInx = rcDataObjOpen(conn, dataObjInp)
-        
-        if l1descInx != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
-            dataObjLseekInp = openedDataObjInp_t()
-            dataObjLseekInp.l1descInx = l1descInx
-            dataObjLseekInp.offset = 0
-            dataObjLseekInp.whence = SEEK_END
+            ls_child = self.getSubCollections()
+            if collName in ls_child:
+                # Special case for the root dir
+                if self.collName == '/':
+                    fullName = '/' + collName
+                else:
+                    fullName = "%s/%s" % (self.collName, collName)
+                self.collName = fullName
+                lastStatus = 0
+        return lastStatus
 
-            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
-            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
-        else:
-            l1descInx = rcDataObjCreate(conn, dataObjInp)
-    
-    else:
-        l1descInx = 0
-    
-    if not resc_name: # If the resc parameter was NULL then we need to find the
-                      # resource iRODS used and set the ir_file variable
-        ir_resc_name = getDataObjRescNames(conn, collName, dataName)
-        ir_file.resourceName = ir_resc_name
+    def rmUserMetadata(self, name, value, units=""):
+        return rmUserMetadata(self._conn, "-c", self.collName,
+                               name, value, units) 
 
-    if l1descInx > 0:
-        ir_file.descInx = l1descInx
-        ir_file.set_size()
-        return ir_file
-    else:
-        return None
-        
-def addCollUserMetadata(conn, path, name, value, units=""):
-    return addUserMetadata(conn, "-c", path, name, value, units)
+    def upCollection(self):
+        status, myDir, myFile = splitPathByKey(self.collName, "/")
+        self.collName = myDir
 
-def addFileUserMetadata(conn, path, name, value, units=""):
-    return addUserMetadata(conn, "-d", path, name, value, units)
-
-def getCollId(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    selectInp.init([COL_COLL_ID], [0], 1)
-    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
-    l = queryToTupleList(conn, selectInp, sqlCondInp)
-    if l:
-        return l[0]
-    else:
-        return -1
-
-def getCollUserMetadata(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-            
-    selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
-                    COL_META_COLL_ATTR_UNITS],
-                   [0, 0, 0], 3)
-    
-    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
-    
-    return queryToTupleList(conn, selectInp, sqlCondInp)
-
-def getFileUserMetadata(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    status, collName, dataName = splitPathByKey(path, "/")
-    
-    selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
-                    COL_META_DATA_ATTR_UNITS],
-                   [0, 0, 0], 3)
-    
-    sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
-                    ["='%s'" % collName,
-                     "='%s'" % dataName], 2)
-    
-    return queryToTupleList(conn, selectInp, sqlCondInp)
-
-def rmCollUserMetadata(conn, path, name, value, units=""):
-    return rmUserMetadata(conn, "-c", path, name, value, units)
-    
-def rmFileUserMetadata(conn, path, name, value, units=""):
-    return rmUserMetadata(conn, "-d", path, name, value, units)
-
-def irodsOpen(conn, path, mode="r", resc_name=""):
-    if not resc_name:
-        status, myEnv = getRodsEnv()
-        resc_name = myEnv.rodsDefResource
-    status, collName, dataName = splitPathByKey(path, "/")
-    return  _irodsOpen(conn, collName, dataName, mode, resc_name) 
-    
-    
 class irodsFile:
-    
+
     def __init__(self, conn):
         self._conn = conn
         self.descInx = 0
@@ -4258,140 +5744,110 @@ class irodsFile:
     def __iter__(self):
         return self
 
-    def next(self):
-        if self.position >= self.size:
-            raise StopIteration
-        return self.readline()
-
-    def fullPath(self):
-        return "%s/%s" % (self.collName, self.dataName)
-
     def addUserMetadata(self, name, value, units=""):
         fullName = self.fullPath()
         return addUserMetadata(self._conn, "-d", fullName, name, value, units)
 
+    def copy(self, new_path, force=False, resc=None):
+        return irodsCopy(self._conn, self.fullPath(), new_path, force, resc)
+
     def close(self):
+        global lastStatus
         dataObjCloseInp = openedDataObjInp_t()
         dataObjCloseInp.l1descInx = self.descInx
-        return rcDataObjClose(self._conn, dataObjCloseInp)
-        
+        lastStatus = rcDataObjClose(self._conn, dataObjCloseInp)
+        return lastStatus
+
     def delete(self, force=False):
+        global lastStatus
         dataObjInp = dataObjInp_t()
         replNum = getDataObjReplicaNumber(self._conn,
                                           self.collName,
                                           self.dataName,
                                           self.resourceName)
-        if replNum:            
+        if replNum:
             addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
             
-        if force:            
+        if force:
             addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        
         dataObjInp.openFlags = O_RDONLY
         dataObjInp.objPath = self.fullPath()
-        return rcDataObjUnlink(self._conn, dataObjInp)
-    
+        lastStatus = rcDataObjUnlink(self._conn, dataObjInp)
+        return lastStatus
+
     def fileno(self):
         return self.descInx
-    
+
     def flush(self):
         pass
-    
-    def getCollName(self):
-        return self.collName
-    
-    def getName(self):
-        return self.dataName
-    
-    def getInfos(self):
-        return getFileInfo(self._conn, self.collName,
-                           self.dataName, self.resourceName)
-        
-    def getDescInx(self):
-        return self.descInx
-    
-    def getPosition(self):
-        return self.position
-    
-    def getResourceName(self):
-        return self.resourceName
-    
-    def getResourceGroupName(self):
-        d = self.getInfos();
-        return d.get("resc_group_name", "")
-    
-    def getId(self):
-        d = self.getInfos();
-        return d.get("data_id", "")
-    
-    def getMapId(self):
-        d = self.getInfos();
-        return d.get("data_map_id", "")
-    
-    def getPath(self):
-        d = self.getInfos();
-        return d.get("data_path", "")
-    
-    def getTypeName(self):
-        d = self.getInfos();
-        return d.get("data_type_name", "")
-    
-    def getComment(self):
-        d = self.getInfos();
-        return d.get("r_comment", "")
-    
-    def getMode(self):
-        d = self.getInfos();
-        return d.get("data_mode", "")
-    
-    def getOwnerName(self):
-        d = self.getInfos();
-        return d.get("data_owner_name", "")
-    
-    def getOwnerZone(self):
-        d = self.getInfos();
-        return d.get("data_owner_zone", "")
-    
+
+    def fullPath(self):
+        return "%s/%s" % (self.collName, self.dataName)
+
     def getChecksum(self):
         d = self.getInfos();
         return d.get("data_checksum", "")
-    
-    def getVersion(self):
-        d = self.getInfos();
-        return d.get("data_version", "")
-    
-    def getExpiryTs(self):
-        d = self.getInfos();
-        return d.get("data_expiry_ts", "")
-    
-    def getModifyTs(self):
-        d = self.getInfos();
-        return d.get("modify_ts", "")
-    
-    def getCreateTs(self):
-        d = self.getInfos();
-        return d.get("create_ts", "")
-    
-    def getStatus(self):
-        d = self.getInfos();
-        return d.get("data_status", "")
-    
+
     def getCollId(self):
         d = self.getInfos();
         return d.get("coll_id", "")
-    
-    def getReplStatus(self):
+
+    def getCollName(self):
+        return self.collName
+
+    def getComment(self):
         d = self.getInfos();
-        return d.get("data_is_dirty", "")
-    
-    def getSize(self):
+        return d.get("r_comment", "")
+
+    def getCreateTs(self):
         d = self.getInfos();
-        return int(d.get("data_size", "0"))
-    
-    def getReplNumber(self):
+        return d.get("create_ts", "")
+
+    def getDescInx(self):
+        return self.descInx
+
+    def getExpiryTs(self):
         d = self.getInfos();
-        return d.get("data_repl_num", "")
-    
+        return d.get("data_expiry_ts", "")
+
+    def getId(self):
+        d = self.getInfos();
+        return d.get("data_id", "")
+
+    def getInfos(self):
+        return getFileInfo(self._conn, self.collName,
+                           self.dataName, self.resourceName)
+
+    def getMapId(self):
+        d = self.getInfos();
+        return d.get("data_map_id", "")
+
+    def getMode(self):
+        d = self.getInfos();
+        return d.get("data_mode", "")
+
+    def getModifyTs(self):
+        d = self.getInfos();
+        return d.get("modify_ts", "")
+
+    def getName(self):
+        return self.dataName
+
+    def getOwnerName(self):
+        d = self.getInfos();
+        return d.get("data_owner_name", "")
+
+    def getOwnerZone(self):
+        d = self.getInfos();
+        return d.get("data_owner_zone", "")
+
+    def getPath(self):
+        d = self.getInfos();
+        return d.get("data_path", "")
+
+    def getPosition(self):
+        return self.position
+
     def getReplications(self):
         res_list = getDataObjRescNames(self._conn, self.collName,
                                        self.dataName)
@@ -4404,23 +5860,66 @@ class irodsFile:
                                "r+", resc_name)
         return res
 
+    def getReplNumber(self):
+        d = self.getInfos();
+        return d.get("data_repl_num", "")
+
+    def getReplStatus(self):
+        d = self.getInfos();
+        return d.get("data_is_dirty", "")
+
+    def getResourceGroupName(self):
+        d = self.getInfos();
+        return d.get("resc_group_name", "")
+
+    def getResourceName(self):
+        return self.resourceName
+
+    def getTypeName(self):
+        d = self.getInfos();
+        return d.get("data_type_name", "")
+
+    def getSize(self):
+        d = self.getInfos();
+        return int(d.get("data_size", "0"))
+
+    def getStatus(self):
+        d = self.getInfos();
+        return d.get("data_status", "")
+
     def getUserMetadata(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
-                
         selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
                         COL_META_DATA_ATTR_UNITS],
                        [0, 0, 0], 3)
-        
         sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
                         ["='%s'" % self.collName,
                          "='%s'" % self.dataName], 2)
-        
         return queryToTupleList(self._conn, selectInp, sqlCondInp)
+
+    def getVersion(self):
+        d = self.getInfos();
+        return d.get("data_version", "")
 
     def isatty(self):
         return false
-    
+
+    def move(self, new_path):
+        global lastStatus
+        dataObjRenameInp = dataObjCopyInp_t()
+        dataObjRenameInp.srcDataObjInp.oprType = RENAME_DATA_OBJ
+        dataObjRenameInp.srcDataObjInp.objPath = self.fullPath()
+        dataObjRenameInp.destDataObjInp.oprType = RENAME_DATA_OBJ
+        dataObjRenameInp.destDataObjInp.objPath = new_path
+        lastStatus = rcDataObjRename(self._conn, dataObjRenameInp)
+        return lastStatus
+
+    def next(self):
+        if self.position >= self.size:
+            raise StopIteration
+        return self.readline()
+
     # Optional parameter : number of bytes to read. if not present reads
     # TRANS_BUF_SZ bytes. If the size is greater it has to be refined...
     def read(self, buffSize=TRANS_BUF_SZ):
@@ -4448,17 +5947,17 @@ class irodsFile:
             self.position += readSize
             return outString
 
-    def readline(f, size=None):
+    def readline(self, size=None):
         res = ""
         end = False
         
-        c = f.read(1)
+        c = self.read(1)
         readsize = 1
         end = c == ''
     
         while not end:
             res += c
-            c = f.read(1)
+            c = self.read(1)
             readsize += 1
             if not c or c in ['\r', '\n']:
                 res += c
@@ -4470,16 +5969,31 @@ class irodsFile:
     
         return res
 
+    def replicate(self, rescName):
+        global lastStatus
+        dataObjInp = dataObjInp_t()
+        dataObjInp.objPath = self.fullPath()
+        addKeyVal(dataObjInp.condInput, RESC_NAME_KW, self.resourceName)
+        replNum = getDataObjReplicaNumber(self._conn, self.collName,
+                                          self.dataName, self.resourceName)
+        if replNum:
+            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
+        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, rescName)
+        lastStatus = rcDataObjRepl(self._conn, dataObjInp)
+        return lastStatus
+
+    def rmUserMetadata(self, name, value, units=""):
+        fullName = self.fullPath()
+        return rmUserMetadata(self._conn, "-d", fullName, name, value, units)
+
     def seek(self, offset, whence=SEEK_SET):
+        global lastStatus
         dataObjLseekInp = openedDataObjInp_t()
         dataObjLseekOut = fileLseekOut_t()
-        
         dataObjLseekInp.l1descInx = self.descInx
         dataObjLseekInp.offset = offset
         dataObjLseekInp.whence = whence
-        
-        status, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
-        
+        lastStatus, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
         if (whence == SEEK_SET):
             self.position = offset
         elif (whence == SEEK_CUR):
@@ -4495,230 +6009,34 @@ class irodsFile:
 
     def tell(self):
         return self.getPosition()
-        
+
     def update(self):
+        global lastStatus
         dataObjInp = dataObjInp_t()
-        
         dataObjInp.objPath = self.fullPath()
         addKeyVal(dataObjInp.condInput, UPDATE_REPL_KW, "")
-        status = rcDataObjRepl(self._conn, dataObjInp)
-        return status
-    
-    def replicate(self, rescName):
-        dataObjInp = dataObjInp_t()
-        
-        dataObjInp.objPath = self.fullPath()
-        addKeyVal(dataObjInp.condInput, RESC_NAME_KW, self.resourceName)
-        
-        replNum = getDataObjReplicaNumber(self._conn, self.collName,
-                                          self.dataName, self.resourceName);
-                                          
-        if replNum:
-            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-
-        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, rescName)
-        return rcDataObjRepl(self._conn, dataObjInp)
-        
-    def rmUserMetadata(self, name, value, units=""):
-        fullName = self.fullPath()
-        return rmUserMetadata(self._conn, "-d", fullName, name, value, units)
+        lastStatus = rcDataObjRepl(self._conn, dataObjInp)
+        return lastStatus
     
     def write(self, inpBuff):
+        global lastStatus
         if self.openFlag == O_RDONLY:
             # If the file is only open for reading and we try to write in it,
             # the call to rcDataObjRead will fail.
             return 0
         else:
             inpLen = len(inpBuff)
-            dataObjWriteInpBBuf = bytesBuf_t();
-            
+            dataObjWriteInpBBuf = bytesBuf_t()
             fileWriteInp = openedDataObjInp_t()
             fileWriteInp.l1descInx = self.descInx
             fileWriteInp.len = inpLen
-            
             dataObjWriteInpBBuf.setBuf(inpBuff, inpLen)
-            
-            status = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
-            
-            if status > 0:
-                self.position += status
-                self.size += status
-            
-            return status
+            lastStatus = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
+            if lastStatus > 0:
+                self.position += lastStatus
+                self.size += lastStatus
+            return lastStatus
 
-
-
-class irodsCollection:
-
-    def __init__(self, conn, collName=None):
-        status, myEnv = getRodsEnv()
-        self._conn = conn
-        
-        if collName:
-            # Remove the last '/', if len = 1 the user wants the root colection
-            if len(collName) > 1 and collName[-1] == '/':
-                collName = collName[:-1]
-                
-            if collName.startswith('/'):
-                # If the path starts with '/' we assume a global path
-                self.collName = collName
-            else:
-                # else we assume that it is local to the current working dir
-                self.collName = myEnv.rodsCwd + '/' + collName
-            
-        else:
-             ## If no collName, we use the current working directory
-            self.collName = myEnv.rodsCwd
-        
-    def addUserMetadata(self, name, value, units=""):
-        return addUserMetadata(self._conn, "-c", self.collName,
-                               name, value, units)
-    
-    def create(self, dataName, resc_name=""):
-        if not resc_name:
-            status, myEnv = getRodsEnv()
-            resc_name = myEnv.rodsDefResource
-            
-        return _irodsOpen(self._conn, self.collName, dataName, "w", resc_name)
-       
-    def createCollection(self, child_collName):
-        collCreateInp = collInp_t()
-        collCreateInp.collName = "%s/%s" % (self.collName, child_collName)
-        status = rcCollCreate(self._conn, collCreateInp)
-        return status
-    
-    def delete(self, dataName, resc_name=""):
-        dataObjInp = dataObjInp_t()
-        if resc_name:
-            replNum = getDataObjReplicaNumber(self._conn, self.collName,
-                                              dataName, resc_name);
-        else:
-            replNum = "0"
-            
-        if replNum:
-            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-            
-        dataObjInp.openFlags = O_RDONLY
-        dataObjInp.objPath = "%s/%s" % (self.collName, dataName)
-        
-        status = rcDataObjUnlink(self._conn, dataObjInp)
-        return status
-    
-    def deleteCollection(self, child_collName):
-        collInp = collInp_t()
-        collInp.collName = "%s/%s" % (self.collName, child_collName)
-        addKeyVal(collInp.condInput, FORCE_FLAG_KW, "")
-        addKeyVal(collInp.condInput, RECURSIVE_OPR__KW, "")
-        status = rcRmColl(self._conn, collInp, 0)
-        return status
-
-    def getCollName(self):
-        return self.collName
-
-    def getId(self):
-        return getCollId(self._conn, self.getCollName())
-
-    def getLenObjects(self):
-        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
-        nb_el = 0
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == DATA_OBJ_T:
-                nb_el += 1
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return nb_el
-    
-    def getLenSubCollections(self):
-        queryFlags = DATA_QUERY_FIRST_FG
-        nb_el = 0
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == COLL_OBJ_T:
-                nb_el += 1 
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return nb_el
-    
-    def getObjects(self):
-        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
-        l = []
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == DATA_OBJ_T:
-                status, srcElement = getLastPathElement(collEnt.dataName)
-                if srcElement:
-                    l.append((srcElement, collEnt.resource))
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return l
-    
-    def getSubCollections(self):
-        queryFlags = DATA_QUERY_FIRST_FG
-        l = []
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == COLL_OBJ_T:
-                status, myColl, myData = splitPathByKey(collEnt.collName, '/')
-                if myData:
-                    l.append(myData)
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return l
-        
-    def getUserMetadata(self):
-        sqlCondInp = inxValPair_t()
-        selectInp = inxIvalPair_t()
-                
-        selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
-                        COL_META_COLL_ATTR_UNITS],
-                       [0, 0, 0], 3)
-        
-        sqlCondInp.init([COL_COLL_NAME], ["='%s'" % self.collName], 1)
-        
-        return queryToTupleList(self._conn, selectInp, sqlCondInp)
-    
-    def open(self, dataName, mode="r", resc_name=""):
-        if not resc_name:
-            status, myEnv = getRodsEnv()
-            resc_name = myEnv.rodsDefResource
-        return _irodsOpen(self._conn, self.collName, dataName, mode, resc_name)
-    
-    def openCollection(self, collName):
-        status = CAT_UNKNOWN_COLLECTION
-        if collName != '/':   
-            collName = collName.rstrip('/')
-        # If the path starts with '/' we assume a global path
-        if (collName.startswith('/')):
-           self.collName = collName
-           status = 0
-        else:
-            ls_child = self.getSubCollections()
-            if collName in ls_child:
-                # Special case for the root dir
-                if self.collName == '/':
-                    fullName = '/' + collName
-                else:
-                    fullName = "%s/%s" % (self.collName, collName)
-                self.collName = fullName
-                status = 0
-        return status
-        
-    def rmUserMetadata(self, name, value, units=""):
-        return rmUserMetadata(self._conn, "-c", self.collName,
-                               name, value, units) 
-        
-    def upCollection(self):
-        status, myDir, myFile = splitPathByKey(self.collName, "/")
-        self.collName = myDir
 
 class regReplica_t(_object):
     __swig_setmethods__ = {}
@@ -5000,15 +6318,6 @@ RULE_ESTIMATE_EXE_TIME_KW = _irods.RULE_ESTIMATE_EXE_TIME_KW
 RULE_NOTIFICATION_ADDR_KW = _irods.RULE_NOTIFICATION_ADDR_KW
 RULE_LAST_EXE_TIME_KW = _irods.RULE_LAST_EXE_TIME_KW
 RULE_EXE_STATUS_KW = _irods.RULE_EXE_STATUS_KW
-LOG_SQL = _irods.LOG_SQL
-LOG_DEBUG1 = _irods.LOG_DEBUG1
-LOG_DEBUG2 = _irods.LOG_DEBUG2
-LOG_DEBUG3 = _irods.LOG_DEBUG3
-LOG_DEBUG = _irods.LOG_DEBUG
-LOG_NOTICE = _irods.LOG_NOTICE
-LOG_ERROR = _irods.LOG_ERROR
-LOG_SYS_WARNING = _irods.LOG_SYS_WARNING
-LOG_SYS_FATAL = _irods.LOG_SYS_FATAL
 
 def rodsErrorName(*args):
   return _irods.rodsErrorName(*args)
@@ -5107,7 +6416,6 @@ rcModAVUMetadata = _irods.rcModAVUMetadata
 def rcModDataObjMeta(*args):
   return _irods.rcModDataObjMeta(*args)
 rcModDataObjMeta = _irods.rcModDataObjMeta
-ALLOW_NO_SRC_FLAG = _irods.ALLOW_NO_SRC_FLAG
 class rodsPath_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, rodsPath_t, name, value)
@@ -5192,17 +6500,18 @@ def getLastPathElement(*args):
   return _irods.getLastPathElement(*args)
 getLastPathElement = _irods.getLastPathElement
 def getLastPathElement(inPath):
-	"""getLastPathElement - 
+    """getLastPathElement - 
   Input -
     str inPath -
   OutPut - (str, int)
     str lastElement
     int status - status of the operation."""
+    global lastStatus
     # TO IMPROVE: irods doesn't manage this out string well
-	lastElement = "_" * MAX_NAME_LEN
-	status = _irods.getLastPathElement(inPath, lastElement)
-	lastElement = lastElement[:lastElement.find('\0')]
-	return (status, lastElement)
+    lastElement = "_" * MAX_NAME_LEN
+    lastStatus = _irods.getLastPathElement(inPath, lastElement)
+    lastElement = lastElement[:lastElement.find('\0')]
+    return (lastStatus, lastElement)
 
 
 def parseCmdLinePath(*args):
@@ -5220,373 +6529,6 @@ parseRodsPathStr = _irods.parseRodsPathStr
 def resolveRodsTarget(*args):
   return _irods.resolveRodsTarget(*args)
 resolveRodsTarget = _irods.resolveRodsTarget
-MAX_SQL_ATTR = _irods.MAX_SQL_ATTR
-MAX_SQL_ROWS = _irods.MAX_SQL_ROWS
-ORDER_BY = _irods.ORDER_BY
-ORDER_BY_DESC = _irods.ORDER_BY_DESC
-RETURN_TOTAL_ROW_COUNT = _irods.RETURN_TOTAL_ROW_COUNT
-NO_DISTINCT = _irods.NO_DISTINCT
-QUOTA_QUERY = _irods.QUOTA_QUERY
-AUTO_CLOSE = _irods.AUTO_CLOSE
-UPPER_CASE_WHERE = _irods.UPPER_CASE_WHERE
-SELECT_MIN = _irods.SELECT_MIN
-SELECT_MAX = _irods.SELECT_MAX
-SELECT_SUM = _irods.SELECT_SUM
-SELECT_AVG = _irods.SELECT_AVG
-SELECT_COUNT = _irods.SELECT_COUNT
-MAX_CORE_TABLE_VALUE = _irods.MAX_CORE_TABLE_VALUE
-COL_ZONE_ID = _irods.COL_ZONE_ID
-COL_ZONE_NAME = _irods.COL_ZONE_NAME
-COL_ZONE_TYPE = _irods.COL_ZONE_TYPE
-COL_ZONE_CONNECTION = _irods.COL_ZONE_CONNECTION
-COL_ZONE_COMMENT = _irods.COL_ZONE_COMMENT
-COL_ZONE_CREATE_TIME = _irods.COL_ZONE_CREATE_TIME
-COL_ZONE_MODIFY_TIME = _irods.COL_ZONE_MODIFY_TIME
-COL_USER_ID = _irods.COL_USER_ID
-COL_USER_NAME = _irods.COL_USER_NAME
-COL_USER_TYPE = _irods.COL_USER_TYPE
-COL_USER_ZONE = _irods.COL_USER_ZONE
-COL_USER_INFO = _irods.COL_USER_INFO
-COL_USER_COMMENT = _irods.COL_USER_COMMENT
-COL_USER_CREATE_TIME = _irods.COL_USER_CREATE_TIME
-COL_USER_MODIFY_TIME = _irods.COL_USER_MODIFY_TIME
-COL_USER_DN_INVALID = _irods.COL_USER_DN_INVALID
-COL_R_RESC_ID = _irods.COL_R_RESC_ID
-COL_R_RESC_NAME = _irods.COL_R_RESC_NAME
-COL_R_ZONE_NAME = _irods.COL_R_ZONE_NAME
-COL_R_TYPE_NAME = _irods.COL_R_TYPE_NAME
-COL_R_CLASS_NAME = _irods.COL_R_CLASS_NAME
-COL_R_LOC = _irods.COL_R_LOC
-COL_R_VAULT_PATH = _irods.COL_R_VAULT_PATH
-COL_R_FREE_SPACE = _irods.COL_R_FREE_SPACE
-COL_R_RESC_INFO = _irods.COL_R_RESC_INFO
-COL_R_RESC_COMMENT = _irods.COL_R_RESC_COMMENT
-COL_R_CREATE_TIME = _irods.COL_R_CREATE_TIME
-COL_R_MODIFY_TIME = _irods.COL_R_MODIFY_TIME
-COL_R_RESC_STATUS = _irods.COL_R_RESC_STATUS
-COL_R_FREE_SPACE_TIME = _irods.COL_R_FREE_SPACE_TIME
-COL_D_DATA_ID = _irods.COL_D_DATA_ID
-COL_D_COLL_ID = _irods.COL_D_COLL_ID
-COL_DATA_NAME = _irods.COL_DATA_NAME
-COL_DATA_REPL_NUM = _irods.COL_DATA_REPL_NUM
-COL_DATA_VERSION = _irods.COL_DATA_VERSION
-COL_DATA_TYPE_NAME = _irods.COL_DATA_TYPE_NAME
-COL_DATA_SIZE = _irods.COL_DATA_SIZE
-COL_D_RESC_GROUP_NAME = _irods.COL_D_RESC_GROUP_NAME
-COL_D_RESC_NAME = _irods.COL_D_RESC_NAME
-COL_D_DATA_PATH = _irods.COL_D_DATA_PATH
-COL_D_OWNER_NAME = _irods.COL_D_OWNER_NAME
-COL_D_OWNER_ZONE = _irods.COL_D_OWNER_ZONE
-COL_D_REPL_STATUS = _irods.COL_D_REPL_STATUS
-COL_D_DATA_STATUS = _irods.COL_D_DATA_STATUS
-COL_D_DATA_CHECKSUM = _irods.COL_D_DATA_CHECKSUM
-COL_D_EXPIRY = _irods.COL_D_EXPIRY
-COL_D_MAP_ID = _irods.COL_D_MAP_ID
-COL_D_COMMENTS = _irods.COL_D_COMMENTS
-COL_D_CREATE_TIME = _irods.COL_D_CREATE_TIME
-COL_D_MODIFY_TIME = _irods.COL_D_MODIFY_TIME
-COL_DATA_MODE = _irods.COL_DATA_MODE
-COL_COLL_ID = _irods.COL_COLL_ID
-COL_COLL_NAME = _irods.COL_COLL_NAME
-COL_COLL_PARENT_NAME = _irods.COL_COLL_PARENT_NAME
-COL_COLL_OWNER_NAME = _irods.COL_COLL_OWNER_NAME
-COL_COLL_OWNER_ZONE = _irods.COL_COLL_OWNER_ZONE
-COL_COLL_MAP_ID = _irods.COL_COLL_MAP_ID
-COL_COLL_INHERITANCE = _irods.COL_COLL_INHERITANCE
-COL_COLL_COMMENTS = _irods.COL_COLL_COMMENTS
-COL_COLL_CREATE_TIME = _irods.COL_COLL_CREATE_TIME
-COL_COLL_MODIFY_TIME = _irods.COL_COLL_MODIFY_TIME
-COL_COLL_TYPE = _irods.COL_COLL_TYPE
-COL_COLL_INFO1 = _irods.COL_COLL_INFO1
-COL_COLL_INFO2 = _irods.COL_COLL_INFO2
-COL_META_DATA_ATTR_NAME = _irods.COL_META_DATA_ATTR_NAME
-COL_META_DATA_ATTR_VALUE = _irods.COL_META_DATA_ATTR_VALUE
-COL_META_DATA_ATTR_UNITS = _irods.COL_META_DATA_ATTR_UNITS
-COL_META_DATA_ATTR_ID = _irods.COL_META_DATA_ATTR_ID
-COL_META_DATA_CREATE_TIME = _irods.COL_META_DATA_CREATE_TIME
-COL_META_DATA_MODIFY_TIME = _irods.COL_META_DATA_MODIFY_TIME
-COL_META_COLL_ATTR_NAME = _irods.COL_META_COLL_ATTR_NAME
-COL_META_COLL_ATTR_VALUE = _irods.COL_META_COLL_ATTR_VALUE
-COL_META_COLL_ATTR_UNITS = _irods.COL_META_COLL_ATTR_UNITS
-COL_META_COLL_ATTR_ID = _irods.COL_META_COLL_ATTR_ID
-COL_META_COLL_CREATE_TIME = _irods.COL_META_COLL_CREATE_TIME
-COL_META_COLL_MODIFY_TIME = _irods.COL_META_COLL_MODIFY_TIME
-COL_META_NAMESPACE_COLL = _irods.COL_META_NAMESPACE_COLL
-COL_META_NAMESPACE_DATA = _irods.COL_META_NAMESPACE_DATA
-COL_META_NAMESPACE_RESC = _irods.COL_META_NAMESPACE_RESC
-COL_META_NAMESPACE_USER = _irods.COL_META_NAMESPACE_USER
-COL_META_NAMESPACE_RESC_GROUP = _irods.COL_META_NAMESPACE_RESC_GROUP
-COL_META_NAMESPACE_RULE = _irods.COL_META_NAMESPACE_RULE
-COL_META_NAMESPACE_MSRVC = _irods.COL_META_NAMESPACE_MSRVC
-COL_META_NAMESPACE_MET2 = _irods.COL_META_NAMESPACE_MET2
-COL_META_RESC_ATTR_NAME = _irods.COL_META_RESC_ATTR_NAME
-COL_META_RESC_ATTR_VALUE = _irods.COL_META_RESC_ATTR_VALUE
-COL_META_RESC_ATTR_UNITS = _irods.COL_META_RESC_ATTR_UNITS
-COL_META_RESC_ATTR_ID = _irods.COL_META_RESC_ATTR_ID
-COL_META_RESC_CREATE_TIME = _irods.COL_META_RESC_CREATE_TIME
-COL_META_RESC_MODIFY_TIME = _irods.COL_META_RESC_MODIFY_TIME
-COL_META_USER_ATTR_NAME = _irods.COL_META_USER_ATTR_NAME
-COL_META_USER_ATTR_VALUE = _irods.COL_META_USER_ATTR_VALUE
-COL_META_USER_ATTR_UNITS = _irods.COL_META_USER_ATTR_UNITS
-COL_META_USER_ATTR_ID = _irods.COL_META_USER_ATTR_ID
-COL_META_USER_CREATE_TIME = _irods.COL_META_USER_CREATE_TIME
-COL_META_USER_MODIFY_TIME = _irods.COL_META_USER_MODIFY_TIME
-COL_META_RESC_GROUP_ATTR_NAME = _irods.COL_META_RESC_GROUP_ATTR_NAME
-COL_META_RESC_GROUP_ATTR_VALUE = _irods.COL_META_RESC_GROUP_ATTR_VALUE
-COL_META_RESC_GROUP_ATTR_UNITS = _irods.COL_META_RESC_GROUP_ATTR_UNITS
-COL_META_RESC_GROUP_ATTR_ID = _irods.COL_META_RESC_GROUP_ATTR_ID
-COL_META_RESC_GROUP_CREATE_TIME = _irods.COL_META_RESC_GROUP_CREATE_TIME
-COL_META_RESC_GROUP_MODIFY_TIME = _irods.COL_META_RESC_GROUP_MODIFY_TIME
-COL_META_RULE_ATTR_NAME = _irods.COL_META_RULE_ATTR_NAME
-COL_META_RULE_ATTR_VALUE = _irods.COL_META_RULE_ATTR_VALUE
-COL_META_RULE_ATTR_UNITS = _irods.COL_META_RULE_ATTR_UNITS
-COL_META_RULE_ATTR_ID = _irods.COL_META_RULE_ATTR_ID
-COL_META_RULE_CREATE_TIME = _irods.COL_META_RULE_CREATE_TIME
-COL_META_RULE_MODIFY_TIME = _irods.COL_META_RULE_MODIFY_TIME
-COL_META_MSRVC_ATTR_NAME = _irods.COL_META_MSRVC_ATTR_NAME
-COL_META_MSRVC_ATTR_VALUE = _irods.COL_META_MSRVC_ATTR_VALUE
-COL_META_MSRVC_ATTR_UNITS = _irods.COL_META_MSRVC_ATTR_UNITS
-COL_META_MSRVC_ATTR_ID = _irods.COL_META_MSRVC_ATTR_ID
-COL_META_MSRVC_CREATE_TIME = _irods.COL_META_MSRVC_CREATE_TIME
-COL_META_MSRVC_MODIFY_TIME = _irods.COL_META_MSRVC_MODIFY_TIME
-COL_META_MET2_ATTR_NAME = _irods.COL_META_MET2_ATTR_NAME
-COL_META_MET2_ATTR_VALUE = _irods.COL_META_MET2_ATTR_VALUE
-COL_META_MET2_ATTR_UNITS = _irods.COL_META_MET2_ATTR_UNITS
-COL_META_MET2_ATTR_ID = _irods.COL_META_MET2_ATTR_ID
-COL_META_MET2_CREATE_TIME = _irods.COL_META_MET2_CREATE_TIME
-COL_META_MET2_MODIFY_TIME = _irods.COL_META_MET2_MODIFY_TIME
-COL_DATA_ACCESS_TYPE = _irods.COL_DATA_ACCESS_TYPE
-COL_DATA_ACCESS_NAME = _irods.COL_DATA_ACCESS_NAME
-COL_DATA_TOKEN_NAMESPACE = _irods.COL_DATA_TOKEN_NAMESPACE
-COL_DATA_ACCESS_USER_ID = _irods.COL_DATA_ACCESS_USER_ID
-COL_DATA_ACCESS_DATA_ID = _irods.COL_DATA_ACCESS_DATA_ID
-COL_COLL_ACCESS_TYPE = _irods.COL_COLL_ACCESS_TYPE
-COL_COLL_ACCESS_NAME = _irods.COL_COLL_ACCESS_NAME
-COL_COLL_TOKEN_NAMESPACE = _irods.COL_COLL_TOKEN_NAMESPACE
-COL_COLL_ACCESS_USER_ID = _irods.COL_COLL_ACCESS_USER_ID
-COL_COLL_ACCESS_COLL_ID = _irods.COL_COLL_ACCESS_COLL_ID
-COL_RESC_ACCESS_TYPE = _irods.COL_RESC_ACCESS_TYPE
-COL_RESC_ACCESS_NAME = _irods.COL_RESC_ACCESS_NAME
-COL_RESC_TOKEN_NAMESPACE = _irods.COL_RESC_TOKEN_NAMESPACE
-COL_RESC_ACCESS_USER_ID = _irods.COL_RESC_ACCESS_USER_ID
-COL_RESC_ACCESS_RESC_ID = _irods.COL_RESC_ACCESS_RESC_ID
-COL_META_ACCESS_TYPE = _irods.COL_META_ACCESS_TYPE
-COL_META_ACCESS_NAME = _irods.COL_META_ACCESS_NAME
-COL_META_TOKEN_NAMESPACE = _irods.COL_META_TOKEN_NAMESPACE
-COL_META_ACCESS_USER_ID = _irods.COL_META_ACCESS_USER_ID
-COL_META_ACCESS_META_ID = _irods.COL_META_ACCESS_META_ID
-COL_RULE_ACCESS_TYPE = _irods.COL_RULE_ACCESS_TYPE
-COL_RULE_ACCESS_NAME = _irods.COL_RULE_ACCESS_NAME
-COL_RULE_TOKEN_NAMESPACE = _irods.COL_RULE_TOKEN_NAMESPACE
-COL_RULE_ACCESS_USER_ID = _irods.COL_RULE_ACCESS_USER_ID
-COL_RULE_ACCESS_RULE_ID = _irods.COL_RULE_ACCESS_RULE_ID
-COL_MSRVC_ACCESS_TYPE = _irods.COL_MSRVC_ACCESS_TYPE
-COL_MSRVC_ACCESS_NAME = _irods.COL_MSRVC_ACCESS_NAME
-COL_MSRVC_TOKEN_NAMESPACE = _irods.COL_MSRVC_TOKEN_NAMESPACE
-COL_MSRVC_ACCESS_USER_ID = _irods.COL_MSRVC_ACCESS_USER_ID
-COL_MSRVC_ACCESS_MSRVC_ID = _irods.COL_MSRVC_ACCESS_MSRVC_ID
-COL_RESC_GROUP_RESC_ID = _irods.COL_RESC_GROUP_RESC_ID
-COL_RESC_GROUP_NAME = _irods.COL_RESC_GROUP_NAME
-COL_RESC_GROUP_ID = _irods.COL_RESC_GROUP_ID
-COL_USER_GROUP_ID = _irods.COL_USER_GROUP_ID
-COL_USER_GROUP_NAME = _irods.COL_USER_GROUP_NAME
-COL_RULE_EXEC_ID = _irods.COL_RULE_EXEC_ID
-COL_RULE_EXEC_NAME = _irods.COL_RULE_EXEC_NAME
-COL_RULE_EXEC_REI_FILE_PATH = _irods.COL_RULE_EXEC_REI_FILE_PATH
-COL_RULE_EXEC_USER_NAME = _irods.COL_RULE_EXEC_USER_NAME
-COL_RULE_EXEC_ADDRESS = _irods.COL_RULE_EXEC_ADDRESS
-COL_RULE_EXEC_TIME = _irods.COL_RULE_EXEC_TIME
-COL_RULE_EXEC_FREQUENCY = _irods.COL_RULE_EXEC_FREQUENCY
-COL_RULE_EXEC_PRIORITY = _irods.COL_RULE_EXEC_PRIORITY
-COL_RULE_EXEC_ESTIMATED_EXE_TIME = _irods.COL_RULE_EXEC_ESTIMATED_EXE_TIME
-COL_RULE_EXEC_NOTIFICATION_ADDR = _irods.COL_RULE_EXEC_NOTIFICATION_ADDR
-COL_RULE_EXEC_LAST_EXE_TIME = _irods.COL_RULE_EXEC_LAST_EXE_TIME
-COL_RULE_EXEC_STATUS = _irods.COL_RULE_EXEC_STATUS
-COL_TOKEN_NAMESPACE = _irods.COL_TOKEN_NAMESPACE
-COL_TOKEN_ID = _irods.COL_TOKEN_ID
-COL_TOKEN_NAME = _irods.COL_TOKEN_NAME
-COL_TOKEN_VALUE = _irods.COL_TOKEN_VALUE
-COL_TOKEN_VALUE2 = _irods.COL_TOKEN_VALUE2
-COL_TOKEN_VALUE3 = _irods.COL_TOKEN_VALUE3
-COL_TOKEN_COMMENT = _irods.COL_TOKEN_COMMENT
-COL_AUDIT_OBJ_ID = _irods.COL_AUDIT_OBJ_ID
-COL_AUDIT_USER_ID = _irods.COL_AUDIT_USER_ID
-COL_AUDIT_ACTION_ID = _irods.COL_AUDIT_ACTION_ID
-COL_AUDIT_COMMENT = _irods.COL_AUDIT_COMMENT
-COL_AUDIT_CREATE_TIME = _irods.COL_AUDIT_CREATE_TIME
-COL_AUDIT_MODIFY_TIME = _irods.COL_AUDIT_MODIFY_TIME
-COL_AUDIT_RANGE_START = _irods.COL_AUDIT_RANGE_START
-COL_AUDIT_RANGE_END = _irods.COL_AUDIT_RANGE_END
-COL_COLL_USER_NAME = _irods.COL_COLL_USER_NAME
-COL_COLL_USER_ZONE = _irods.COL_COLL_USER_ZONE
-COL_DATA_USER_NAME = _irods.COL_DATA_USER_NAME
-COL_DATA_USER_ZONE = _irods.COL_DATA_USER_ZONE
-COL_RESC_USER_NAME = _irods.COL_RESC_USER_NAME
-COL_RESC_USER_ZONE = _irods.COL_RESC_USER_ZONE
-COL_SL_HOST_NAME = _irods.COL_SL_HOST_NAME
-COL_SL_RESC_NAME = _irods.COL_SL_RESC_NAME
-COL_SL_CPU_USED = _irods.COL_SL_CPU_USED
-COL_SL_MEM_USED = _irods.COL_SL_MEM_USED
-COL_SL_SWAP_USED = _irods.COL_SL_SWAP_USED
-COL_SL_RUNQ_LOAD = _irods.COL_SL_RUNQ_LOAD
-COL_SL_DISK_SPACE = _irods.COL_SL_DISK_SPACE
-COL_SL_NET_INPUT = _irods.COL_SL_NET_INPUT
-COL_SL_NET_OUTPUT = _irods.COL_SL_NET_OUTPUT
-COL_SL_CREATE_TIME = _irods.COL_SL_CREATE_TIME
-COL_SLD_RESC_NAME = _irods.COL_SLD_RESC_NAME
-COL_SLD_LOAD_FACTOR = _irods.COL_SLD_LOAD_FACTOR
-COL_SLD_CREATE_TIME = _irods.COL_SLD_CREATE_TIME
-COL_USER_AUTH_ID = _irods.COL_USER_AUTH_ID
-COL_USER_DN = _irods.COL_USER_DN
-COL_RULE_ID = _irods.COL_RULE_ID
-COL_RULE_VERSION = _irods.COL_RULE_VERSION
-COL_RULE_BASE_NAME = _irods.COL_RULE_BASE_NAME
-COL_RULE_NAME = _irods.COL_RULE_NAME
-COL_RULE_EVENT = _irods.COL_RULE_EVENT
-COL_RULE_CONDITION = _irods.COL_RULE_CONDITION
-COL_RULE_BODY = _irods.COL_RULE_BODY
-COL_RULE_RECOVERY = _irods.COL_RULE_RECOVERY
-COL_RULE_STATUS = _irods.COL_RULE_STATUS
-COL_RULE_OWNER_NAME = _irods.COL_RULE_OWNER_NAME
-COL_RULE_OWNER_ZONE = _irods.COL_RULE_OWNER_ZONE
-COL_RULE_DESCR_1 = _irods.COL_RULE_DESCR_1
-COL_RULE_DESCR_2 = _irods.COL_RULE_DESCR_2
-COL_RULE_INPUT_PARAMS = _irods.COL_RULE_INPUT_PARAMS
-COL_RULE_OUTPUT_PARAMS = _irods.COL_RULE_OUTPUT_PARAMS
-COL_RULE_DOLLAR_VARS = _irods.COL_RULE_DOLLAR_VARS
-COL_RULE_ICAT_ELEMENTS = _irods.COL_RULE_ICAT_ELEMENTS
-COL_RULE_SIDEEFFECTS = _irods.COL_RULE_SIDEEFFECTS
-COL_RULE_COMMENT = _irods.COL_RULE_COMMENT
-COL_RULE_CREATE_TIME = _irods.COL_RULE_CREATE_TIME
-COL_RULE_MODIFY_TIME = _irods.COL_RULE_MODIFY_TIME
-COL_RULE_BASE_MAP_VERSION = _irods.COL_RULE_BASE_MAP_VERSION
-COL_RULE_BASE_MAP_BASE_NAME = _irods.COL_RULE_BASE_MAP_BASE_NAME
-COL_RULE_BASE_MAP_OWNER_NAME = _irods.COL_RULE_BASE_MAP_OWNER_NAME
-COL_RULE_BASE_MAP_OWNER_ZONE = _irods.COL_RULE_BASE_MAP_OWNER_ZONE
-COL_RULE_BASE_MAP_COMMENT = _irods.COL_RULE_BASE_MAP_COMMENT
-COL_RULE_BASE_MAP_CREATE_TIME = _irods.COL_RULE_BASE_MAP_CREATE_TIME
-COL_RULE_BASE_MAP_MODIFY_TIME = _irods.COL_RULE_BASE_MAP_MODIFY_TIME
-COL_RULE_BASE_MAP_PRIORITY = _irods.COL_RULE_BASE_MAP_PRIORITY
-COL_DVM_ID = _irods.COL_DVM_ID
-COL_DVM_VERSION = _irods.COL_DVM_VERSION
-COL_DVM_BASE_NAME = _irods.COL_DVM_BASE_NAME
-COL_DVM_EXT_VAR_NAME = _irods.COL_DVM_EXT_VAR_NAME
-COL_DVM_CONDITION = _irods.COL_DVM_CONDITION
-COL_DVM_INT_MAP_PATH = _irods.COL_DVM_INT_MAP_PATH
-COL_DVM_STATUS = _irods.COL_DVM_STATUS
-COL_DVM_OWNER_NAME = _irods.COL_DVM_OWNER_NAME
-COL_DVM_OWNER_ZONE = _irods.COL_DVM_OWNER_ZONE
-COL_DVM_COMMENT = _irods.COL_DVM_COMMENT
-COL_DVM_CREATE_TIME = _irods.COL_DVM_CREATE_TIME
-COL_DVM_MODIFY_TIME = _irods.COL_DVM_MODIFY_TIME
-COL_DVM_BASE_MAP_VERSION = _irods.COL_DVM_BASE_MAP_VERSION
-COL_DVM_BASE_MAP_BASE_NAME = _irods.COL_DVM_BASE_MAP_BASE_NAME
-COL_DVM_BASE_MAP_OWNER_NAME = _irods.COL_DVM_BASE_MAP_OWNER_NAME
-COL_DVM_BASE_MAP_OWNER_ZONE = _irods.COL_DVM_BASE_MAP_OWNER_ZONE
-COL_DVM_BASE_MAP_COMMENT = _irods.COL_DVM_BASE_MAP_COMMENT
-COL_DVM_BASE_MAP_CREATE_TIME = _irods.COL_DVM_BASE_MAP_CREATE_TIME
-COL_DVM_BASE_MAP_MODIFY_TIME = _irods.COL_DVM_BASE_MAP_MODIFY_TIME
-COL_FNM_ID = _irods.COL_FNM_ID
-COL_FNM_VERSION = _irods.COL_FNM_VERSION
-COL_FNM_BASE_NAME = _irods.COL_FNM_BASE_NAME
-COL_FNM_EXT_FUNC_NAME = _irods.COL_FNM_EXT_FUNC_NAME
-COL_FNM_INT_FUNC_NAME = _irods.COL_FNM_INT_FUNC_NAME
-COL_FNM_STATUS = _irods.COL_FNM_STATUS
-COL_FNM_OWNER_NAME = _irods.COL_FNM_OWNER_NAME
-COL_FNM_OWNER_ZONE = _irods.COL_FNM_OWNER_ZONE
-COL_FNM_COMMENT = _irods.COL_FNM_COMMENT
-COL_FNM_CREATE_TIME = _irods.COL_FNM_CREATE_TIME
-COL_FNM_MODIFY_TIME = _irods.COL_FNM_MODIFY_TIME
-COL_FNM_BASE_MAP_VERSION = _irods.COL_FNM_BASE_MAP_VERSION
-COL_FNM_BASE_MAP_BASE_NAME = _irods.COL_FNM_BASE_MAP_BASE_NAME
-COL_FNM_BASE_MAP_OWNER_NAME = _irods.COL_FNM_BASE_MAP_OWNER_NAME
-COL_FNM_BASE_MAP_OWNER_ZONE = _irods.COL_FNM_BASE_MAP_OWNER_ZONE
-COL_FNM_BASE_MAP_COMMENT = _irods.COL_FNM_BASE_MAP_COMMENT
-COL_FNM_BASE_MAP_CREATE_TIME = _irods.COL_FNM_BASE_MAP_CREATE_TIME
-COL_FNM_BASE_MAP_MODIFY_TIME = _irods.COL_FNM_BASE_MAP_MODIFY_TIME
-COL_QUOTA_USER_ID = _irods.COL_QUOTA_USER_ID
-COL_QUOTA_RESC_ID = _irods.COL_QUOTA_RESC_ID
-COL_QUOTA_LIMIT = _irods.COL_QUOTA_LIMIT
-COL_QUOTA_OVER = _irods.COL_QUOTA_OVER
-COL_QUOTA_MODIFY_TIME = _irods.COL_QUOTA_MODIFY_TIME
-COL_QUOTA_USAGE_USER_ID = _irods.COL_QUOTA_USAGE_USER_ID
-COL_QUOTA_USAGE_RESC_ID = _irods.COL_QUOTA_USAGE_RESC_ID
-COL_QUOTA_USAGE = _irods.COL_QUOTA_USAGE
-COL_QUOTA_USAGE_MODIFY_TIME = _irods.COL_QUOTA_USAGE_MODIFY_TIME
-COL_QUOTA_RESC_NAME = _irods.COL_QUOTA_RESC_NAME
-COL_QUOTA_USER_NAME = _irods.COL_QUOTA_USER_NAME
-COL_QUOTA_USER_ZONE = _irods.COL_QUOTA_USER_ZONE
-COL_QUOTA_USER_TYPE = _irods.COL_QUOTA_USER_TYPE
-COL_MSRVC_ID = _irods.COL_MSRVC_ID
-COL_MSRVC_NAME = _irods.COL_MSRVC_NAME
-COL_MSRVC_SIGNATURE = _irods.COL_MSRVC_SIGNATURE
-COL_MSRVC_DOXYGEN = _irods.COL_MSRVC_DOXYGEN
-COL_MSRVC_VARIATIONS = _irods.COL_MSRVC_VARIATIONS
-COL_MSRVC_STATUS = _irods.COL_MSRVC_STATUS
-COL_MSRVC_OWNER_NAME = _irods.COL_MSRVC_OWNER_NAME
-COL_MSRVC_OWNER_ZONE = _irods.COL_MSRVC_OWNER_ZONE
-COL_MSRVC_COMMENT = _irods.COL_MSRVC_COMMENT
-COL_MSRVC_CREATE_TIME = _irods.COL_MSRVC_CREATE_TIME
-COL_MSRVC_MODIFY_TIME = _irods.COL_MSRVC_MODIFY_TIME
-COL_MSRVC_VERSION = _irods.COL_MSRVC_VERSION
-COL_MSRVC_HOST = _irods.COL_MSRVC_HOST
-COL_MSRVC_LOCATION = _irods.COL_MSRVC_LOCATION
-COL_MSRVC_LANGUAGE = _irods.COL_MSRVC_LANGUAGE
-COL_MSRVC_TYPE_NAME = _irods.COL_MSRVC_TYPE_NAME
-COL_MSRVC_MODULE_NAME = _irods.COL_MSRVC_MODULE_NAME
-COL_MSRVC_VER_OWNER_NAME = _irods.COL_MSRVC_VER_OWNER_NAME
-COL_MSRVC_VER_OWNER_ZONE = _irods.COL_MSRVC_VER_OWNER_ZONE
-COL_MSRVC_VER_COMMENT = _irods.COL_MSRVC_VER_COMMENT
-COL_MSRVC_VER_CREATE_TIME = _irods.COL_MSRVC_VER_CREATE_TIME
-COL_MSRVC_VER_MODIFY_TIME = _irods.COL_MSRVC_VER_MODIFY_TIME
-COL_TICKET_ID = _irods.COL_TICKET_ID
-COL_TICKET_STRING = _irods.COL_TICKET_STRING
-COL_TICKET_TYPE = _irods.COL_TICKET_TYPE
-COL_TICKET_USER_ID = _irods.COL_TICKET_USER_ID
-COL_TICKET_OBJECT_ID = _irods.COL_TICKET_OBJECT_ID
-COL_TICKET_OBJECT_TYPE = _irods.COL_TICKET_OBJECT_TYPE
-COL_TICKET_USES_LIMIT = _irods.COL_TICKET_USES_LIMIT
-COL_TICKET_USES_COUNT = _irods.COL_TICKET_USES_COUNT
-COL_TICKET_EXPIRY_TS = _irods.COL_TICKET_EXPIRY_TS
-COL_TICKET_CREATE_TIME = _irods.COL_TICKET_CREATE_TIME
-COL_TICKET_MODIFY_TIME = _irods.COL_TICKET_MODIFY_TIME
-COL_TICKET_WRITE_FILE_COUNT = _irods.COL_TICKET_WRITE_FILE_COUNT
-COL_TICKET_WRITE_FILE_LIMIT = _irods.COL_TICKET_WRITE_FILE_LIMIT
-COL_TICKET_WRITE_BYTE_COUNT = _irods.COL_TICKET_WRITE_BYTE_COUNT
-COL_TICKET_WRITE_BYTE_LIMIT = _irods.COL_TICKET_WRITE_BYTE_LIMIT
-COL_TICKET_ALLOWED_HOST_TICKET_ID = _irods.COL_TICKET_ALLOWED_HOST_TICKET_ID
-COL_TICKET_ALLOWED_HOST = _irods.COL_TICKET_ALLOWED_HOST
-COL_TICKET_ALLOWED_USER_TICKET_ID = _irods.COL_TICKET_ALLOWED_USER_TICKET_ID
-COL_TICKET_ALLOWED_USER_NAME = _irods.COL_TICKET_ALLOWED_USER_NAME
-COL_TICKET_ALLOWED_GROUP_TICKET_ID = _irods.COL_TICKET_ALLOWED_GROUP_TICKET_ID
-COL_TICKET_ALLOWED_GROUP_NAME = _irods.COL_TICKET_ALLOWED_GROUP_NAME
-COL_TICKET_DATA_NAME = _irods.COL_TICKET_DATA_NAME
-COL_TICKET_DATA_COLL_NAME = _irods.COL_TICKET_DATA_COLL_NAME
-COL_TICKET_COLL_NAME = _irods.COL_TICKET_COLL_NAME
-COL_TICKET_OWNER_NAME = _irods.COL_TICKET_OWNER_NAME
-COL_TICKET_OWNER_ZONE = _irods.COL_TICKET_OWNER_ZONE
-COL_COLL_FILEMETA_OBJ_ID = _irods.COL_COLL_FILEMETA_OBJ_ID
-COL_COLL_FILEMETA_UID = _irods.COL_COLL_FILEMETA_UID
-COL_COLL_FILEMETA_GID = _irods.COL_COLL_FILEMETA_GID
-COL_COLL_FILEMETA_OWNER = _irods.COL_COLL_FILEMETA_OWNER
-COL_COLL_FILEMETA_GROUP = _irods.COL_COLL_FILEMETA_GROUP
-COL_COLL_FILEMETA_MODE = _irods.COL_COLL_FILEMETA_MODE
-COL_COLL_FILEMETA_CTIME = _irods.COL_COLL_FILEMETA_CTIME
-COL_COLL_FILEMETA_MTIME = _irods.COL_COLL_FILEMETA_MTIME
-COL_COLL_FILEMETA_SOURCE_PATH = _irods.COL_COLL_FILEMETA_SOURCE_PATH
-COL_COLL_FILEMETA_CREATE_TIME = _irods.COL_COLL_FILEMETA_CREATE_TIME
-COL_COLL_FILEMETA_MODIFY_TIME = _irods.COL_COLL_FILEMETA_MODIFY_TIME
-COL_DATA_FILEMETA_OBJ_ID = _irods.COL_DATA_FILEMETA_OBJ_ID
-COL_DATA_FILEMETA_UID = _irods.COL_DATA_FILEMETA_UID
-COL_DATA_FILEMETA_GID = _irods.COL_DATA_FILEMETA_GID
-COL_DATA_FILEMETA_OWNER = _irods.COL_DATA_FILEMETA_OWNER
-COL_DATA_FILEMETA_GROUP = _irods.COL_DATA_FILEMETA_GROUP
-COL_DATA_FILEMETA_MODE = _irods.COL_DATA_FILEMETA_MODE
-COL_DATA_FILEMETA_CTIME = _irods.COL_DATA_FILEMETA_CTIME
-COL_DATA_FILEMETA_MTIME = _irods.COL_DATA_FILEMETA_MTIME
-COL_DATA_FILEMETA_SOURCE_PATH = _irods.COL_DATA_FILEMETA_SOURCE_PATH
-COL_DATA_FILEMETA_CREATE_TIME = _irods.COL_DATA_FILEMETA_CREATE_TIME
-COL_DATA_FILEMETA_MODIFY_TIME = _irods.COL_DATA_FILEMETA_MODIFY_TIME
 class generalUpdateInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, generalUpdateInp_t, name, value)
@@ -5999,172 +6941,12 @@ rcSubStructFileUnlink = _irods.rcSubStructFileUnlink
 def rcSubStructFileWrite(*args):
   return _irods.rcSubStructFileWrite(*args)
 rcSubStructFileWrite = _irods.rcSubStructFileWrite
-def createGroup(conn, groupName):
-    if groupName == "":
-        return None
-    status, myEnv = getRodsEnv()
-    status = addObject(conn, "user", groupName, "rodsgroup", myEnv.rodsZone, "", "")
-    if status == 0:
-        return irodsGroup(conn, groupName)
-
-def createResource(conn, name, type, cls, host, path):
-    if name == "":
-        return None
-    status = addObject(conn, "resource", name, type, cls,
-                        host, path)
-    if status == 0:
-        return irodsResource(conn, name)
-    else:
-        return None
-
-def createUser(conn, userName, type):
-    status, myEnv = getRodsEnv()
-    status = addObject(conn, "user", userName, type, myEnv.rodsZone, "", "")
-    if status == 0:
-        return irodsUser(conn, userName, myEnv.rodsZone)
-
-def createZone(conn, zone_name, type, connstr="", comment=""):
-    status, myEnv = getRodsEnv()
-    status = addObject(conn, "zone", zone_name, type, connstr, comment, "")
-    if status == 0:
-        return irodsZone(conn, zone_name)
-
-def deleteGroup(conn, userName):
-    status, myEnv = getRodsEnv()
-    return rmObject(conn, "user", userName, myEnv.rodsZone)
-
-def deleteResource(conn, name):
-    return rmObject(conn, "resource", name, "")
-
-def deleteUser(conn, userName):
-    return rmObject(conn, "user", userName, "")
-
-def deleteZone(conn, zone_name):
-    return rmObject(conn, "zone", zone_name, "")
-
-def getGroup(conn, groupName):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME], [0], 1)
-    
-    sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE], 
-                    ["='%s'" % groupName,
-                     "='rodsgroup'"], 2)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    if len(l) > 0:
-        return irodsGroup(conn, l[0])
-    else:
-        return None
-
-def getGroups(conn):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME], [0], 1)
-    
-    sqlCondInp.init([COL_USER_TYPE], 
-                    ["='rodsgroup'"], 1)
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    if len(l) > 0:
-        return [ irodsGroup(conn, name) for name in l ]
-    else:
-        return []
-
-def getResource(conn, resc_name):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_R_RESC_NAME], [0], 1)
-    
-    sqlCondInp.init([COL_R_RESC_NAME], ["='%s'" % resc_name], 1)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    # Check the existence of the resource
-    if len(l) > 0:
-        return irodsResource(conn, l[0])
-    else:
-        return None
-
-def getUser(conn, userName, zone_name=""):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME, COL_USER_ZONE], [0, 0], 2)
-    
-    if zone_name:
-        sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE, COL_USER_ZONE], 
-                        ["='%s'" % userName,
-                         "<>'rodsgroup'",
-                         "='%s'" % zone_name], 3)
-    else:
-        sqlCondInp.init([COL_USER_NAME, COL_USER_TYPE], 
-                        ["='%s'" % userName,
-                         "<>'rodsgroup'"], 2)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    if len(l) > 0:
-        return irodsUser(conn, l[0][0], l[0][1])
-    else:
-        return None
-
-def getUserInfo(conn, userName, zone_name=""):
-    return getUserInfoToDict(conn, userName, zone_name)
-
-def getUsers(conn):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME, COL_USER_ZONE], [0, 0], 2)
-    
-    sqlCondInp.init([COL_USER_TYPE], 
-                    ["<>'rodsgroup'"], 1)
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    if len(l) > 0:
-        return [  irodsUser(conn, name, zone) for (name, zone) in l ]
-    else:
-        return []
-
-def getZone(conn, zone_name):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_ZONE_NAME], [0], 1)
-    
-    sqlCondInp.init([COL_ZONE_NAME], 
-                    ["='%s'" % zone_name], 1)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    if len(l) > 0:
-        return irodsZone(conn, l[0])
-    else:
-        return None
-    
-
-def getZones(conn):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    selectInp.init([COL_ZONE_NAME], [0], 1)
-    sqlCondInp.init([], [], 0)
-    
-    return [ irodsZone(conn, el) for el in queryToTupleList(conn, selectInp, sqlCondInp)]
-
-
-
 class irodsGroup:
 
     def __init__(self, conn, groupName):
         self._conn = conn
         self.groupName = groupName
-        
+
     def addUser(self, name, zone=""):
         if zone:
             namezone = "%s#%s" % (name, zone)
@@ -6172,58 +6954,57 @@ class irodsGroup:
             namezone = name
         return modifyObject(self._conn, "group", self.groupName,
                             "add", namezone)
-        
+
     def addUserMetadata(self, name, value, units=""):
         return addUserMetadata(self._conn, "-u", self.groupName, name, value, units)
-    
+
     def getComment(self):
         d = self.getInfos()
         return d.get("r_comment", "")
-    
+
     def getCreateTs(self):
         d = self.getInfos()
         return d.get("create_ts", "")
-    
+
     def getId(self):
         d = self.getInfos()
         return d.get("user_id", "")
-    
+
     def getInfo(self):
         d = self.getInfos()
         return d.get("user_info", "")
-    
+
     def getInfos(self):
         return getUserInfoToDict(self._conn, self.groupName)
-    
+
     def getMembers(self):
         l = getGroupMembers(self._conn, self.groupName)
         return [ irodsUser(self._conn, name, zone) for (name, zone) in l ]
-    
+
     def getModifyTs(self):
         d = self.getInfos()
         return d.get("modify_ts", "")
-    
+
     def getName(self):
         return self.groupName
-    
+
     def getTypeName(self):
         d = self.getInfos()
         return d.get("user_type_name", "")
-    
+
     def getUserMetadata(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
         selectInp.init([COL_META_USER_ATTR_NAME, COL_META_USER_ATTR_VALUE,
                         COL_META_USER_ATTR_UNITS],
-                       [0, 0, 0], 3)        
+                       [0, 0, 0], 3)
         sqlCondInp.init([COL_USER_NAME], ["='%s'" % self.groupName], 1)
-        
         return queryToTupleList(self._conn, selectInp, sqlCondInp)
-    
+
     def getZone(self):
         d = self.getInfos()
         return d.get("zone_name", "")
-    
+
     def rmUser(self, userName, userZone=""):
         if userZone:
             namezone = "%s#%s" % (name, userZone)
@@ -6231,69 +7012,68 @@ class irodsGroup:
             namezone = userName
         return modifyObject(self._conn, "group", self.groupName,
                             "remove", namezone)
-    
+
     def rmUserMetadata(self, name, value, units=""):
         return rmUserMetadata(self._conn, "-u", self.groupName,
                                name, value, units) 
-    
+
     def setComment(self, value):
         return modifyObject(self._conn, "user", self.groupName, "comment", value)
-    
+
     def setInfo(self, value):
         return modifyObject(self._conn, "user", self.groupName, "info", value)
-    
 
 class irodsResource:
-    
+
     def __init__(self, conn, resc_name):
         self._conn = conn
         self.name = resc_name
-        
+
     def addUserMetadata(self, name, value, units=""):
         return addUserMetadata(self._conn, "-r", self.name, name, value, units)
-    
+
     def getClassName(self):
         d = self.getInfos()
         return d.get("resc_class_name", "")
-    
+
     def getComment(self):
         d = self.getInfos()
         return d.get("r_comment", "")
-    
+
     def getCreateTs(self):
         d = self.getInfos()
         return d.get("create_ts", "")
-    
+
     def getFreeSpace(self):
         d = self.getInfos()
         return d.get("free_space", "")
-    
+
     def getFreeSpaceTs(self):
         d = self.getInfos()
         return d.get("free_space_ts", "")
-    
+
     def getHost(self):
         d = self.getInfos()
         return d.get("resc_net", "")
-    
+
     def getId(self):
         d = self.getInfos()
         return d.get("resc_id", "")
-    
+
     def getInfo(self):
         d = self.getInfos()
         return d.get("resc_info", "")
-    
+
     def getInfos(self):
         return getRescInfoToDict(self._conn, self.name)
-    
+
     def getModifyTs(self):
         d = self.getInfos()
         return d.get("modify_ts", "")
-        
+
     def getName(self):
         return self.name
-    
+
     def getPath(self):
         d = self.getInfos()
         return d.get("resc_def_path", "")
@@ -6301,45 +7081,42 @@ class irodsResource:
     def getTypeName(self):
         d = self.getInfos()
         return d.get("resc_type_name", "")
-    
+
     def getUserMetadata(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
-                
         selectInp.init([COL_META_RESC_ATTR_NAME, COL_META_RESC_ATTR_VALUE,
                         COL_META_RESC_ATTR_UNITS],
                        [0, 0, 0], 3)
-        
         sqlCondInp.init([COL_R_RESC_NAME], ["='%s'" % self.name], 1)
-        
         return queryToTupleList(self._conn, selectInp, sqlCondInp)
-    
+
     def getZone(self):
         d = self.getInfos()
         return d.get("zone_name", "")
-    
+
     def rmUserMetadata(self, name, value, units=""):
         return rmUserMetadata(self._conn, "-r", self.name,
                                name, value, units) 
-    
+
     def setClassName(self, value):
         return modifyObject(self._conn, "resource", self.name, "class", value)
-    
+
     def setComment(self, value):
         return modifyObject(self._conn, "resource", self.name, "comment", value)
-    
+
     def setFreeSpace(self, value):
         return modifyObject(self._conn, "resource", self.name, "freespace", value)
-    
+
     def setHost(self, value):
         return modifyObject(self._conn, "resource", self.name, "host", value)
-    
+
     def setInfo(self, value):
         return modifyObject(self._conn, "resource", self.name, "info", value)
-    
+
     def setPath(self, value):
         return modifyObject(self._conn, "resource", self.name, "path", value)
-    
+
     def setTypeName(self, value):
         return modifyObject(self._conn, "resource", self.name, "type", value)
 
@@ -6349,92 +7126,89 @@ class irodsUser:
         self._conn = conn
         self.userName = userName
         self.userZone = userZone
-    
+
     def addUserMetadata(self, name, value, units=""):
         return addUserMetadata(self._conn, "-u", self.userName, name, value, units)
-    
+
     def getComment(self):
         d = self.getInfos()
         return d.get("r_comment", "")
-    
+
     def getCreateTs(self):
         d = self.getInfos()
         return d.get("create_ts", "")
-    
+
     def getFullName(self):
         return "%s#%s" % (self.userName, self.userZone)
-    
+
     def getGroups(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
-                
         selectInp.init([COL_USER_GROUP_NAME],
                        [0], 1)
-        
         sqlCondInp.init([COL_USER_NAME], 
                         ["='%s'" % self.userName], 1)
-        
         l = queryToTupleList(self._conn, selectInp, sqlCondInp)
         return [ irodsGroup(self._conn, name) for name in l ]
-    
+
     def getId(self):
         d = self.getInfos()
         return d.get("user_id", "")
-    
+
     def getInfo(self):
         d = self.getInfos()
         return d.get("user_info", "")
-    
+
     def getInfos(self):
         return getUserInfoToDict(self._conn, self.userName)
-    
+
     def getModifyTs(self):
         d = self.getInfos()
         return d.get("modify_ts", "")
-    
+
     def getName(self):
         return self.userName
-    
+
     def getQuotaGlobal(self):
         return getQuota(self._conn, self.getFullName(), True, True)
-    
+
     def getQuotaResources(self):
         return getQuota(self._conn, self.getFullName(), True, False)
-    
+
     def getTypeName(self):
         d = self.getInfos()
         return d.get("user_type_name", "")
-    
+
     def getUserMetadata(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
-                
         selectInp.init([COL_META_USER_ATTR_NAME, COL_META_USER_ATTR_VALUE,
                         COL_META_USER_ATTR_UNITS],
                        [0, 0, 0], 3)
-        
         sqlCondInp.init([COL_USER_NAME, COL_USER_ZONE], 
                         ["='%s'" % self.userName,
                          "='%s'" % self.userZone], 2)
-        
         return queryToTupleList(self._conn, selectInp, sqlCondInp)
-    
+
     def getZone(self):
         return self.userZone
-    
+
     def rmUserMetadata(self, name, value, units=""):
         return rmUserMetadata(self._conn, "-u", self.userName,
                                name, value, units)
-    
+
     def setComment(self, value):
         return modifyObject(self._conn, "user", self.userName, "comment", value)
-    
+
     def setInfo(self, value):
         return modifyObject(self._conn, "user", self.userName, "info", value)
-    
+
+    def setPassword(self, new_pw):
+        return setPassword(self._conn, self.userName, new_pw)
+
     def setTypeName(self, value):
         return modifyObject(self._conn, "user", self.userName, "type", value)
-    
+
     def setZone(self, value):
         return modifyObject(self._conn, "user", self.userName, "zone", value)
 
@@ -6444,43 +7218,43 @@ class irodsZone:
     def __init__(self, conn, name):
         self._conn = conn
         self.name = name
-        
-    def  __str__(self):
+
+    def __str__(self):
         return self.name
-    
+
     def getComment(self):
         d = self.getInfos()
         return d.get("r_comment", "")
-    
+
     def getConnString(self):
         d = self.getInfos()
         return d.get("zone_conn_string", "")
-    
+
     def getCreateTs(self):
         d = self.getInfos()
         return d.get("create_ts", "")
-    
+
     def getId(self):
         d = self.getInfos()
         return d.get("zone_id", "")
-    
+
     def getInfos(self):
         return getZoneInfoToDict(self._conn, self.name)
-    
+
     def getModifyTs(self):
         d = self.getInfos()
         return d.get("modify_ts", "")
-    
+
     def getName(self):
         return self.name
-    
+
     def getTypeName(self):
         d = self.getInfos()
         return d.get("zone_type_name", "")
-    
+
     def setComment(self, value):
         return modifyObject(self._conn, "zone", self.name, "comment", value)
-    
+
     def setConnString(self, value):
         return modifyObject(self._conn, "zone", self.name, "conn", value)
 
@@ -6579,8 +7353,6 @@ class userOtherInfo_t(_object):
 userOtherInfo_t_swigregister = _irods.userOtherInfo_t_swigregister
 userOtherInfo_t_swigregister(userOtherInfo_t)
 
-SINGLE_MSG_TICKET = _irods.SINGLE_MSG_TICKET
-MULTI_MSG_TICKET = _irods.MULTI_MSG_TICKET
 class getXmsgTicketInp_t(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, getXmsgTicketInp_t, name, value)
@@ -6725,589 +7497,12 @@ rcRcvXmsg = _irods.rcRcvXmsg
 def rcSendXmsg(*args):
   return _irods.rcSendXmsg(*args)
 rcSendXmsg = _irods.rcSendXmsg
-def addObject(conn, objType, objName, arg3, arg4, arg5, arg6):
-    generalAdminInp = generalAdminInp_t ()
-
-    generalAdminInp.arg0 = "add"
-    generalAdminInp.arg1 = objType
-    generalAdminInp.arg2 = objName
-    generalAdminInp.arg3 = arg3
-    generalAdminInp.arg4 = arg4
-    generalAdminInp.arg5 = arg5
-    generalAdminInp.arg6 = arg6
-    generalAdminInp.arg7 = ""
-    generalAdminInp.arg8 = ""
-    generalAdminInp.arg9 = ""
-
-    return rcGeneralAdmin(conn, generalAdminInp)
-
-# Parse a genQueryOut result parameter which comes from a genQuery call.
-# Add the output to the python list passed in parameter. Each row becomes an
-# element of the list and each element is a dictionary created with the keys
-# passed in parameter. The order should be compliant with the order in genQueryInp
-# if len(formatStr) < len(genQueryOut->sqlResult[a].attriInx) => segfault, that's
-# why this function is not accessible from anywhere else
-def addResultToFormatDictList(genQueryOut, formatStr, l):
-    if not genQueryOut:
-        return 0
-    
-    for r in xrange(genQueryOut.rowCnt):
-        t = genQueryOut.getSqlResultIdx(r)
-        d = {}
-        
-        for idx in xrange(len(formatStr)):
-            name = formatStr[idx]
-            tResult = t[idx]
-            if name.endswith("_ts"):    # Pretty print of time values
-                localTime = getLocalTimeFromRodsTime(tResult)
-                d[name] = localTime
-            else:
-                d[name] = tResult
-        l.append(d)
-    
-    return 0
-    
-##
-## Parse a genQueryOut result parameter which comes from a genQuery call.
-## Add the output to the python list passed in parameter. Each row becomes an
-## element of the list and each element is a tuple created by selected attributes
-## in the genQueryInp parameter.
-## If attriCnt = 1 we do not create a list of tuple of str but a list of str
-def addResultToTupleList(genQueryOut, l):
-    if not genQueryOut:
-        return 0
-    
-    for r in xrange(genQueryOut.rowCnt):
-        l.append(genQueryOut.getSqlResultIdx(r))
-    
-    return 0
-    
-def addUserMetadata(conn, obj_type, name, attName, attValue, attUnits):
-    return procUserMetadata(conn, "add", obj_type, name, attName, attValue, 
-                            attUnits)
-
-## Returns the number of a replica for a specific file when you only know the
-## resource name. This is used by REPL_NUM_KW when you want to open a file for
-## instance
-def getDataObjReplicaNumber(conn, coll_name, data_name, resc_name):
-    genQueryInp = genQueryInp_t()
-    
-    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
-    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)
-    addInxVal(genQueryInp.sqlCondInp, COL_D_RESC_NAME, "='%s'" % resc_name)
-    addInxIval(genQueryInp.selectInp, COL_DATA_REPL_NUM, 1)
-    genQueryInp.maxRows = MAX_SQL_ROWS
-    
-    genQueryOut = rcGenQuery(conn, genQueryInp)
-    rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
-    
-    if genQueryOut and genQueryOut.rowCnt >= 0:
-        # Should only have one row as output
-        rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
-        res = rescNum.value[0]
-    else:
-        return ""
-    
-    return res
-
-# Returns a PyList of the resource names of an irods data object given its
-# collection and its name. The order is given by resource ids.
-# It will fail if there are more than MAX_SQL_ROWS as I did not loop if
-# continueInx > 0 after genQuery call
-def getDataObjRescNames(conn, coll_name, data_name):
-    genQueryInp = genQueryInp_t()
-    
-    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
-    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)
-    addInxIval(genQueryInp.selectInp, COL_D_RESC_NAME, 1)
-    addInxIval(genQueryInp.selectInp, COL_R_RESC_ID, ORDER_BY)
-    genQueryInp.maxRows = MAX_SQL_ROWS
-    
-    genQueryOut = rcGenQuery(conn, genQueryInp)
-    rescNum = getSqlResultByInx(genQueryOut, COL_DATA_REPL_NUM)
-    
-    res = []
-    if genQueryOut and genQueryOut.rowCnt >= 0:
-        for i in xrange(genQueryOut.rowCnt):
-            res.append(genQueryOut.getSqlResultByInxIdx(COL_D_RESC_NAME, i))
-    else:
-        return ""
-    
-    return res
-
-# Returns the size of a data object
-def getDataObjSize(conn, coll_name, data_name, resc_name):
-    genQueryInp = genQueryInp_t()
-    
-    addInxVal(genQueryInp.sqlCondInp, COL_COLL_NAME, "='%s'" % coll_name)
-    addInxVal(genQueryInp.sqlCondInp, COL_DATA_NAME, "='%s'" % data_name)  
-    addInxVal(genQueryInp.sqlCondInp, COL_D_RESC_NAME, "='%s'" % resc_name)
-    addInxIval(genQueryInp.selectInp, COL_DATA_SIZE, 1)
-    genQueryInp.maxRows = MAX_SQL_ROWS
-    
-    genQueryOut = rcGenQuery(conn, genQueryInp)
-    if genQueryOut and genQueryOut.rowCnt >= 0:
-        sizeNum = getSqlResultByInx(genQueryOut, COL_DATA_SIZE)
-        return int(sizeNum.value)
-    else:
-        return 0
-
-# Get the file Info with the name and resource, query the ICAT database and
-# create a dictionary with the returned information. Need the connection to
-# iRODS
-def getFileInfo(conn, coll_name, data_name, resc_name):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    selectInp.init([COL_D_DATA_ID, COL_D_COLL_ID, COL_DATA_NAME, 
-                    COL_DATA_REPL_NUM, COL_DATA_VERSION, COL_DATA_TYPE_NAME, 
-                    COL_DATA_SIZE, COL_D_RESC_GROUP_NAME, COL_D_RESC_NAME, 
-                    COL_D_DATA_PATH, COL_D_OWNER_NAME, COL_D_OWNER_ZONE, 
-                    COL_D_REPL_STATUS, COL_D_DATA_STATUS, COL_D_DATA_CHECKSUM, 
-                    COL_D_EXPIRY, COL_D_MAP_ID, COL_D_COMMENTS, 
-                    COL_D_CREATE_TIME, COL_D_MODIFY_TIME, COL_DATA_MODE],
-                   [0, 0, 0, 0, 0, 
-                    0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 
-                    0, 0, 0, 0, 0,
-                    0], 
-                   21)
-    
-    sqlCondInp.init([COL_DATA_NAME, COL_COLL_NAME, COL_D_RESC_NAME], 
-                    ["='%s'" % data_name,
-                     "='%s'" % coll_name,
-                     "='%s'" % resc_name], 
-                    3)
-    
-    columnNames = ["data_id", "coll_id", "data_name", "data_repl_num",
-                   "data_version", "data_type_name", "data_size",
-                   "resc_group_name", "resc_name", "data_path",
-                   "data_owner_name", "data_owner_zone", "data_is_dirty",
-                   "data_status", "data_checksum", "data_expiry_ts",
-                   "data_map_id", "r_comment", "create_ts", "modify_ts",
-                   "data_mode"]
-    
-    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames);
-    
-    if len(l) > 0:
-        return l[0]
-    else:
-        return {columnNames[0] : "mountP",          # "data_id"
-                columnNames[1] : "",                # "coll_id"
-                columnNames[2] : data_name,         # "data_name"
-                columnNames[3] : "1",               # "data_repl_num"
-                columnNames[4] : "",                # "data_version"
-                columnNames[5] :  "mountP",         # "data_type_name"
-                columnNames[6] : "       ",         # "data_size"
-                columnNames[7] : "",                # "resc_group_name"
-                columnNames[8] : resc_name,         # "resc_name"
-                columnNames[9] : coll_name,         # "data_path"
-                columnNames[10] : "        ",       # "data_owner_name"
-                columnNames[11] : "            ",   # "data_owner_zone"
-                columnNames[12] : "",               # "data_is_dirty" 
-                columnNames[13] : "",               # "data_status"
-                columnNames[14] : "",               # "data_checksum"
-                columnNames[15] : "              ", # "data_expiry_ts"
-                columnNames[16] : "",               # "data_map_id"
-                columnNames[17] : "",               # "r_comment"
-                columnNames[18] : "              ", # "create_ts"
-                columnNames[19] : "              ", # "modify_ts"
-                columnNames[20] : ""}               # "data_mode"
-
-# Get a python list of names of members of a group 
-def getGroupMembers(conn, group_name):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME, COL_USER_ZONE,],
-                   [0, 0], 
-                   2)
-    sqlCondInp.init([COL_USER_GROUP_NAME], 
-                    ["='%s'" % group_name], 
-                    1)
-    
-    return queryToTupleList(conn, selectInp, sqlCondInp)
-
-def getRescInfoToDict(conn, resc_name):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_R_RESC_ID, COL_R_RESC_NAME, COL_R_ZONE_NAME, 
-                    COL_R_TYPE_NAME, COL_R_CLASS_NAME, COL_R_LOC, 
-                    COL_R_VAULT_PATH, COL_R_FREE_SPACE, COL_R_FREE_SPACE_TIME, 
-                    COL_R_RESC_INFO, COL_R_RESC_COMMENT, COL_R_CREATE_TIME, 
-                    COL_R_MODIFY_TIME],
-                   [0, 0, 0, 0, 0, 
-                    0, 0, 0, 0, 0,
-                    0, 0, 0], 
-                   13)
-    
-    sqlCondInp.init([COL_R_RESC_NAME], 
-                    ["='%s'" % resc_name], 
-                    1)
-    
-    columnNames = ["resc_id", "resc_name", "zone_name", "resc_type_name",
-                   "resc_class_name", "resc_net", "resc_def_path",
-                   "free_space", "free_space_ts", "resc_info",
-                   "r_comment", "create_ts", "modify_ts"]
-
-    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames);
-    
-    if len(l) > 0:
-        return l[0]
-    else:
-        return {}
-
-def getResources(conn):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    selectInp.init([COL_R_RESC_NAME], [0], 1)
-    sqlCondInp.init([], [], 0)
-    
-    return [ irodsResource(conn, name) for name in queryToTupleList(conn, selectInp, sqlCondInp) ]
-
-def getUserInfoToDict(conn, user_name, zone=""):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_USER_NAME, COL_USER_ID, COL_USER_TYPE, COL_USER_ZONE,
-                    COL_USER_INFO, COL_USER_COMMENT, COL_USER_CREATE_TIME,
-                    COL_USER_MODIFY_TIME],
-                   [0, 0, 0, 0, 0, 
-                    0, 0, 0], 
-                   8)
-    if zone:
-        sqlCondInp.init([COL_USER_NAME, COL_USER_ZONE], 
-                        ["='%s'" % user_name,
-                         "='%s'" % zone], 
-                        2)
-    else:
-        sqlCondInp.init([COL_USER_NAME], 
-                        ["='%s'" % user_name], 
-                        1)
-    
-    columnNames = ["user_name", "user_id", "user_type_name", "zone_name",
-                   "user_info", "r_comment", "create_ts",
-                   "modify_ts"]
-    
-    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
-    
-    if len(l) > 0:
-        return l[0]
-    else:
-        return {}
-
-def getZoneInfoToDict(conn, zone_name, zone=""):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-                
-    selectInp.init([COL_ZONE_ID, COL_ZONE_NAME, COL_ZONE_TYPE, 
-                    COL_ZONE_CONNECTION, COL_ZONE_COMMENT, COL_ZONE_CREATE_TIME,
-                    COL_ZONE_MODIFY_TIME],
-                   [0, 0, 0, 0, 0, 0, 0], 
-                   7)
-
-    sqlCondInp.init([COL_ZONE_NAME], ["='%s'" % zone_name], 1)
-    
-    columnNames = ["zone_id", "zone_name", "zone_type_name", 
-                   "zone_conn_string", "r_comment", "create_ts", "modify_ts"]
-    
-    l =  queryToFormatDictList(conn, selectInp, sqlCondInp, columnNames)
-    
-    if len(l) > 0:
-        return l[0]
-    else:
-        return {}
-
-def modifyObject(conn, objType, objName, fieldName, fieldValue):
-    generalAdminInp = generalAdminInp_t ()
-    
-    generalAdminInp.arg0 = "modify"
-    generalAdminInp.arg1 = objType
-    generalAdminInp.arg2 = objName
-    generalAdminInp.arg3 = fieldName
-    generalAdminInp.arg4 = fieldValue
-    generalAdminInp.arg5 = ""
-    generalAdminInp.arg6 = ""
-    generalAdminInp.arg7 = ""
-    generalAdminInp.arg8 = ""
-    generalAdminInp.arg9 = ""
-
-    return rcGeneralAdmin(conn, generalAdminInp)
-
-## Factorize the call to modAVUMetadata
-## objType = -d -C, -R, -u,...
-## action = add, rm
-def procUserMetadata(conn, action, objType, name, attName, attValue, attUnits):
-    modAVUMetadataInp = modAVUMetadataInp_t()   
-    
-    modAVUMetadataInp.arg0 = action
-    modAVUMetadataInp.arg1 = objType
-    modAVUMetadataInp.arg2 = name
-    modAVUMetadataInp.arg3 = attName
-    modAVUMetadataInp.arg4 = attValue
-    modAVUMetadataInp.arg5 = attUnits
-    modAVUMetadataInp.arg6 = ""
-    modAVUMetadataInp.arg7 = ""
-    modAVUMetadataInp.arg8 = ""
-    modAVUMetadataInp.arg9 = ""
-    
-    return rcModAVUMetadata(conn, modAVUMetadataInp)
-
-def queryToFormatDictList(conn, selectInp, sqlCondInp, formatStr):
-    genQueryInp = genQueryInp_t()
-    l = []
-    
-    genQueryInp.maxRows = MAX_SQL_ROWS
-    genQueryInp.continueInx = 0
-    genQueryInp.condInput.len = 0
-    genQueryInp.selectInp = selectInp
-    genQueryInp.sqlCondInp = sqlCondInp
-    
-    genQueryOut = rcGenQuery(conn, genQueryInp)
-    
-    if not genQueryOut:
-        return l;
-    addResultToFormatDictList(genQueryOut, formatStr, l)
-    
-    while genQueryOut and genQueryOut.continueInx > 0:
-        genQueryInp.continueInx = genQueryOut.continueInx
-        genQueryOut = rcGenQuery(conn, genQueryInp)
-        if genQueryOut:
-            addResultToFormatDictList(genQueryOut, l)
-    
-    return l
-
-def queryToTupleList(conn, selectInp, sqlCondInp):
-    genQueryInp = genQueryInp_t()
-    l = []
-    
-    genQueryInp.maxRows = MAX_SQL_ROWS
-    #genQueryInp.maxRows = 5
-    genQueryInp.continueInx = 0
-    genQueryInp.condInput.len = 0
-    genQueryInp.selectInp = selectInp
-    genQueryInp.sqlCondInp = sqlCondInp
-    
-    genQueryOut = rcGenQuery(conn, genQueryInp)
-    
-    if not genQueryOut:
-        return l;
-    
-    addResultToTupleList(genQueryOut, l)
-    
-    while genQueryOut and genQueryOut.continueInx > 0:
-        genQueryInp.continueInx = genQueryOut.continueInx
-    
-        genQueryOut = rcGenQuery(conn, genQueryInp)
-    
-        if genQueryOut:
-            addResultToTupleList(genQueryOut, l);
-    
-    return l;
-
-def rmObject(conn, objType, objName, arg3):
-    generalAdminInp = generalAdminInp_t ()
-    
-    generalAdminInp.arg0 = "rm"
-    generalAdminInp.arg1 = objType
-    generalAdminInp.arg2 = objName
-    generalAdminInp.arg3 = arg3
-    generalAdminInp.arg4 = ""
-    generalAdminInp.arg5 = ""
-    generalAdminInp.arg6 = ""
-    generalAdminInp.arg7 = ""
-    generalAdminInp.arg8 = ""
-    generalAdminInp.arg9 = ""
-    
-    return rcGeneralAdmin(conn, generalAdminInp)
-
-def rmUserMetadata(conn, obj_type, name, attName, attValue, attUnits):
-    return procUserMetadata(conn, "rm", obj_type, name, attName, attValue, 
-                            attUnits)
-
-## return a list of dictionaries:
-##   keys: 
-##     resource: Resource name
-##     user: User name
-##     zone: zone name
-##     usage: nb bits used
-##     time: time set
-def getUserUsage(userName, usersZone):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    selectInp.init([COL_QUOTA_USAGE_MODIFY_TIME,
-                    COL_QUOTA_RESC_NAME,
-                    COL_QUOTA_USER_NAME,
-                    COL_QUOTA_USER_ZONE,
-                    COL_QUOTA_USAGE],
-                   [0,0,0,0,0],
-                   5)
-    
-    colName = ["time", "resource", "user", "zone", "usage"]
-    
-    if userName:
-        sqlCondInp.init([COL_QUOTA_USER_NAME],
-                        ["='%s'" % userName],
-                        1)
-    else:
-        sqlCondInp.init([], [], 0)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    res = []
-    
-    for el in l:
-        d = dict(zip(colName, el))
-        d['time'] = getLocalTimeFromRodsTime(d['time'])
-        d['usage'] = int(d['usage'])
-        res.append(d)
-    
-    return res
-
-## return the list of groups for the user
-def getUserGroupMembership(conn, userName, zoneName):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    selectInp.init([COL_USER_GROUP_NAME],
-                   [0],
-                   1)
-    
-    sqlCondInp.init([COL_USER_NAME, COL_USER_ZONE],
-                    ["='%s'" % userName, "='%s'" % zoneName],
-                    2)
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    return l
-
-## userQ = boolean (true means user, false means group)
-## GlobalQ = boolean (true means global, false means resource)
-## return a list of dictionaries:
-##   keys: 
-##     resource: Resource name
-##     user/group: User or Group name
-##     zone: zone name
-##     quota: set quota (in bits)
-##     over: nb bits over quota (<0 means under quota)
-##     time: time set
-def getQuota(conn, userName, userQ, globalQ):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    printCount = 0
-    i = 0
-    
-    colName = []
-    inputInx = []
-    inputVal = []
-    
-    if not globalQ:
-        colName.append("resource")
-        inputInx.append(COL_QUOTA_RESC_NAME)
-        inputVal.append(0)
-    else:
-        colName.append("resource")
-        inputInx.append(COL_QUOTA_RESC_ID)
-        inputVal.append(0)
-    
-    if userQ:
-        colName.append("user")
-    else:
-        colName.append("group")
-    inputInx.append(COL_QUOTA_USER_NAME)
-    inputVal.append(0)
-    
-    colName.append("zone")
-    inputInx.append(COL_QUOTA_USER_ZONE)
-    inputVal.append(0)
-    
-    colName.append("quota")
-    inputInx.append(COL_QUOTA_LIMIT)
-    inputVal.append(0)
-    
-    colName.append("over")
-    inputInx.append(COL_QUOTA_OVER)
-    inputVal.append(0)
-    
-    colName.append("time")
-    inputInx.append(COL_QUOTA_MODIFY_TIME)
-    inputVal.append(0)
-    
-    selectInp.init(inputInx, inputVal, len(inputInx))
-    
-    inputCond = []
-    condVal = []
-    
-    if userName:
-        userName2 = ""
-        userZone = ""
-        status, userName2, userZone = parseUserName(userName)
-        
-        if not userZone:
-            inputCond.append(COL_QUOTA_USER_NAME)
-            condVal.append("='%s'" % userName)
-        else:
-            inputCond.append(COL_QUOTA_USER_NAME)
-            condVal.append("='%s'" % userName2)
-            inputCond.append(COL_QUOTA_USER_ZONE)
-            condVal.append("='%s'" % userZone)
-    
-    inputCond.append(COL_QUOTA_USER_TYPE)
-    if userQ:
-        condVal.append("!='rodsgroup'")
-    else:
-        condVal.append("='rodsgroup'")
-    
-    if globalQ:
-        inputCond.append(COL_QUOTA_RESC_ID)
-        condVal.append("='0'")
-    
-    sqlCondInp.init(inputCond, condVal, len(inputCond))
-    
-    l =  queryToTupleList(conn, selectInp, sqlCondInp)
-    
-    res = []
-    
-    for el in l:
-        d = dict(zip(colName, el))
-        if globalQ:
-            d['resource'] = "All"
-        d['time'] = getLocalTimeFromRodsTime(d['time'])
-        d['over'] = int(d['over'])
-        d['quota'] = int(d['quota'])
-        res.append(d)
-    
-    return res
-
-def getUserQuotaGlobal(conn, userName):
-    return getQuota(conn, userName, True, True)
-
-def getUserQuotaResources(conn, userName):
-    return getQuota(conn, userName, True, False)
-
-def getGroupsQuotaGlobal(conn):
-    return getQuota(conn, "", False, True)
-
-def getGroupsQuotaResources(conn):
-    return getQuota(conn, "", False, False)
-
-def getUsersQuotaGlobal(conn):
-    return getQuota(conn, "", True, True)
-
-def getUsersQuotaResources(conn):
-    return getQuota(conn, "", True, False)
-
-
 
 def splitPathByKey(*args):
   return _irods.splitPathByKey(*args)
 splitPathByKey = _irods.splitPathByKey
 def splitPathByKey(srcPath, key):
-	"""splitPathByKey - 
+    """splitPathByKey - 
   Input -
     str srcPath -
     char key -
@@ -7315,13 +7510,14 @@ def splitPathByKey(srcPath, key):
     str coll - directory
     str data - file
     int status - status of the operation."""
+    global lastStatus
     # TO IMPROVE: irods doesn't manage this out string well
-	coll = "_" * MAX_NAME_LEN
-	data = "_" * MAX_NAME_LEN
-	status = _irods.splitPathByKey(srcPath, coll, data, key)
-	coll = coll[:coll.find('\0')]
-	data = data[:data.find('\0')]
-	return (status, coll, data)
+    coll = "_" * MAX_NAME_LEN
+    data = "_" * MAX_NAME_LEN
+    lastStatus = _irods.splitPathByKey(srcPath, coll, data, key)
+    coll = coll[:coll.find('\0')]
+    data = data[:data.find('\0')]
+    return (lastStatus, coll, data)
 
 # This file is compatible with both classic and new-style classes.
 

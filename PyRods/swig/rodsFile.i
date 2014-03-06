@@ -48,11 +48,6 @@
 
 /*****************************************************************************/
 
-#define NO_CHK_PERM_FLAG    0x1
-#define UNIQUE_REM_COMM_FLAG    0x2
-#define FORCE_FLAG      0x4
-#define RMDIR_RECUR 0x1
-
 typedef struct {
     fileDriverType_t fileType;
     rodsHostAddr_t addr;
@@ -218,7 +213,8 @@ bytesBuf_t *fileGetOutBBuf);
 /*****************************************************************************/
 
 %inline %{
-fileGetFsFreeSpaceOut_t * rcFileGetFsFreeSpace(rcComm_t *conn, fileGetFsFreeSpaceInp_t *fileGetFsFreeSpaceInp) {
+fileGetFsFreeSpaceOut_t * rcFileGetFsFreeSpace(rcComm_t *conn, 
+        fileGetFsFreeSpaceInp_t *fileGetFsFreeSpaceInp) {
     fileGetFsFreeSpaceOut_t * fileGetFsFreeSpaceOut = NULL;
     rcFileGetFsFreeSpace(conn, fileGetFsFreeSpaceInp, &fileGetFsFreeSpaceOut);
     return fileGetFsFreeSpaceOut;

@@ -32,183 +32,184 @@
 #include "unregDataObj.h"
 %}
 
-
-/*****************************************************************************/
-
-#define PURGE_STRUCT_FILE_CACHE 0x1 
-#define DELETE_STRUCT_FILE  0x2 
-#define NO_REG_COLL_INFO    0x4 
-#define LOGICAL_BUNDLE      0x8
-#define CREATE_TAR_OPR      0x0
-#define ADD_TO_TAR_OPR          0x10
-#define PRESERVE_COLL_PATH      0x20
-#define PRESERVE_DIR_CONT   0x40
-
-// We can also use the os module in Python
-#define O_RDONLY 0
-#define O_WRONLY 1
-#define O_RDWR 2
-#define O_CREAT 64
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-
 /*****************************************************************************/
 
 
 %pythoncode %{
-def _irodsOpen(conn, collName, dataName, mode, resc_name):
-    ir_file = irodsFile(conn)
-    dataObjInp = dataObjInp_t()
-    
-    ir_file.dataName = dataName
-    ir_file.collName = collName
-    ir_file.openFlag = O_RDONLY
-    
-    dataObjInp.objPath = ir_file.fullPath()
-    
-    # Set the resource
-    if resc_name:
-        ir_file.resourceName = resc_name
-        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, resc_name)
+
+
+class irodsCollection:
+
+    def __init__(self, conn, collName=None):
+        status, myEnv = getRodsEnv()
+        self._conn = conn
         
-        # Set the replica number (get the info from the icat)
-        # returns null if the file does not exist
-        replNum = getDataObjReplicaNumber(conn, collName, dataName, resc_name)
-    
+        if collName:
+            # Remove the last '/', if len = 1 the user wants the root colection
+            if len(collName) > 1 and collName[-1] == '/':
+                collName = collName[:-1]
+                
+            if collName.startswith('/'):
+                # If the path starts with '/' we assume a global path
+                self.collName = collName
+            else:
+                # else we assume that it is local to the current working dir
+                self.collName = myEnv.rodsCwd + '/' + collName
+            
+        else:
+             ## If no collName, we use the current working directory
+            self.collName = myEnv.rodsCwd
+
+    def addUserMetadata(self, name, value, units=""):
+        return addUserMetadata(self._conn, "-c", self.collName,
+                               name, value, units)
+
+    def create(self, dataName, resc_name=""):
+        if not resc_name:
+            status, myEnv = getRodsEnv()
+            resc_name = myEnv.rodsDefResource
+            
+        return _irodsOpen(self._conn, self.collName, dataName, "w", resc_name)
+
+    def createCollection(self, child_collName):
+        global lastStatus
+        collCreateInp = collInp_t()
+        collCreateInp.collName = "%s/%s" % (self.collName, child_collName)
+        lastStatus = rcCollCreate(self._conn, collCreateInp)
+        return lastStatus
+
+    def delete(self, dataName, resc_name=""):
+        global lastStatus
+        dataObjInp = dataObjInp_t()
+        if resc_name:
+            replNum = getDataObjReplicaNumber(self._conn, self.collName,
+                                              dataName, resc_name);
+        else:
+            replNum = "0"
         if replNum:
             addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-    
-    if mode == "w":
-        dataObjInp.openFlags = O_WRONLY | O_CREAT
-        ir_file.openFlag = O_WRONLY | O_CREAT
-        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        l1descInx = rcDataObjCreate(conn, dataObjInp)
-        
-    elif mode == "r":
         dataObjInp.openFlags = O_RDONLY
-        ir_file.openFlag = O_RDONLY
-        l1descInx = rcDataObjOpen(conn, dataObjInp) 
-        
-    elif mode == "a":  
-        dataObjInp.openFlags = O_WRONLY
-        ir_file.openFlag = O_WRONLY
-        l1descInx = rcDataObjOpen(conn, dataObjInp)
-        
-        if l1descInx != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
-            dataObjLseekInp = openedDataObjInp_t()
-            dataObjLseekInp.l1descInx = l1descInx
-            dataObjLseekInp.offset = 0
-            dataObjLseekInp.whence = SEEK_END
+        dataObjInp.objPath = "%s/%s" % (self.collName, dataName)
+        lastStatus = rcDataObjUnlink(self._conn, dataObjInp)
+        return lastStatus
 
-            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
-            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
+    def deleteCollection(self, child_collName):
+        global lastStatus
+        collInp = collInp_t()
+        collInp.collName = "%s/%s" % (self.collName, child_collName)
+        addKeyVal(collInp.condInput, FORCE_FLAG_KW, "")
+        addKeyVal(collInp.condInput, RECURSIVE_OPR__KW, "")
+        lastStatus = rcRmColl(self._conn, collInp, 0)
+        return lastStatus
+
+    def getCollName(self):
+        return self.collName
+
+    def getId(self):
+        return getCollId(self._conn, self.getCollName())
+
+    def getLenObjects(self):
+        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
+        nb_el = 0
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == DATA_OBJ_T:
+                nb_el += 1
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return nb_el
+
+    def getLenSubCollections(self):
+        queryFlags = DATA_QUERY_FIRST_FG
+        nb_el = 0
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == COLL_OBJ_T:
+                nb_el += 1 
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return nb_el
+
+    def getObjects(self):
+        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
+        l = []
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == DATA_OBJ_T:
+                status, srcElement = getLastPathElement(collEnt.dataName)
+                if srcElement:
+                    l.append((srcElement, collEnt.resource))
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return l
+
+    def getSubCollections(self):
+        queryFlags = DATA_QUERY_FIRST_FG
+        l = []
+        
+        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
+        status, collEnt = rclReadCollection(self._conn, collHandle)
+        while status >= 0:
+            if collEnt.objType == COLL_OBJ_T:
+                status, myColl, myData = splitPathByKey(collEnt.collName, '/')
+                if myData:
+                    l.append(myData)
+            status, collEnt = rclReadCollection(self._conn, collHandle)
+        rclCloseCollection(collHandle)
+        return l
+
+    def getUserMetadata(self):
+        sqlCondInp = inxValPair_t()
+        selectInp = inxIvalPair_t()
+        selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
+                        COL_META_COLL_ATTR_UNITS],
+                       [0, 0, 0], 3)
+        sqlCondInp.init([COL_COLL_NAME], ["='%s'" % self.collName], 1)
+        return queryToTupleList(self._conn, selectInp, sqlCondInp)
+
+    def open(self, dataName, mode="r", resc_name=""):
+        if not resc_name:
+            status, myEnv = getRodsEnv()
+            resc_name = myEnv.rodsDefResource
+        return _irodsOpen(self._conn, self.collName, dataName, mode, resc_name)
+
+    def openCollection(self, collName):
+        global lastStatus
+        lastStatus = CAT_UNKNOWN_COLLECTION
+        if collName != '/':   
+            collName = collName.rstrip('/')
+        # If the path starts with '/' we assume a global path
+        if (collName.startswith('/')):
+           self.collName = collName
+           lastStatus = 0
         else:
-            l1descInx = rcDataObjCreate(conn, dataObjInp)
-            
-    elif mode == "w+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        l1descInx = rcDataObjCreate(conn, dataObjInp)
-        
-    elif mode == "r+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        l1descInx = rcDataObjOpen(conn, dataObjInp) 
-        
-    elif mode == "a+":
-        dataObjInp.openFlags = O_RDWR
-        ir_file.openFlag = O_RDWR
-        l1descInx = rcDataObjOpen(conn, dataObjInp)
-        
-        if l1descInx != CAT_NO_ROWS_FOUND: # the file exists => seek to the end
-            dataObjLseekInp = openedDataObjInp_t()
-            dataObjLseekInp.l1descInx = l1descInx
-            dataObjLseekInp.offset = 0
-            dataObjLseekInp.whence = SEEK_END
+            ls_child = self.getSubCollections()
+            if collName in ls_child:
+                # Special case for the root dir
+                if self.collName == '/':
+                    fullName = '/' + collName
+                else:
+                    fullName = "%s/%s" % (self.collName, collName)
+                self.collName = fullName
+                lastStatus = 0
+        return lastStatus
 
-            status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
-            ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
-        else:
-            l1descInx = rcDataObjCreate(conn, dataObjInp)
-    
-    else:
-        l1descInx = 0
-    
-    if not resc_name: # If the resc parameter was NULL then we need to find the
-                      # resource iRODS used and set the ir_file variable
-        ir_resc_name = getDataObjRescNames(conn, collName, dataName)
-        ir_file.resourceName = ir_resc_name
+    def rmUserMetadata(self, name, value, units=""):
+        return rmUserMetadata(self._conn, "-c", self.collName,
+                               name, value, units) 
 
-    if l1descInx > 0:
-        ir_file.descInx = l1descInx
-        ir_file.set_size()
-        return ir_file
-    else:
-        return None
-        
-def addCollUserMetadata(conn, path, name, value, units=""):
-    return addUserMetadata(conn, "-c", path, name, value, units)
+    def upCollection(self):
+        status, myDir, myFile = splitPathByKey(self.collName, "/")
+        self.collName = myDir
 
-def addFileUserMetadata(conn, path, name, value, units=""):
-    return addUserMetadata(conn, "-d", path, name, value, units)
-
-def getCollId(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    selectInp.init([COL_COLL_ID], [0], 1)
-    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
-    l = queryToTupleList(conn, selectInp, sqlCondInp)
-    if l:
-        return l[0]
-    else:
-        return -1
-
-def getCollUserMetadata(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-            
-    selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
-                    COL_META_COLL_ATTR_UNITS],
-                   [0, 0, 0], 3)
-    
-    sqlCondInp.init([COL_COLL_NAME], ["='%s'" % path], 1)
-    
-    return queryToTupleList(conn, selectInp, sqlCondInp)
-
-def getFileUserMetadata(conn, path):
-    sqlCondInp = inxValPair_t()
-    selectInp = inxIvalPair_t()
-    
-    status, collName, dataName = splitPathByKey(path, "/")
-    
-    selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
-                    COL_META_DATA_ATTR_UNITS],
-                   [0, 0, 0], 3)
-    
-    sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
-                    ["='%s'" % collName,
-                     "='%s'" % dataName], 2)
-    
-    return queryToTupleList(conn, selectInp, sqlCondInp)
-
-def rmCollUserMetadata(conn, path, name, value, units=""):
-    return rmUserMetadata(conn, "-c", path, name, value, units)
-    
-def rmFileUserMetadata(conn, path, name, value, units=""):
-    return rmUserMetadata(conn, "-d", path, name, value, units)
-
-def irodsOpen(conn, path, mode="r", resc_name=""):
-    if not resc_name:
-        status, myEnv = getRodsEnv()
-        resc_name = myEnv.rodsDefResource
-    status, collName, dataName = splitPathByKey(path, "/")
-    return  _irodsOpen(conn, collName, dataName, mode, resc_name) 
-    
-    
 class irodsFile:
-    
+
     def __init__(self, conn):
         self._conn = conn
         self.descInx = 0
@@ -222,140 +223,110 @@ class irodsFile:
     def __iter__(self):
         return self
 
-    def next(self):
-        if self.position >= self.size:
-            raise StopIteration
-        return self.readline()
-
-    def fullPath(self):
-        return "%s/%s" % (self.collName, self.dataName)
-
     def addUserMetadata(self, name, value, units=""):
         fullName = self.fullPath()
         return addUserMetadata(self._conn, "-d", fullName, name, value, units)
 
+    def copy(self, new_path, force=False, resc=None):
+        return irodsCopy(self._conn, self.fullPath(), new_path, force, resc)
+
     def close(self):
+        global lastStatus
         dataObjCloseInp = openedDataObjInp_t()
         dataObjCloseInp.l1descInx = self.descInx
-        return rcDataObjClose(self._conn, dataObjCloseInp)
-        
+        lastStatus = rcDataObjClose(self._conn, dataObjCloseInp)
+        return lastStatus
+
     def delete(self, force=False):
+        global lastStatus
         dataObjInp = dataObjInp_t()
         replNum = getDataObjReplicaNumber(self._conn,
                                           self.collName,
                                           self.dataName,
                                           self.resourceName)
-        if replNum:            
+        if replNum:
             addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
             
-        if force:            
+        if force:
             addKeyVal(dataObjInp.condInput, FORCE_FLAG_KW, "")
-        
         dataObjInp.openFlags = O_RDONLY
         dataObjInp.objPath = self.fullPath()
-        return rcDataObjUnlink(self._conn, dataObjInp)
-    
+        lastStatus = rcDataObjUnlink(self._conn, dataObjInp)
+        return lastStatus
+
     def fileno(self):
         return self.descInx
-    
+
     def flush(self):
         pass
-    
-    def getCollName(self):
-        return self.collName
-    
-    def getName(self):
-        return self.dataName
-    
-    def getInfos(self):
-        return getFileInfo(self._conn, self.collName,
-                           self.dataName, self.resourceName)
-        
-    def getDescInx(self):
-        return self.descInx
-    
-    def getPosition(self):
-        return self.position
-    
-    def getResourceName(self):
-        return self.resourceName
-    
-    def getResourceGroupName(self):
-        d = self.getInfos();
-        return d.get("resc_group_name", "")
-    
-    def getId(self):
-        d = self.getInfos();
-        return d.get("data_id", "")
-    
-    def getMapId(self):
-        d = self.getInfos();
-        return d.get("data_map_id", "")
-    
-    def getPath(self):
-        d = self.getInfos();
-        return d.get("data_path", "")
-    
-    def getTypeName(self):
-        d = self.getInfos();
-        return d.get("data_type_name", "")
-    
-    def getComment(self):
-        d = self.getInfos();
-        return d.get("r_comment", "")
-    
-    def getMode(self):
-        d = self.getInfos();
-        return d.get("data_mode", "")
-    
-    def getOwnerName(self):
-        d = self.getInfos();
-        return d.get("data_owner_name", "")
-    
-    def getOwnerZone(self):
-        d = self.getInfos();
-        return d.get("data_owner_zone", "")
-    
+
+    def fullPath(self):
+        return "%s/%s" % (self.collName, self.dataName)
+
     def getChecksum(self):
         d = self.getInfos();
         return d.get("data_checksum", "")
-    
-    def getVersion(self):
-        d = self.getInfos();
-        return d.get("data_version", "")
-    
-    def getExpiryTs(self):
-        d = self.getInfos();
-        return d.get("data_expiry_ts", "")
-    
-    def getModifyTs(self):
-        d = self.getInfos();
-        return d.get("modify_ts", "")
-    
-    def getCreateTs(self):
-        d = self.getInfos();
-        return d.get("create_ts", "")
-    
-    def getStatus(self):
-        d = self.getInfos();
-        return d.get("data_status", "")
-    
+
     def getCollId(self):
         d = self.getInfos();
         return d.get("coll_id", "")
-    
-    def getReplStatus(self):
+
+    def getCollName(self):
+        return self.collName
+
+    def getComment(self):
         d = self.getInfos();
-        return d.get("data_is_dirty", "")
-    
-    def getSize(self):
+        return d.get("r_comment", "")
+
+    def getCreateTs(self):
         d = self.getInfos();
-        return int(d.get("data_size", "0"))
-    
-    def getReplNumber(self):
+        return d.get("create_ts", "")
+
+    def getDescInx(self):
+        return self.descInx
+
+    def getExpiryTs(self):
         d = self.getInfos();
-        return d.get("data_repl_num", "")
-    
+        return d.get("data_expiry_ts", "")
+
+    def getId(self):
+        d = self.getInfos();
+        return d.get("data_id", "")
+
+    def getInfos(self):
+        return getFileInfo(self._conn, self.collName,
+                           self.dataName, self.resourceName)
+
+    def getMapId(self):
+        d = self.getInfos();
+        return d.get("data_map_id", "")
+
+    def getMode(self):
+        d = self.getInfos();
+        return d.get("data_mode", "")
+
+    def getModifyTs(self):
+        d = self.getInfos();
+        return d.get("modify_ts", "")
+
+    def getName(self):
+        return self.dataName
+
+    def getOwnerName(self):
+        d = self.getInfos();
+        return d.get("data_owner_name", "")
+
+    def getOwnerZone(self):
+        d = self.getInfos();
+        return d.get("data_owner_zone", "")
+
+    def getPath(self):
+        d = self.getInfos();
+        return d.get("data_path", "")
+
+    def getPosition(self):
+        return self.position
+
     def getReplications(self):
         res_list = getDataObjRescNames(self._conn, self.collName,
                                        self.dataName)
@@ -368,23 +339,66 @@ class irodsFile:
                                "r+", resc_name)
         return res
 
+    def getReplNumber(self):
+        d = self.getInfos();
+        return d.get("data_repl_num", "")
+
+    def getReplStatus(self):
+        d = self.getInfos();
+        return d.get("data_is_dirty", "")
+
+    def getResourceGroupName(self):
+        d = self.getInfos();
+        return d.get("resc_group_name", "")
+
+    def getResourceName(self):
+        return self.resourceName
+
+    def getTypeName(self):
+        d = self.getInfos();
+        return d.get("data_type_name", "")
+
+    def getSize(self):
+        d = self.getInfos();
+        return int(d.get("data_size", "0"))
+
+    def getStatus(self):
+        d = self.getInfos();
+        return d.get("data_status", "")
+
     def getUserMetadata(self):
         sqlCondInp = inxValPair_t()
         selectInp = inxIvalPair_t()
-                
         selectInp.init([COL_META_DATA_ATTR_NAME, COL_META_DATA_ATTR_VALUE,
                         COL_META_DATA_ATTR_UNITS],
                        [0, 0, 0], 3)
-        
         sqlCondInp.init([COL_COLL_NAME, COL_DATA_NAME], 
                         ["='%s'" % self.collName,
                          "='%s'" % self.dataName], 2)
-        
         return queryToTupleList(self._conn, selectInp, sqlCondInp)
+
+    def getVersion(self):
+        d = self.getInfos();
+        return d.get("data_version", "")
 
     def isatty(self):
         return false
-    
+
+    def move(self, new_path):
+        global lastStatus
+        dataObjRenameInp = dataObjCopyInp_t()
+        dataObjRenameInp.srcDataObjInp.oprType = RENAME_DATA_OBJ
+        dataObjRenameInp.srcDataObjInp.objPath = self.fullPath()
+        dataObjRenameInp.destDataObjInp.oprType = RENAME_DATA_OBJ
+        dataObjRenameInp.destDataObjInp.objPath = new_path
+        lastStatus = rcDataObjRename(self._conn, dataObjRenameInp)
+        return lastStatus
+
+    def next(self):
+        if self.position >= self.size:
+            raise StopIteration
+        return self.readline()
+
     # Optional parameter : number of bytes to read. if not present reads
     # TRANS_BUF_SZ bytes. If the size is greater it has to be refined...
     def read(self, buffSize=TRANS_BUF_SZ):
@@ -412,17 +426,17 @@ class irodsFile:
             self.position += readSize
             return outString
 
-    def readline(f, size=None):
+    def readline(self, size=None):
         res = ""
         end = False
         
-        c = f.read(1)
+        c = self.read(1)
         readsize = 1
         end = c == ''
     
         while not end:
             res += c
-            c = f.read(1)
+            c = self.read(1)
             readsize += 1
             if not c or c in ['\r', '\n']:
                 res += c
@@ -434,16 +448,31 @@ class irodsFile:
     
         return res
 
+    def replicate(self, rescName):
+        global lastStatus
+        dataObjInp = dataObjInp_t()
+        dataObjInp.objPath = self.fullPath()
+        addKeyVal(dataObjInp.condInput, RESC_NAME_KW, self.resourceName)
+        replNum = getDataObjReplicaNumber(self._conn, self.collName,
+                                          self.dataName, self.resourceName)
+        if replNum:
+            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
+        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, rescName)
+        lastStatus = rcDataObjRepl(self._conn, dataObjInp)
+        return lastStatus
+
+    def rmUserMetadata(self, name, value, units=""):
+        fullName = self.fullPath()
+        return rmUserMetadata(self._conn, "-d", fullName, name, value, units)
+
     def seek(self, offset, whence=SEEK_SET):
+        global lastStatus
         dataObjLseekInp = openedDataObjInp_t()
         dataObjLseekOut = fileLseekOut_t()
-        
         dataObjLseekInp.l1descInx = self.descInx
         dataObjLseekInp.offset = offset
         dataObjLseekInp.whence = whence
-        
-        status, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
-        
+        lastStatus, dataObjLseekOut = rcDataObjLseek(self._conn, dataObjLseekInp)
         if (whence == SEEK_SET):
             self.position = offset
         elif (whence == SEEK_CUR):
@@ -459,230 +488,34 @@ class irodsFile:
 
     def tell(self):
         return self.getPosition()
-        
+
     def update(self):
+        global lastStatus
         dataObjInp = dataObjInp_t()
-        
         dataObjInp.objPath = self.fullPath()
         addKeyVal(dataObjInp.condInput, UPDATE_REPL_KW, "")
-        status = rcDataObjRepl(self._conn, dataObjInp)
-        return status
-    
-    def replicate(self, rescName):
-        dataObjInp = dataObjInp_t()
-        
-        dataObjInp.objPath = self.fullPath()
-        addKeyVal(dataObjInp.condInput, RESC_NAME_KW, self.resourceName)
-        
-        replNum = getDataObjReplicaNumber(self._conn, self.collName,
-                                          self.dataName, self.resourceName);
-                                          
-        if replNum:
-            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-
-        addKeyVal(dataObjInp.condInput, DEST_RESC_NAME_KW, rescName)
-        return rcDataObjRepl(self._conn, dataObjInp)
-        
-    def rmUserMetadata(self, name, value, units=""):
-        fullName = self.fullPath()
-        return rmUserMetadata(self._conn, "-d", fullName, name, value, units)
+        lastStatus = rcDataObjRepl(self._conn, dataObjInp)
+        return lastStatus
     
     def write(self, inpBuff):
+        global lastStatus
         if self.openFlag == O_RDONLY:
             # If the file is only open for reading and we try to write in it,
             # the call to rcDataObjRead will fail.
             return 0
         else:
             inpLen = len(inpBuff)
-            dataObjWriteInpBBuf = bytesBuf_t();
-            
+            dataObjWriteInpBBuf = bytesBuf_t()
             fileWriteInp = openedDataObjInp_t()
             fileWriteInp.l1descInx = self.descInx
             fileWriteInp.len = inpLen
-            
             dataObjWriteInpBBuf.setBuf(inpBuff, inpLen)
-            
-            status = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
-            
-            if status > 0:
-                self.position += status
-                self.size += status
-            
-            return status
+            lastStatus = rcDataObjWrite(self._conn, fileWriteInp, dataObjWriteInpBBuf)
+            if lastStatus > 0:
+                self.position += lastStatus
+                self.size += lastStatus
+            return lastStatus
 
-
-
-class irodsCollection:
-
-    def __init__(self, conn, collName=None):
-        status, myEnv = getRodsEnv()
-        self._conn = conn
-        
-        if collName:
-            # Remove the last '/', if len = 1 the user wants the root colection
-            if len(collName) > 1 and collName[-1] == '/':
-                collName = collName[:-1]
-                
-            if collName.startswith('/'):
-                # If the path starts with '/' we assume a global path
-                self.collName = collName
-            else:
-                # else we assume that it is local to the current working dir
-                self.collName = myEnv.rodsCwd + '/' + collName
-            
-        else:
-             ## If no collName, we use the current working directory
-            self.collName = myEnv.rodsCwd
-        
-    def addUserMetadata(self, name, value, units=""):
-        return addUserMetadata(self._conn, "-c", self.collName,
-                               name, value, units)
-    
-    def create(self, dataName, resc_name=""):
-        if not resc_name:
-            status, myEnv = getRodsEnv()
-            resc_name = myEnv.rodsDefResource
-            
-        return _irodsOpen(self._conn, self.collName, dataName, "w", resc_name)
-       
-    def createCollection(self, child_collName):
-        collCreateInp = collInp_t()
-        collCreateInp.collName = "%s/%s" % (self.collName, child_collName)
-        status = rcCollCreate(self._conn, collCreateInp)
-        return status
-    
-    def delete(self, dataName, resc_name=""):
-        dataObjInp = dataObjInp_t()
-        if resc_name:
-            replNum = getDataObjReplicaNumber(self._conn, self.collName,
-                                              dataName, resc_name);
-        else:
-            replNum = "0"
-            
-        if replNum:
-            addKeyVal(dataObjInp.condInput, REPL_NUM_KW, replNum)
-            
-        dataObjInp.openFlags = O_RDONLY
-        dataObjInp.objPath = "%s/%s" % (self.collName, dataName)
-        
-        status = rcDataObjUnlink(self._conn, dataObjInp)
-        return status
-    
-    def deleteCollection(self, child_collName):
-        collInp = collInp_t()
-        collInp.collName = "%s/%s" % (self.collName, child_collName)
-        addKeyVal(collInp.condInput, FORCE_FLAG_KW, "")
-        addKeyVal(collInp.condInput, RECURSIVE_OPR__KW, "")
-        status = rcRmColl(self._conn, collInp, 0)
-        return status
-
-    def getCollName(self):
-        return self.collName
-
-    def getId(self):
-        return getCollId(self._conn, self.getCollName())
-
-    def getLenObjects(self):
-        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
-        nb_el = 0
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == DATA_OBJ_T:
-                nb_el += 1
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return nb_el
-    
-    def getLenSubCollections(self):
-        queryFlags = DATA_QUERY_FIRST_FG
-        nb_el = 0
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == COLL_OBJ_T:
-                nb_el += 1 
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return nb_el
-    
-    def getObjects(self):
-        queryFlags = DATA_QUERY_FIRST_FG | LONG_METADATA_FG | NO_TRIM_REPL_FG
-        l = []
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == DATA_OBJ_T:
-                status, srcElement = getLastPathElement(collEnt.dataName)
-                if srcElement:
-                    l.append((srcElement, collEnt.resource))
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return l
-    
-    def getSubCollections(self):
-        queryFlags = DATA_QUERY_FIRST_FG
-        l = []
-        
-        status, collHandle = rclOpenCollection(self._conn, self.collName, queryFlags)
-        status, collEnt = rclReadCollection(self._conn, collHandle)
-        while status >= 0:
-            if collEnt.objType == COLL_OBJ_T:
-                status, myColl, myData = splitPathByKey(collEnt.collName, '/')
-                if myData:
-                    l.append(myData)
-            status, collEnt = rclReadCollection(self._conn, collHandle)
-        rclCloseCollection(collHandle)
-        return l
-        
-    def getUserMetadata(self):
-        sqlCondInp = inxValPair_t()
-        selectInp = inxIvalPair_t()
-                
-        selectInp.init([COL_META_COLL_ATTR_NAME, COL_META_COLL_ATTR_VALUE,
-                        COL_META_COLL_ATTR_UNITS],
-                       [0, 0, 0], 3)
-        
-        sqlCondInp.init([COL_COLL_NAME], ["='%s'" % self.collName], 1)
-        
-        return queryToTupleList(self._conn, selectInp, sqlCondInp)
-    
-    def open(self, dataName, mode="r", resc_name=""):
-        if not resc_name:
-            status, myEnv = getRodsEnv()
-            resc_name = myEnv.rodsDefResource
-        return _irodsOpen(self._conn, self.collName, dataName, mode, resc_name)
-    
-    def openCollection(self, collName):
-        status = CAT_UNKNOWN_COLLECTION
-        if collName != '/':   
-            collName = collName.rstrip('/')
-        # If the path starts with '/' we assume a global path
-        if (collName.startswith('/')):
-           self.collName = collName
-           status = 0
-        else:
-            ls_child = self.getSubCollections()
-            if collName in ls_child:
-                # Special case for the root dir
-                if self.collName == '/':
-                    fullName = '/' + collName
-                else:
-                    fullName = "%s/%s" % (self.collName, collName)
-                self.collName = fullName
-                status = 0
-        return status
-        
-    def rmUserMetadata(self, name, value, units=""):
-        return rmUserMetadata(self._conn, "-c", self.collName,
-                               name, value, units) 
-        
-    def upCollection(self):
-        status, myDir, myFile = splitPathByKey(self.collName, "/")
-        self.collName = myDir
 %}
 
 

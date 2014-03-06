@@ -43,60 +43,6 @@
 #include "dataObjWrite.h"
 %}
 
-/* definition for oprType in dataObjInp_t, portalOpr_t and l1desc_t */
-
-#define DONE_OPR            9999
-#define PUT_OPR             1
-#define GET_OPR             2
-#define SAME_HOST_COPY_OPR      3
-#define COPY_TO_LOCAL_OPR   4
-#define COPY_TO_REM_OPR     5
-#define REPLICATE_OPR       6
-#define REPLICATE_DEST          7
-#define REPLICATE_SRC           8
-#define COPY_DEST               9
-#define COPY_SRC                10
-#define RENAME_DATA_OBJ         11
-#define RENAME_COLL             12
-#define MOVE_OPR                13
-#define RSYNC_OPR               14
-#define PHYMV_OPR               15
-#define PHYMV_SRC               16
-#define PHYMV_DEST              17
-#define QUERY_DATA_OBJ          18
-#define QUERY_DATA_OBJ_RECUR    19
-#define QUERY_COLL_OBJ          20
-#define QUERY_COLL_OBJ_RECUR    21
-#define RENAME_UNKNOWN_TYPE     22
-#define REMOTE_ZONE_OPR         24
-#define UNREG_OPR           26
-
-/* NETCDF type operation */
-#define NC_OPR          1000    /* netcdf operation */
-#define NC_OPEN_FOR_WRITE   1000    /* open/create NETCDF for write */
-#define NC_OPEN_FOR_READ    1001    /* open NETCDF for read */
-#define NC_CREATE       1002    /* create NETCDF */
-#define NC_OPEN_GROUP       1003    /* create NETCDF */
-
-/* definition for openType in l1desc_t */
-#define CREATE_TYPE             1
-#define OPEN_FOR_READ_TYPE      2
-#define OPEN_FOR_WRITE_TYPE     3
-
-/* definition for flags */
-#define STREAMING_FLAG      0x1
-#define NO_CHK_COPY_LEN_FLAG    0x2
-
-/* lock type definition */
-#define READ_LOCK_TYPE  "readLockType"
-#define WRITE_LOCK_TYPE "writeLockType"
-#define UNLOCK_TYPE "unlockType"
-
-/* lock command definition */
-#define SET_LOCK_CMD    "setLockCmd"
-#define SET_LOCK_WAIT_CMD "setLockWaitCmd"
-#define GET_LOCK_CMD    "getLockCmd"
-
 /*****************************************************************************/
 
 typedef struct CollInp {
@@ -186,9 +132,6 @@ int rcDataCopy (rcComm_t *conn, dataCopyInp_t *dataCopyInp);
 
 /*****************************************************************************/
 
-//int
-//rcDataGet (rcComm_t *conn, dataOprInp_t *dataGetInp,
-//portalOprOut_t **portalOprOut);
 
 %inline %{
 PyObject * rcDataGet(rcComm_t *conn, dataOprInp_t *dataGetInp) {

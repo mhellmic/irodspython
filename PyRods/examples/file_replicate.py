@@ -46,6 +46,7 @@ if __name__ == "__main__":
     print "  Size :", f.getSize()
     print "  Content :", f.read()
     print
+    
     f.replicate(resc2)
     f.close()
     

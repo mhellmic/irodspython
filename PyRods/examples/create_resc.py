@@ -37,6 +37,6 @@ if __name__ == "__main__":
     print resc.getHost()
 
     # Delete the resource
-    deleteResource(conn, "testResc")
+    #deleteResource(conn, "testResc")
     
     conn.disconnect()

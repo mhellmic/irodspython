@@ -34,5 +34,6 @@ include lib/api/obj/empty.txt
 include lib/md5/obj/empty.txt
 include lib/rbudp/obj/empty.txt
 include lib/core/obj/empty.txt
+include lib/sha1/obj/empty.txt
 include clients/icommands/obj/empty.txt
 include clients/icommands/bin/empty.txt

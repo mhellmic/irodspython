@@ -25,9 +25,6 @@
 
 /*****************************************************************************/
 
-#define SINGLE_MSG_TICKET  0
-#define MULTI_MSG_TICKET   1
-
 typedef struct {
     unsigned int expireTime;
     unsigned int flag;

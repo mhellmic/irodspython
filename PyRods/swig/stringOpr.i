@@ -31,7 +31,7 @@ splitPathByKey (char *srcPath, char *dir, char *file, char key);
 
 %pythoncode %{
 def splitPathByKey(srcPath, key):
-	"""splitPathByKey - 
+    """splitPathByKey - 
   Input -
     str srcPath -
     char key -
@@ -39,13 +39,14 @@ def splitPathByKey(srcPath, key):
     str coll - directory
     str data - file
     int status - status of the operation."""
+    global lastStatus
     # TO IMPROVE: irods doesn't manage this out string well
-	coll = "_" * MAX_NAME_LEN
-	data = "_" * MAX_NAME_LEN
-	status = _irods.splitPathByKey(srcPath, coll, data, key)
-	coll = coll[:coll.find('\0')]
-	data = data[:data.find('\0')]
-	return (status, coll, data)
+    coll = "_" * MAX_NAME_LEN
+    data = "_" * MAX_NAME_LEN
+    lastStatus = _irods.splitPathByKey(srcPath, coll, data, key)
+    coll = coll[:coll.find('\0')]
+    data = data[:data.find('\0')]
+    return (lastStatus, coll, data)
 %}
 
 /*****************************************************************************/

@@ -21,13 +21,6 @@
 #include "rodsDef.h"
 %}
 
-/*****************************************************************************/
-
-#define MAX_PATH_ALLOWED 1024
-#define MAX_NAME_LEN   (MAX_PATH_ALLOWED+64)
-#define TRANS_BUF_SZ    (4*1024*1024)
-
-#define PUBLIC_USER_NAME    "public"
 
 /*****************************************************************************/
 

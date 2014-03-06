@@ -40,13 +40,17 @@
 #
 %}
 
+#define PYRODS_VERSION "3.3.3"
 
 %include cstring.i
 %include templates.i
 
+%include rodsException.i
 %include auth.i
 %include chkObjPermAndStat.i
 %include dataObj.i
+%include defines.i
+%include functions.i
 %include getRodsEnv.i
 %include md5.i
 %include miscUtil.i
@@ -72,6 +76,5 @@
 %include rodsStructFile.i
 %include rodsUser.i
 %include rodsXmsg.i
-%include sqlMisc.i
 %include stringOpr.i
 

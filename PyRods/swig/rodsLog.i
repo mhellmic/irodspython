@@ -19,18 +19,6 @@
 
 /*****************************************************************************/
 
-#define LOG_SQL 11
-#define LOG_DEBUG1  10
-#define LOG_DEBUG2  9
-#define LOG_DEBUG3  8
-#define LOG_DEBUG   7
-#define LOG_NOTICE  5
-#define LOG_ERROR  3
-#define LOG_SYS_WARNING 2
-#define LOG_SYS_FATAL 1
-
-/*****************************************************************************/
-
 %inline %{
 PyObject * rodsErrorName(int errorValue) {
     char *mySubName;
