@@ -1,0 +1,14 @@
+/build
+/dist
+/filelist.txt
+.client_cflags
+.client_ldflags
+.cproject
+.project
+.pydevproject
+.server_cflags
+.server_ldflags
+*.o
+*.a
+*.pyc
+
