@@ -40,7 +40,7 @@
 #
 %}
 
-#define PYRODS_VERSION "3.3.3"
+#define PYRODS_VERSION "3.3.4"
 
 %include cstring.i
 %include templates.i

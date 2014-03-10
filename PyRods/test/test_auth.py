@@ -29,51 +29,51 @@ class testAuth(iRODSTestCase):
         self.assertEqual(tmp.challenge, "challenge")
         self.assertEqual(tmp.response, "response")
         self.assertEqual(tmp.username, "username")
-
+ 
     def test_authCheckOut_t(self):
         tmp = create_authCheckOut_t(12, 12, "serverResponse")
         self.assertEqual(tmp.clientPrivLevel, 12)
         self.assertEqual(tmp.privLevel, 12)
         self.assertEqual(tmp.serverResponse, "serverResponse")
-
+ 
     def test_authResponseInp_t(self):
         tmp = create_authResponseInp_t("response", "username")
         self.assertEqual(tmp.response, "response")
         self.assertEqual(tmp.username, "username")
-        
+         
     def test_authRequestOut_t(self):
         tmp = create_authRequestOut_t("challenge")
         self.assertEqual(tmp.challenge, "challenge")
-
+ 
     def test_gsiAuthRequestOut_t(self):
         tmp = create_gsiAuthRequestOut_t("serverDN")
         self.assertEqual(tmp.serverDN, "serverDN")
-
+ 
     def test_authCheckInp_t_unicode(self):
         tmp = create_authCheckInp_t(u"challenge", u"response", u"username")
         self.assertEqual(tmp.challenge, u"challenge")
         self.assertEqual(tmp.response, u"response")
         self.assertEqual(tmp.username, u"username")
-
+ 
     def test_authCheckOut_t_unicode(self):
         tmp = create_authCheckOut_t(12, 12, u"serverResponse")
         self.assertEqual(tmp.clientPrivLevel, 12)
         self.assertEqual(tmp.privLevel, 12)
         self.assertEqual(tmp.serverResponse, u"serverResponse")
-
+ 
     def test_authResponseInp_t_unicode(self):
         tmp = create_authResponseInp_t(u"response", u"username")
         self.assertEqual(tmp.response, u"response")
         self.assertEqual(tmp.username, u"username")
-        
+         
     def test_authRequestOut_t_unicode(self):
         tmp = create_authRequestOut_t(u"challenge")
         self.assertEqual(tmp.challenge, u"challenge")
-
+ 
     def test_gsiAuthRequestOut_t_unicode(self):
         tmp = create_gsiAuthRequestOut_t(u"serverDN")
         self.assertEqual(tmp.serverDN, u"serverDN")
-        
+         
 
 def suite():
     suite = unittest.TestSuite()

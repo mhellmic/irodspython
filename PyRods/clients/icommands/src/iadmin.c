@@ -847,50 +847,43 @@ doCommand(char *cmdToken[]) {
       return(0);
    }
    if (strcmp(cmdToken[0],"moduser") == 0) {
-	   if (strcmp(cmdToken[2],"password") ==0) {
-		   printf("%s %s %s %s\n", cmdToken[1], cmdToken[2],cmdToken[3], cmdToken[4]);
-		   int i, len, lcopy;
-		   struct stat statbuf;
-		   char *key2;
-		   /* this is a random string used to pad, arbitrary, but must match
+      if (strcmp(cmdToken[2],"password") ==0) {
+	 int i, len, lcopy;
+	 struct stat statbuf;
+	 char *key2;
+	 /* this is a random string used to pad, arbitrary, but must match
 	    the server side: */
-		   char rand[]="1gCBizHWbwIYyWLoysGzTe6SyzqFKMniZX05faZHWAwQKXf6Fs";
+	 char rand[]="1gCBizHWbwIYyWLoysGzTe6SyzqFKMniZX05faZHWAwQKXf6Fs"; 
 
-		   strncpy(buf0, cmdToken[3], MAX_PASSWORD_LEN);
-		   len = strlen(cmdToken[3]);
-		   lcopy = MAX_PASSWORD_LEN-10-len;
-		   if (lcopy > 15) {  /* server will look for 15 characters of random string */
-			   strncat(buf0, rand, lcopy);
-		   }
-		   printf("buf0: %s\n", buf0);
-		   i = obfGetPw(buf1);
-		   printf("buf1: %s %d\n", buf1, i);
-		   if (i !=0) {
+	 strncpy(buf0, cmdToken[3], MAX_PASSWORD_LEN);
+	 len = strlen(cmdToken[3]);
+	 lcopy = MAX_PASSWORD_LEN-10-len;
+	 if (lcopy > 15) {  /* server will look for 15 characters of random string */
+	    strncat(buf0, rand, lcopy);
+	 }
+   	 i = obfGetPw(buf1);
+	 if (i !=0) {
 #ifndef _WIN32
-			   if (stat ("/bin/stty", &statbuf) == 0) {
-				   system("/bin/stty -echo");
-			   }
-			   printf("Enter your current iRODS password:");
-			   fgets(buf1, MAX_PASSWORD_LEN, stdin);
-			   system("/bin/stty echo");
-			   printf("\n");
-			   buf1[strlen(buf1)-1]='\0'; /* remove trailing \n */
+	    if (stat ("/bin/stty", &statbuf) == 0) {
+	       system("/bin/stty -echo");
+	    }
+	    printf("Enter your current iRODS password:");
+	    fgets(buf1, MAX_PASSWORD_LEN, stdin);
+	    system("/bin/stty echo");
+	    printf("\n");
+	    buf1[strlen(buf1)-1]='\0'; /* remove trailing \n */
 #else
-			   printf("Error %d getting password\n", i);
-			   return(0);
+	    printf("Error %d getting password\n", i);
+	    return(0);
 #endif
-		   }
-		   key2 = getSessionSignitureClientside();
-
-		   printf("key2: %s\n", key2);
-		   obfEncodeByKeyV2(buf0, buf1, key2, buf2);
-		   printf("buf2: %s\n", buf2);
-		   cmdToken[3]=buf2;
-	   }
-	   printf("%s %s %s %s\n", cmdToken[1], cmdToken[2],cmdToken[3], cmdToken[4]);
-	   generalAdmin(0, "modify", "user", cmdToken[1], cmdToken[2],
-			   cmdToken[3], cmdToken[4], cmdToken[5], cmdToken[6]);
-	   return(0);
+	 }
+	 key2 = getSessionSignitureClientside();
+	 obfEncodeByKeyV2(buf0, buf1, key2, buf2);
+	 cmdToken[3]=buf2;
+      }
+      generalAdmin(0, "modify", "user", cmdToken[1], cmdToken[2],
+		  cmdToken[3], cmdToken[4], cmdToken[5], cmdToken[6]);
+      return(0);
    }
    if (strcmp(cmdToken[0],"aua") == 0) {
       generalAdmin(0, "modify", "user", cmdToken[1], "addAuth", 
@@ -1773,6 +1766,13 @@ usage(char *subOpt)
 "Create a new zone definition.  Type must be 'remote' as the local zone",
 "must previously exist and there can be only one local zone definition.",
 "Connection-info (hostname:port) and a Comment field are optional.",
+" ",
+"The connection-info should be the hostname of the ICAT-Enabled-Server (IES)",
+"of the zone.  If it is a non-IES, remote users trying to connect will get",
+"a CAT_INVALID_USER error, even if valid, due to complications in the",
+"way the protocol connections operate when the local server tries to",
+"connect back to the remote zone to authenticate the user.",
+" ",
 "Also see modzone, rmzone, and lz.",
 ""};
 
@@ -1781,6 +1781,9 @@ usage(char *subOpt)
 "Modify values in a zone definition, either the name, conn (connection-info),",
 "or comment.  Connection-info is the DNS host string:port, for example:",
 "zuri.unc.edu:1247",
+"When modifying the conn information, it should be the hostname of the",
+"ICAT-Enabled-Server (IES); see 'h mkzone' for more.",
+" ",
 "The name of the local zone can be changed via some special processing and",
 "since it also requires some manual changes, iadmin will explain those and",
 "prompt for confirmation in this case.",

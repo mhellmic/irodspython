@@ -65,8 +65,12 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
             dataObjLseekInp.l1descInx = lastStatus
             dataObjLseekInp.offset = 0
             dataObjLseekInp.whence = SEEK_END
-
             status, dataObjLseekOut = rcDataObjLseek(conn, dataObjLseekInp)
+            if not resc_name:
+                resc_names = getDataObjRescNames(conn, collName, dataName)
+                if resc_names:
+                    resc_name = resc_names[0]
+                # else: File not found in iCAT, shouldn't happen
             ir_file.position = getDataObjSize(conn, collName, dataName, resc_name)
         else:
             lastStatus = rcDataObjCreate(conn, dataObjInp)
@@ -115,8 +119,6 @@ def _irodsOpen(conn, collName, dataName, mode, resc_name):
         ir_file.descInx = lastStatus
         ir_file.set_size()
         return ir_file
-    #else:
-     #   raise IrodsException(l1descInx)
 
 def addCollUserMetadata(conn, path, name, value, units=""):
     global lastStatus

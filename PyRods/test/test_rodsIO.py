@@ -105,7 +105,7 @@ class testRodsIO(iRODSTestCase):
         f.seek(-60, os.SEEK_CUR) # middle
         self.assertEqual(f.getPosition(), 40)
         f.write("+" * 20)        
-        self.assertEqual(f.getPosition(), 60)       
+        self.assertEqual(f.getPosition(), 60)
         f.close()   
         
         f = irodsOpen(self.conn, path, 'r')

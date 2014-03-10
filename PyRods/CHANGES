@@ -62,3 +62,6 @@
 
 * 3.3.3:
   - Correct default resources associated when opening/creating a file
+
+* 3.3.4:
+  - switch to iRODS 3.3.1

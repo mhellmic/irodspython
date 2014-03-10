@@ -27,7 +27,7 @@ typedef struct {
 
 /*****************************************************************************/
 
-int chksumLocFile (char *fileName, char *chksumStr);
+int chksumLocFile (char *fileName, char *chksumStr, int use_sha256);
 
 /*****************************************************************************/
 
@@ -50,6 +50,6 @@ int md5ToStr (unsigned char *digest, char *chksumStr);
 
 /*****************************************************************************/
 
-int rcChksumLocFile (char *fileName, char *chksumFlag, keyValPair_t *condInput);
+int rcChksumLocFile (char *fileName, char *chksumFlag, keyValPair_t *condInput, int use_sha256);
 
 /*****************************************************************************/
