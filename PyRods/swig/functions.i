@@ -383,6 +383,8 @@ def getDataObjReplicaNumber(conn, coll_name, data_name, resc_name):
     else:
         return ""
     
+    if genQueryOut is not None:
+        genQueryOut.release()
     return res
 
 # Returns a PyList of the resource names of an irods data object given its
@@ -405,6 +407,8 @@ def getDataObjRescNames(conn, coll_name, data_name):
     else:
         return ""
     
+    if genQueryOut is not None:
+        genQueryOut.release()
     return res
 
 # Returns the size of a data object
@@ -418,7 +422,10 @@ def getDataObjSize(conn, coll_name, data_name, resc_name):
     genQueryOut = rcGenQuery(conn, genQueryInp)
     if genQueryOut and genQueryOut.rowCnt >= 0:
         sizeNum = getSqlResultByInx(genQueryOut, COL_DATA_SIZE)
-        return int(sizeNum.value)
+        sizePyInt = int(sizeNum.value)
+        if genQueryOut is not None:
+            genQueryOut.release()
+        return sizePyInt
     else:
         return 0
 
@@ -924,9 +931,14 @@ def queryToFormatDictList(conn, selectInp, sqlCondInp, formatStr):
     addResultToFormatDictList(genQueryOut, formatStr, l)
     while genQueryOut and genQueryOut.continueInx > 0:
         genQueryInp.continueInx = genQueryOut.continueInx
+        if genQueryOut is not None:
+            genQueryOut.release()
         genQueryOut = rcGenQuery(conn, genQueryInp)
         if genQueryOut:
             addResultToFormatDictList(genQueryOut, l)
+
+    if genQueryOut is not None:
+        genQueryOut.release()
     return l
 
 def queryToTupleList(conn, selectInp, sqlCondInp):
@@ -943,9 +955,14 @@ def queryToTupleList(conn, selectInp, sqlCondInp):
     addResultToTupleList(genQueryOut, l)
     while genQueryOut and genQueryOut.continueInx > 0:
         genQueryInp.continueInx = genQueryOut.continueInx
+        if genQueryOut is not None:
+            genQueryOut.release()
         genQueryOut = rcGenQuery(conn, genQueryInp)
         if genQueryOut:
             addResultToTupleList(genQueryOut, l)
+
+    if genQueryOut is not None:
+        genQueryOut.release()
     return l
 
 def rmCollUserMetadata(conn, path, name, value, units=""):

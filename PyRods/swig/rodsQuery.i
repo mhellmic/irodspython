@@ -52,6 +52,10 @@ typedef struct GenQueryOut {
 
 %extend genQueryOut_t {
 
+    void release() {
+        freeGenQueryOut(&$self);
+    }
+
     PyObject * getSqlResult() {
   		int i;
   		PyObject *l = PyList_New($self->rowCnt);
