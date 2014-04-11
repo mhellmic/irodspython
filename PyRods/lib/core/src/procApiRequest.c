@@ -55,6 +55,7 @@ bytesBuf_t *inputBsBBuf, void **outStruct, bytesBuf_t *outBsBBuf)
 
     status = sendApiRequest (conn, apiInx, inputStruct, inputBsBBuf);
     if (status < 0) {
+        conn->status = status;
         rodsLogError (LOG_DEBUG, status,
           "procApiRequest: sendApiRequest failed. status = %d", status);
         return (status);
